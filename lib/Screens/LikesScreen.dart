@@ -27,31 +27,33 @@ class _LikesScreenState extends State<LikesScreen>
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50.0), // appBar 높이 조절
-          child: AppBar(
-            bottom: TabBar(controller: _tabController, tabs: const <Widget>[
-              Tab(
-                child: Text('저장한 글', style: TextStyle(fontSize: 20)),
-              ),
-              Tab(
-                child: Text('저장한 단어', style: TextStyle(fontSize: 20)),
-              ),
-            ]),
-          ),
-        ),
-        body: TabBarView(controller: _tabController, children: const <Widget>[
-          Center(
-            child: Text(
-              "글글",
-              style: TextStyle(fontSize: 40),
+      child: SafeArea(
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(50.0), // appBar 높이 조절
+            child: AppBar(
+              bottom: TabBar(controller: _tabController, tabs: const <Widget>[
+                Tab(
+                  child: Text('저장한 글', style: TextStyle(fontSize: 20)),
+                ),
+                Tab(
+                  child: Text('저장한 단어', style: TextStyle(fontSize: 20)),
+                ),
+              ]),
             ),
           ),
-          Center(
-            child: Text("단어단어", style: TextStyle(fontSize: 40)),
-          ),
-        ]),
+          body: TabBarView(controller: _tabController, children: const <Widget>[
+            Center(
+              child: Text(
+                "글글",
+                style: TextStyle(fontSize: 40),
+              ),
+            ),
+            Center(
+              child: Text("단어단어", style: TextStyle(fontSize: 40)),
+            ),
+          ]),
+        ),
       ),
     );
   }

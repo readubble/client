@@ -176,6 +176,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "smooth_page_indicator",
+      "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/smooth_page_indicator-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "source_span",
       "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/source_span-1.9.1",
       "packageUri": "lib/",
@@ -230,7 +236,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-04-27T06:34:51.013030Z",
+  "generated": "2023-04-27T13:31:23.982306Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

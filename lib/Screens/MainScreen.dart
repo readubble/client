@@ -1,3 +1,4 @@
+import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 import 'HomeScreen.dart';
 import 'LikesScreen.dart';
@@ -32,39 +33,42 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              size: 35,
+    return SafeArea(
+      child: Scaffold(
+        body: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                size: 35,
+              ),
+              label: 'Home',
             ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.favorite,
-              size: 35,
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.favorite,
+                size: 35,
+              ),
+              label: 'Likes',
             ),
-            label: 'Likes',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-              size: 35,
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person,
+                size: 35,
+              ),
+              label: 'MyPage',
             ),
-            label: 'MyPage',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue.shade200,
-        onTap: _onItemTapped,
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: myColor.shade100,
+          unselectedItemColor: myColor.shade800,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }

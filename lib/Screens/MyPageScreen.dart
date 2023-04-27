@@ -23,11 +23,11 @@ class _MyPageScreenState extends State<MyPageScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Column(
           children: [
             const SizedBox(
-              height: 40,
+              height: 20,
             ),
             Row(
               // 로그인된 상태
