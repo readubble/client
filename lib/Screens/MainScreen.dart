@@ -36,7 +36,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      //top: !hasNotch,
       child: Scaffold(
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),

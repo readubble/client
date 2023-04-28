@@ -1,5 +1,6 @@
 import 'package:bwageul/Screens/LoginScreen.dart';
-import 'package:bwageul/Screens/ReadingScreen.dart';
+import 'package:bwageul/Screens/ReadingArticleScreen.dart';
+import 'package:bwageul/Screens/ReadingThumbnailScreen.dart';
 import 'package:bwageul/Screens/RegisterScreen.dart';
 import 'package:bwageul/Screens/MainScreen.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const MainScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
-        '/reading': (context) => const ReadingScreen(),
+        '/startReading': (context) => const ReadingThumbnailScreen(),
+        '/article': (context) => const ReadingArticleScreen(),
       },
     );
   }

@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/reading');
+                      Navigator.pushNamed(context, '/startReading');
                     },
                     child: unlockedArticleTile(
                         'assets/images/hum1.jpeg', "예술", "중", "브람스 교향곡 4번"),
@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, '/reading');
+                        Navigator.pushNamed(context, '/startReading');
                       },
                       child: unlockedArticleTile('assets/images/soc1.png', '사회',
                           '중', '법무부 ‘제시카법’은 성범죄만…강력범죄 피해자 보호는 구멍')),
@@ -187,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, '/reading');
+                        Navigator.pushNamed(context, '/startReading');
                       },
                       child: unlockedArticleTile('assets/images/sci1.png', 'IT',
                           '중', 'AI의 등장에 따른 윤리적 문제')),
