@@ -1,5 +1,6 @@
 import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
+import 'package:iphone_has_notch/iphone_has_notch.dart';
 import 'HomeScreen.dart';
 import 'LikesScreen.dart';
 import 'MyPageScreen.dart';
@@ -14,6 +15,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   final bool _isLoggedIn = false; // 로그인 여부를 저장하는 변수
+  bool hasNotch = IphoneHasNotch.hasNotch;
 
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
@@ -34,6 +36,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      //top: !hasNotch,
       child: Scaffold(
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),

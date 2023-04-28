@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   image_picker: ^0.8.7+3
   smooth_page_indicator: ^1.1.0
+  iphone_has_notch: ^1.0.0
 
 dev_dependencies:
   flutter_test:

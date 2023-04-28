@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-MaterialColor myColor = const MaterialColor(0xffA6D8FF, {
+MaterialColor myColor = const MaterialColor(0xff84B7D9, {
   //메인은 하늘색
   50: Color(0xffccecfd), //옅은 하늘색
   100: Color(0xff84B7D9), //메인 색상
