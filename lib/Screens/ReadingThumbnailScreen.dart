@@ -14,7 +14,7 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
     return GestureDetector(
       onHorizontalDragUpdate: (details) {
         if (details.delta.direction > 0) {
-          // <- 방향 스로이프 시 다음 단계로 넘어감
+          // <- 방향 스와이프 시 다음 단계로 넘어감
           Navigator.of(context).pushNamed('/article');
         }
       },
@@ -27,7 +27,7 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
                   borderRadius: BorderRadius.circular(0),
                   image: DecorationImage(
                     image: AssetImage('assets/images/hum1.jpeg'),
-                    fit: BoxFit.fitHeight,
+                    fit: BoxFit.cover,
                   ),
                 ),
                 child: Container(
@@ -53,24 +53,29 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      SizedBox(
-                        child: Text(
-                          "브람스 교향곡 4번",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 30),
-                        ),
+                      Text(
+                        "브람스 교향곡 4번",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 30),
                       ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text("출처: 클래식 명곡 명연주, 최은규",
+                          style: TextStyle(
+                              color: Colors.white.withOpacity(0.5),
+                              fontSize: 15)),
                     ],
                   ),
                 ),
               ),
               Positioned(
-                top: 10,
-                left: 10,
+                top: 15,
+                left: 15,
                 child: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_back_rounded,
                     color: Colors.white,
                     size: 35,
@@ -78,7 +83,7 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
-              Positioned(
+              const Positioned(
                   top: 0,
                   bottom: 0,
                   right: 5,
