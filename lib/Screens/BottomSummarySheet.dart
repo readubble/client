@@ -17,6 +17,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
     "quiz2": ["하이든", "바흐", "베토벤"],
     "quiz3": ["O", "X", "알 수 없음"]
   };
+  int keywordNum = 1;
 
   static const List<Tab> myTabs = <Tab>[
     Tab(text: '키워드'),
@@ -185,7 +186,75 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                           SingleChildScrollView(
                             controller: scrollController,
                             child: Container(
-                              child: Center(child: Text('Tab 1')),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '이 글에서 키워드라고 생각하는 단어를 적어주세요! (개수 제한 없음)',
+                                      style: TextStyle(fontSize: 17),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            "$keywordNum",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 25),
+                                          ),
+                                          SizedBox(
+                                            width: 25,
+                                          ),
+                                          Expanded(
+                                            child: TextFormField(
+                                              textAlign: TextAlign.center,
+                                              decoration: InputDecoration(
+                                                hintText: '키워드 적기',
+                                                border: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                  color: Colors.grey,
+                                                  width: 1,
+                                                )),
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Colors.grey,
+                                                    width: 1,
+                                                  ),
+                                                ),
+                                                focusedBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: myColor.shade300,
+                                                    width: 2,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 25,
+                                          ),
+                                          IconButton(
+                                              onPressed: () {},
+                                              icon: Icon(
+                                                Icons
+                                                    .add_circle_outline_outlined,
+                                                size: 30,
+                                              ))
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                           SingleChildScrollView(
