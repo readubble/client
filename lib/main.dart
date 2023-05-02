@@ -1,3 +1,5 @@
+import 'package:bwageul/Screens/Dictionary.dart';
+import 'package:bwageul/Screens/FinishReading.dart';
 import 'package:bwageul/Screens/LoginScreen.dart';
 import 'package:bwageul/Screens/ReadingArticleScreen.dart';
 import 'package:bwageul/Screens/ReadingThumbnailScreen.dart';
@@ -26,6 +28,8 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterScreen(),
         '/startReading': (context) => const ReadingThumbnailScreen(),
         '/article': (context) => const ReadingArticleScreen(),
+        '/finish': (context) => const FinishReading(),
+        '/dictionary': (context) => const KoreanDictionary(),
       },
     );
   }

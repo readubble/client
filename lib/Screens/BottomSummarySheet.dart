@@ -132,6 +132,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                           height: 20,
                         ),
                         Container(
+                          //스크롤 안내
                           padding:
                               EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                           decoration: BoxDecoration(
@@ -171,12 +172,12 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                   ),
                   Column(
                     children: [
-                      SizedBox(
-                        height: 15,
-                      ),
-                      TabBar(
-                        tabs: myTabs,
-                        controller: _tabController,
+                      SingleChildScrollView(
+                        controller: scrollController,
+                        child: TabBar(
+                          tabs: myTabs,
+                          controller: _tabController,
+                        ),
                       ),
                       Expanded(
                         child:
@@ -322,6 +323,25 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                 chosenAnswer[2] = value!;
                               });
                             }),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pushNamed('/finish');
+                                },
+                                child: Text(
+                                  "완료",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600),
+                                )),
+                          ],
+                        )
                       ],
                     ),
                   ),

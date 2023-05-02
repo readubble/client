@@ -11,6 +11,7 @@ class ReadingArticleScreen extends StatefulWidget {
 }
 
 class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
+  double baseFontSize = 18;
   String thisText = """
   \"거인이 내 뒤로 뚜벅뚜벅 쫓아오는 소리를 항상 들어야 한다고 생각해보게. 그때 그 기분을 자네는 전혀 상상할 수 없을 걸세.\" - 요하네스 브람스
   
@@ -27,85 +28,167 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+          backgroundColor: Colors.white,
           body: Stack(children: [
-        SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 20, 15, 70),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.arrow_back_rounded,
-                      size: 35,
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15, 20, 15, 70),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back_rounded,
+                          size: 35,
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                      ),
                     ),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        "브람스 교향곡 4번",
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.w600),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Column(
                         children: [
                           Text(
-                            "난이도 ",
+                            "브람스 교향곡 4번",
                             style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                          Text(
-                            "중",
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: myColor.shade300,
-                                fontWeight: FontWeight.w600),
+                                fontSize: 28, fontWeight: FontWeight.w600),
                           ),
                           SizedBox(
-                            width: 10,
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                "난이도 ",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                "중",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: myColor.shade300,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            // 가로줄
+                            margin: const EdgeInsets.symmetric(vertical: 15),
+                            width: double.infinity,
+                            height: 2,
+                            color: Colors.black,
+                          ),
+                          Row(
+                            children: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pushNamed('/dictionary');
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.search,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        "국어사전",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    fixedSize: Size(110, 40),
+                                    backgroundColor: myColor.shade700,
+                                    foregroundColor: Colors.black,
+                                    primary: Colors.black.withOpacity(0.5),
+                                    elevation: 4,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          20), // BorderRadius 적용
+                                    ),
+                                  )),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Container(
+                                height: 40,
+                                width: 160,
+                                decoration: BoxDecoration(
+                                    color: myColor.shade700,
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          offset: Offset(0, 3),
+                                          blurRadius: 2,
+                                          color: myColor.shade800)
+                                    ]),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            if (baseFontSize > 13)
+                                              baseFontSize -= 1;
+                                          });
+                                        },
+                                        icon:
+                                            Icon(Icons.text_decrease_rounded)),
+                                    Text("글자 크기",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600)),
+                                    IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            if (baseFontSize < 30)
+                                              baseFontSize += 1;
+                                          });
+                                        },
+                                        icon:
+                                            Icon(Icons.text_increase_rounded)),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            thisText,
+                            style:
+                                TextStyle(fontSize: baseFontSize, height: 1.7),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        // 가로줄
-                        margin: const EdgeInsets.symmetric(vertical: 15),
-                        width: double.infinity,
-                        height: 2,
-                        color: Colors.black,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        thisText,
-                        style: TextStyle(fontSize: 18, height: 1.7),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-        BottomSummarySheet(), // 하단 퀴즈, 글 요약하는 창
-      ])),
+            BottomSummarySheet(), // 하단 퀴즈, 글 요약하는 창
+          ])),
     );
   }
 }
