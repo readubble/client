@@ -10,8 +10,8 @@ class BottomSummarySheet extends StatefulWidget {
 
 class _BottomSummarySheetState extends State<BottomSummarySheet>
     with SingleTickerProviderStateMixin {
+  final String nickname = '홍길동';
   final PageController _pageController = PageController(initialPage: 0);
-  int _currentPageIndex = 0;
 
   List<int> chosenAnswer = [0, 0, 0]; //총 3문제
   Map<String, List<String>> choices = {
@@ -30,6 +30,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
 
   int _rowsCount = 1;
   List<TextEditingController> _textEditingControllers = [];
+  TextEditingController _summaryTextEditingController = TextEditingController();
 
   void _addRow() {
     setState(() {
@@ -45,6 +46,10 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
       _textEditingControllers.removeAt(index);
       _rowsCount--;
     });
+  }
+
+  void _copyText() {
+    //_summaryTextEditingController.text += "THIS TEXT";
   }
 
   @override
@@ -73,7 +78,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
             Container(
               padding: EdgeInsets.fromLTRB(20, 25, 20, 0),
               decoration: BoxDecoration(
-                  color: myColor.shade600, // 배경 색상
+                  color: Colors.white, // 배경 색상
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                   boxShadow: [
                     BoxShadow(
@@ -155,46 +160,33 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                         SizedBox(
                           height: 20,
                         ),
-                        Container(
-                          //스크롤 안내
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: myColor.shade800,
-                                  offset: Offset(3, 3),
-                                  blurRadius: 10,
-                                )
-                              ]),
-                          width: 220,
-                          alignment: Alignment.bottomRight,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Icon(
-                                Icons.arrow_back_rounded,
-                                color: myColor.shade800,
-                                size: 30,
-                              ),
-                              Text(
-                                " 스크롤하여 문제 이동 ",
-                                style: TextStyle(color: myColor.shade800),
-                              ),
-                              Icon(
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                _pageController.nextPage(
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: myColor.shade100,
+                                  foregroundColor: Colors.white,
+                                  shadowColor: myColor.shade800,
+                                  elevation: 4),
+                              child: Icon(
                                 Icons.arrow_forward_rounded,
-                                color: myColor.shade800,
-                                size: 30,
-                              )
-                            ],
-                          ),
-                        ),
+                                size: 25,
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
                   Column(
+                    //두번째 페이지
                     children: [
                       SingleChildScrollView(
                         controller: scrollController,
@@ -216,7 +208,10 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                   children: [
                                     Text(
                                       '이 글에서 키워드라고 생각하는 단어를 적어주세요! (최대 3개)',
-                                      style: TextStyle(fontSize: 17),
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                       textAlign: TextAlign.center,
                                     ),
                                     SizedBox(
@@ -279,23 +274,283 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                         }).toList().cast<Widget>(),
                                       ),
                                     ),
+                                    SizedBox(
+                                      height: 50,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            _pageController.previousPage(
+                                              duration:
+                                                  Duration(milliseconds: 300),
+                                              curve: Curves.easeInOut,
+                                            );
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: myColor.shade800,
+                                              foregroundColor: Colors.white,
+                                              shadowColor: myColor.shade800,
+                                              elevation: 4),
+                                          child: Icon(
+                                            Icons.arrow_back_rounded,
+                                            size: 25,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            final nextIndex =
+                                                _tabController.index + 1;
+                                            if (nextIndex <
+                                                _tabController.length) {
+                                              _tabController
+                                                  .animateTo(nextIndex);
+                                            }
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: myColor.shade100,
+                                              foregroundColor: Colors.white,
+                                              shadowColor: myColor.shade800,
+                                              elevation: 4),
+                                          child: Icon(
+                                            Icons.arrow_forward_rounded,
+                                            size: 25,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
                             ),
-                          ),
+                          ), // 키워드 탭
                           SingleChildScrollView(
                             controller: scrollController,
                             child: Container(
-                              child: Center(child: Text('Tab 2')),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '주제문이라고 생각하는 문장들을 선택해주세요.',
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        child: Column(
+                                          children: [Text("주제문들 주르륵")],
+                                        )),
+                                    SizedBox(
+                                      height: 50,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            final previousIndex =
+                                                _tabController.index - 1;
+                                            if (previousIndex >= 0) {
+                                              _tabController
+                                                  .animateTo(previousIndex);
+                                            }
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: myColor.shade800,
+                                              foregroundColor: Colors.white,
+                                              shadowColor: myColor.shade800,
+                                              elevation: 4),
+                                          child: Icon(
+                                            Icons.arrow_back_rounded,
+                                            size: 25,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            final nextIndex =
+                                                _tabController.index + 1;
+                                            if (nextIndex <
+                                                _tabController.length) {
+                                              _tabController
+                                                  .animateTo(nextIndex);
+                                            }
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: myColor.shade100,
+                                              foregroundColor: Colors.white,
+                                              shadowColor: myColor.shade800,
+                                              elevation: 4),
+                                          child: Icon(
+                                            Icons.arrow_forward_rounded,
+                                            size: 25,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+                          ), // 주제문 탭
+
                           SingleChildScrollView(
                             controller: scrollController,
                             child: Container(
-                              child: Center(child: Text('Tab 3')),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    ExpansionTile(
+                                      title: Text(
+                                        '$nickname님이 선택한 주제문',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      children: [
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: myColor.shade700,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15, vertical: 7),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                          onPressed: _copyText,
+                                          child: Container(
+                                            child: Text(
+                                              "19세기의 다른 교향곡 작곡가들과 마찬가지로 브람스 역시 베토벤이라는 거인을 피해갈 수 없었다.",
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: myColor.shade700,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15, vertical: 7),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                          onPressed: _copyText,
+                                          child: Container(
+                                            child: Text(
+                                              "1885년, 이미 세 곡의 훌륭한 교향곡을 통해 교향곡 작곡가로서의 능력을 입증해낸 브람스는 이제 인생의 말년에 접어들어 자신만의 음악적 깊이를 교향곡에 담아내고자 그의 마지막 교향곡의 작곡에 심혈을 기울였다.",
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                        Text(
+                                          '위 주제문을 참고해보세요!',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    TextFormField(
+                                      controller: _summaryTextEditingController,
+                                      maxLines: 10,
+                                      decoration: InputDecoration(
+                                        hintText: '요약문을 작성해주세요.',
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 50,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            final previousIndex =
+                                                _tabController.index - 1;
+                                            if (previousIndex >= 0) {
+                                              _tabController
+                                                  .animateTo(previousIndex);
+                                            }
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: myColor.shade800,
+                                              foregroundColor: Colors.white,
+                                              shadowColor: myColor.shade800,
+                                              elevation: 4),
+                                          child: Icon(
+                                            Icons.arrow_back_rounded,
+                                            size: 25,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            _pageController.nextPage(
+                                              duration:
+                                                  Duration(milliseconds: 300),
+                                              curve: Curves.easeInOut,
+                                            );
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: myColor.shade100,
+                                              foregroundColor: Colors.white,
+                                              shadowColor: myColor.shade800,
+                                              elevation: 4),
+                                          child: Icon(
+                                            Icons.arrow_forward_rounded,
+                                            size: 25,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+                          ), // 요약문 탭
                         ]),
                       )
                     ],
@@ -358,9 +613,54 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                 chosenAnswer[1] = value!;
                               });
                             }),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                _pageController.previousPage(
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: myColor.shade800,
+                                  foregroundColor: Colors.white,
+                                  shadowColor: myColor.shade800,
+                                  elevation: 4),
+                              child: Icon(
+                                Icons.arrow_back_rounded,
+                                size: 25,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                _pageController.nextPage(
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: myColor.shade100,
+                                  foregroundColor: Colors.white,
+                                  shadowColor: myColor.shade800,
+                                  elevation: 4),
+                              child: Icon(
+                                Icons.arrow_forward_rounded,
+                                size: 25,
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
-                  ),
+                  ), // 2번 문제
                   SingleChildScrollView(
                     //3번 문제
                     controller: scrollController,
@@ -440,7 +740,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                         )
                       ],
                     ),
-                  ),
+                  ), // 3번 문제
                 ],
               ),
             ),
