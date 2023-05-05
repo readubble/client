@@ -10,14 +10,15 @@ class BottomSummarySheet extends StatefulWidget {
 
 class _BottomSummarySheetState extends State<BottomSummarySheet>
     with SingleTickerProviderStateMixin {
-  final PageController pageController = PageController(initialPage: 0);
+  final PageController _pageController = PageController(initialPage: 0);
+  int _currentPageIndex = 0;
+
   List<int> chosenAnswer = [0, 0, 0]; //총 3문제
   Map<String, List<String>> choices = {
     "quiz1": ["바로 다음의 해", "올해", "지난해"],
     "quiz2": ["하이든", "바흐", "베토벤"],
     "quiz3": ["O", "X", "알 수 없음"]
   };
-  int keywordNum = 1;
 
   static const List<Tab> myTabs = <Tab>[
     Tab(text: '키워드'),
@@ -27,15 +28,36 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
 
   late TabController _tabController;
 
+  int _rowsCount = 1;
+  List<TextEditingController> _textEditingControllers = [];
+
+  void _addRow() {
+    setState(() {
+      if (_rowsCount < 3) {
+        _textEditingControllers.add(TextEditingController());
+        _rowsCount++;
+      }
+    });
+  }
+
+  void _removeRow(int index) {
+    setState(() {
+      _textEditingControllers.removeAt(index);
+      _rowsCount--;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: myTabs.length);
+    _textEditingControllers.add(TextEditingController());
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _textEditingControllers.forEach((controller) => controller.dispose());
     super.dispose();
   }
 
@@ -62,6 +84,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                   ] // 둥근 모서리
                   ),
               child: PageView(
+                controller: _pageController,
                 children: [
                   SingleChildScrollView(
                     //1번 문제
@@ -192,8 +215,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '이 글에서 키워드라고 생각하는 단어를 적어주세요! (개수 제한 없음)',
+                                      '이 글에서 키워드라고 생각하는 단어를 적어주세요! (최대 3개)',
                                       style: TextStyle(fontSize: 17),
+                                      textAlign: TextAlign.center,
                                     ),
                                     SizedBox(
                                       height: 20,
@@ -201,55 +225,58 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10.0),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            "$keywordNum",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: 25),
-                                          ),
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                          Expanded(
-                                            child: TextFormField(
-                                              textAlign: TextAlign.center,
-                                              decoration: InputDecoration(
-                                                hintText: '키워드 적기',
-                                                border: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                  color: Colors.grey,
-                                                  width: 1,
-                                                )),
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: Colors.grey,
-                                                    width: 1,
-                                                  ),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: myColor.shade300,
-                                                    width: 2,
+                                      child: Column(
+                                        children:
+                                            List.generate(_rowsCount, (index) {
+                                          final isLastRow =
+                                              (index == _rowsCount - 1);
+                                          return Row(
+                                            children: [
+                                              Text(
+                                                (index + 1).toString(),
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w900,
+                                                    fontSize: 25),
+                                              ),
+                                              SizedBox(
+                                                width: 25,
+                                              ),
+                                              Expanded(
+                                                child: TextFormField(
+                                                  textAlign: TextAlign.center,
+                                                  controller:
+                                                      _textEditingControllers[
+                                                          index],
+                                                  decoration: InputDecoration(
+                                                    hintText: '키워드 입력',
+                                                    border:
+                                                        UnderlineInputBorder(),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                          IconButton(
-                                              onPressed: () {},
-                                              icon: Icon(
-                                                Icons
-                                                    .add_circle_outline_outlined,
-                                                size: 30,
-                                              ))
-                                        ],
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              if (isLastRow)
+                                                IconButton(
+                                                  onPressed: _addRow,
+                                                  icon: Icon(
+                                                    Icons.add,
+                                                    size: 25,
+                                                  ),
+                                                ),
+                                              if (!isLastRow)
+                                                IconButton(
+                                                  onPressed: () =>
+                                                      _removeRow(index),
+                                                  icon: Icon(
+                                                    Icons.remove,
+                                                    size: 25,
+                                                  ),
+                                                ),
+                                            ],
+                                          );
+                                        }).toList().cast<Widget>(),
                                       ),
                                     ),
                                   ],

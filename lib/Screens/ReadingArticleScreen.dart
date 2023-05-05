@@ -103,6 +103,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                     children: [
                                       Icon(
                                         Icons.search,
+                                        size: 25,
                                       ),
                                       SizedBox(
                                         width: 5,
@@ -152,8 +153,10 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                               baseFontSize -= 1;
                                           });
                                         },
-                                        icon:
-                                            Icon(Icons.text_decrease_rounded)),
+                                        icon: Icon(
+                                          Icons.text_decrease_rounded,
+                                          size: 25,
+                                        )),
                                     Text("글자 크기",
                                         style: TextStyle(
                                             fontSize: 15,
@@ -165,15 +168,17 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                               baseFontSize += 1;
                                           });
                                         },
-                                        icon:
-                                            Icon(Icons.text_increase_rounded)),
+                                        icon: Icon(
+                                          Icons.text_increase_rounded,
+                                          size: 25,
+                                        )),
                                   ],
                                 ),
                               )
                             ],
                           ),
                           SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
                           Text(
                             thisText,
