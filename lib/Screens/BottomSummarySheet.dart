@@ -102,6 +102,37 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
     return buttonList;
   }
 
+  List<Widget> getTopicSentences() {
+    List<Widget> sentencesTile = [];
+
+    for (int i = 0; i < _articleSentences.length; i++) {
+      if (isSelected[i]) {
+        Container button = Container(
+          margin: EdgeInsets.only(bottom: 10),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: myColor.shade700,
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            onPressed: _copyText,
+            child: Container(
+              child: Text(
+                _articleSentences[i],
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+          ),
+        );
+
+        sentencesTile.add(button);
+      }
+    }
+    return sentencesTile;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -472,62 +503,19 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                         ),
                                         textAlign: TextAlign.center,
                                       ),
-                                      children: [
-                                        ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: myColor.shade700,
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 15, vertical: 7),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                          ),
-                                          onPressed: _copyText,
-                                          child: Container(
-                                            child: Text(
-                                              "19세기의 다른 교향곡 작곡가들과 마찬가지로 브람스 역시 베토벤이라는 거인을 피해갈 수 없었다.",
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 15,
-                                        ),
-                                        ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: myColor.shade700,
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 15, vertical: 7),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                          ),
-                                          onPressed: _copyText,
-                                          child: Container(
-                                            child: Text(
-                                              "1885년, 이미 세 곡의 훌륭한 교향곡을 통해 교향곡 작곡가로서의 능력을 입증해낸 브람스는 이제 인생의 말년에 접어들어 자신만의 음악적 깊이를 교향곡에 담아내고자 그의 마지막 교향곡의 작곡에 심혈을 기울였다.",
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 15,
-                                        ),
-                                        Text(
-                                          '위 주제문을 참고해보세요!',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.black,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        SizedBox(
-                                          height: 15,
-                                        ),
-                                      ],
+                                      children: getTopicSentences(),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      '위 주제문을 참고해보세요!',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
                                     SizedBox(
                                       height: 15,
