@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../main.dart';
 
@@ -32,6 +33,22 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
   List<TextEditingController> _textEditingControllers = [];
   TextEditingController _summaryTextEditingController = TextEditingController();
 
+  final List<String> _articleSentences = [
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit Sed non risus.',
+    'Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.',
+    'Cras elementum ultrices diam Maecenas ligula massa, varius a, semper congue, euismod non, mi.',
+    'Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat.',
+    'Duis semper Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim.',
+    'Pellentesque congue Ut in risus volutpat libero pharetra tempor.',
+    'Cras vestibulum bibendum augue Praesent egestas leo in pede Praesent blandit odio eu enim.',
+    'Pellentesque sed dui ut augue blandit sodales.',
+    'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.',
+    'Mauris ac mauris sed pede pellentesque fermentum.',
+    'Maecenas adipiscing ante non diam sodales hendrerit.',
+    'Ut velit mauris, egestas sed, gravida nec, ornare ut, mi.',
+  ];
+  late List<bool> isSelected; // 각 문장이 선택되었는지 true/false
+
   void _addRow() {
     setState(() {
       if (_rowsCount < 3) {
@@ -52,11 +69,45 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
     //_summaryTextEditingController.text += "THIS TEXT";
   }
 
+  void updateSelection(int index) {
+    setState(() {
+      isSelected[index] = !isSelected[index];
+    });
+  }
+
+  List<Widget> getElevatedButtonList() {
+    List<Widget> buttonList = [];
+
+    for (int i = 0; i < _articleSentences.length; i++) {
+      Container button = Container(
+          margin: EdgeInsets.symmetric(vertical: 5),
+          width: MediaQuery.of(context).size.width,
+          child: ElevatedButton(
+            onPressed: () {
+              updateSelection(i);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor:
+                  isSelected[i] ? myColor.shade50 : myColor.shade700,
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            child: Text(_articleSentences[i], style: TextStyle(fontSize: 16)),
+          ));
+
+      buttonList.add(button);
+    }
+    return buttonList;
+  }
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: myTabs.length);
     _textEditingControllers.add(TextEditingController());
+    isSelected = List.generate(_articleSentences.length, (_) => false);
   }
 
   @override
@@ -92,7 +143,6 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                 controller: _pageController,
                 children: [
                   SingleChildScrollView(
-                    //1번 문제
                     controller: scrollController,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -184,9 +234,8 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                         )
                       ],
                     ),
-                  ),
+                  ), // 1번 문제
                   Column(
-                    //두번째 페이지
                     children: [
                       SingleChildScrollView(
                         controller: scrollController,
@@ -347,12 +396,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                     SizedBox(
                                       height: 20,
                                     ),
-                                    Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0),
-                                        child: Column(
-                                          children: [Text("주제문들 주르륵")],
-                                        )),
+                                    Column(children: getElevatedButtonList()),
                                     SizedBox(
                                       height: 50,
                                     ),
@@ -418,6 +462,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     ExpansionTile(
+                                      initiallyExpanded: true,
                                       title: Text(
                                         '$nickname님이 선택한 주제문',
                                         style: TextStyle(
@@ -554,7 +599,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                         ]),
                       )
                     ],
-                  ),
+                  ), // 두번째 페이지(키워드,주제문,요약문)
                   SingleChildScrollView(
                     //2번 문제
                     controller: scrollController,
