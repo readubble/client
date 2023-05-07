@@ -348,7 +348,10 @@ Widget lockedArticleTile(BuildContext context, String imageURL,
               content: const Text('아직은 이 글을 볼 수 없어요!'),
               actions: <Widget>[
                 TextButton(
-                  child: const Text('확인'),
+                  child: const Text(
+                    '확인',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                  ),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },

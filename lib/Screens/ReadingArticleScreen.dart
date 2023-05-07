@@ -25,6 +25,36 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
   """;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      // 페이지가 로드된 후 즉시 alertDialog를 표시합니다.
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('타이머 시작'),
+            content: Text(
+              '시작 버튼을 누르면 타이머가 시작됩니다.',
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text(
+                  '시작',
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -57,7 +87,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                             "브람스 교향곡 4번",
                             style: TextStyle(
                                 fontSize: 28, fontWeight: FontWeight.w600),
-                          ),
+                          ), //글 제목
                           SizedBox(
                             height: 20,
                           ),
@@ -81,17 +111,16 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                 width: 10,
                               ),
                             ],
-                          ),
+                          ), //난이도
                           SizedBox(
                             height: 10,
                           ),
                           Container(
-                            // 가로줄
                             margin: const EdgeInsets.symmetric(vertical: 15),
                             width: double.infinity,
                             height: 2,
                             color: Colors.black,
-                          ),
+                          ), // 가로줄
                           Row(
                             children: [
                               ElevatedButton(
@@ -128,7 +157,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                       borderRadius: BorderRadius.circular(
                                           20), // BorderRadius 적용
                                     ),
-                                  )),
+                                  )), // 국어사전 버튼
                               SizedBox(
                                 width: 15,
                               ),
