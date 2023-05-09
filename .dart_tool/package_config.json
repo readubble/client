@@ -20,6 +20,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "circular_usage_indicator",
+      "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/circular_usage_indicator-0.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.7"
+    },
+    {
       "name": "clock",
       "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/clock-1.1.1",
       "packageUri": "lib/",
@@ -176,6 +182,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "simple_circular_progress_bar",
+      "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/simple_circular_progress_bar-1.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///Users/kim-yumi/development/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -242,7 +254,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-04-28T08:11:45.817801Z",
+  "generated": "2023-05-09T10:36:02.092582Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

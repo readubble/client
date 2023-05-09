@@ -44,6 +44,6 @@ MaterialColor myColor = const MaterialColor(0xff84B7D9, {
   400: Color(0xffffae8c), //옅은 산호색
   500: Color(0xff0a4671), //네이비
   600: Color(0xFFFCFFF9), //연두
-  700: Color(0xffE3E2E8), //옅은 회색
+  700: Color(0xfff1f1f1), //옅은 회색
   800: Color(0xffb1b1b3), //짙은 회색
 });
