@@ -42,29 +42,29 @@ class _MainScreenState extends State<MainScreen> {
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.home,
                 size: 35,
               ),
-              label: 'Home',
+              label: '홈',
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.favorite,
                 size: 35,
               ),
-              label: 'Likes',
+              label: '북마크',
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.person,
                 size: 35,
               ),
-              label: 'MyPage',
+              label: '마이페이지',
             ),
           ],
           currentIndex: _selectedIndex,

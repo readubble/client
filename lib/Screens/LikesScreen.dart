@@ -168,7 +168,7 @@ class _LikesScreenState extends State<LikesScreen>
                                     color: Colors.lightBlue),
                               ),
                               TextSpan(
-                                text: '저장한 글($articleCount 개)',
+                                text: '저장한 글 ($articleCount 개)',
                                 style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w600,
@@ -205,10 +205,36 @@ class _LikesScreenState extends State<LikesScreen>
                         ),
                       ],
                     ),
-                  ),
-                  const Center(
-                    child: Text("단어단어", style: TextStyle(fontSize: 40)),
-                  ),
+                  ), //저장한 글
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          ' 나의 단어장',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black),
+                        ), //'저장한 글' 텍스트
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Expanded(
+                          child: GridView.count(
+                            shrinkWrap: true,
+                            primary: false,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            crossAxisCount: 3,
+                            childAspectRatio: 2,
+                            children: getLikedWords(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ), //저장한 단어
                 ]),
               ),
             ],
@@ -233,3 +259,22 @@ List<Widget> getLikedArticles() {
   return articles;
 } // 저장한 글의 리스트를 타일 형태로 반환하는 메소드. 좋아요 표시 된 UnlockedArticleTile을 articles[]에 추가할 것.
 // 매개변수로 글의 카테고리를 받고, 그때 그때 카테고리에 따라 저장한 글을 가져오면 좋겠음
+
+List<Widget> getLikedWords() {
+  List<Widget> words = [];
+
+  for (int i = 0; i < 10; i++) {
+    words.add(Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20), color: Colors.teal.shade100),
+      padding: const EdgeInsets.all(8),
+      child: const Text(
+        '대외비',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      ),
+    ));
+  }
+
+  return words;
+}
