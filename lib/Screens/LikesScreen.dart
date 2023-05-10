@@ -20,6 +20,7 @@ class _LikesScreenState extends State<LikesScreen>
     )
   ];
   int articleCount = 0;
+  String category = '';
 
   @override
   void initState() {
@@ -54,7 +55,9 @@ class _LikesScreenState extends State<LikesScreen>
                           children: [
                             GestureDetector(
                               onTap: () {
-                                print('clicked!');
+                                setState(() {
+                                  category = '[인문]';
+                                });
                               },
                               child: Column(
                                 children: [
@@ -85,7 +88,9 @@ class _LikesScreenState extends State<LikesScreen>
                             ), // 인문 버튼
                             GestureDetector(
                               onTap: () {
-                                print('clicked!');
+                                setState(() {
+                                  category = '[사회]';
+                                });
                               },
                               child: Column(
                                 children: [
@@ -116,7 +121,9 @@ class _LikesScreenState extends State<LikesScreen>
                             ), //사회 버튼
                             GestureDetector(
                               onTap: () {
-                                print('clicked!');
+                                setState(() {
+                                  category = '[과학]';
+                                });
                               },
                               child: Column(
                                 children: [
@@ -151,13 +158,29 @@ class _LikesScreenState extends State<LikesScreen>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              ' 저장한 글($articleCount 개)',
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w600),
-                            ),
+                            RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                text: ' $category ',
+                                style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.lightBlue),
+                              ),
+                              TextSpan(
+                                text: '저장한 글($articleCount 개)',
+                                style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                            ])),
                             TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  setState(() {
+                                    category = '';
+                                  });
+                                },
                                 child: const Text(
                                   '모두 보기',
                                   style: TextStyle(
@@ -177,50 +200,7 @@ class _LikesScreenState extends State<LikesScreen>
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
                             crossAxisCount: 3,
-                            children: <Widget>[
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                color: Colors.teal[100],
-                                child: const Text(
-                                    "He'd have you all unravel at the"),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                color: Colors.teal[200],
-                                child: const Text('Heed not the rabble'),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                color: Colors.teal[100],
-                                child: const Text(
-                                    "He'd have you all unravel at the"),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                color: Colors.teal[200],
-                                child: const Text('Heed not the rabble'),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                color: Colors.teal[300],
-                                child: const Text('Sound of screams but the'),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                color: Colors.teal[400],
-                                child: const Text('Who scream'),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                color: Colors.teal[500],
-                                child: const Text('Revolution is coming...'),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                color: Colors.teal[600],
-                                child: const Text('Revolution, they...'),
-                              ),
-                            ],
+                            children: getLikedArticles(),
                           ),
                         ),
                       ],
@@ -238,3 +218,18 @@ class _LikesScreenState extends State<LikesScreen>
     );
   }
 }
+
+List<Widget> getLikedArticles() {
+  List<Widget> articles = [];
+
+  for (int i = 0; i < 10; i++) {
+    articles.add(Container(
+      padding: const EdgeInsets.all(8),
+      color: Colors.teal[200],
+      child: const Text('Heed not the rabble'),
+    ));
+  }
+
+  return articles;
+} // 저장한 글의 리스트를 타일 형태로 반환하는 메소드. 좋아요 표시 된 UnlockedArticleTile을 articles[]에 추가할 것.
+// 매개변수로 글의 카테고리를 받고, 그때 그때 카테고리에 따라 저장한 글을 가져오면 좋겠음
