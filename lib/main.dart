@@ -1,10 +1,10 @@
-import 'package:bwageul/Screens/Dictionary.dart';
-import 'package:bwageul/Screens/FinishReading.dart';
-import 'package:bwageul/Screens/LoginScreen.dart';
-import 'package:bwageul/Screens/ReadingArticleScreen.dart';
-import 'package:bwageul/Screens/ReadingThumbnailScreen.dart';
-import 'package:bwageul/Screens/RegisterScreen.dart';
-import 'package:bwageul/Screens/MainScreen.dart';
+import 'package:bwageul/Screens/dictionary.dart';
+import 'package:bwageul/Screens/finish_reading.dart';
+import 'package:bwageul/Screens/login_screen.dart';
+import 'package:bwageul/Screens/reading_article_screen.dart';
+import 'package:bwageul/Screens/reading_thumbnail_screen.dart';
+import 'package:bwageul/Screens/register_screen.dart';
+import 'package:bwageul/Screens/main_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

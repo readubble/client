@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../main.dart';
-import 'BottomSummarySheet.dart';
+import 'bottom_summary_sheet.dart';
 
 class ReadingArticleScreen extends StatefulWidget {
   const ReadingArticleScreen({Key? key}) : super(key: key);

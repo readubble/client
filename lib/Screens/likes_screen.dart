@@ -266,11 +266,12 @@ List<Widget> getLikedWords() {
   for (int i = 0; i < 10; i++) {
     words.add(Container(
       alignment: Alignment.center,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), color: Colors.teal.shade100),
+      decoration: BoxDecoration(boxShadow: [
+        BoxShadow(color: myColor.shade800, offset: Offset(3, 3), blurRadius: 3)
+      ], borderRadius: BorderRadius.circular(20), color: Colors.grey[350]),
       padding: const EdgeInsets.all(8),
       child: const Text(
-        '대외비',
+        '금일',
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
       ),
     ));

@@ -87,9 +87,9 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/http-0.13.5",
+      "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/http-0.13.6",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "2.19"
     },
     {
       "name": "http_parser",
@@ -254,7 +254,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-05-09T10:36:02.092582Z",
+  "generated": "2023-05-10T18:05:12.347579Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

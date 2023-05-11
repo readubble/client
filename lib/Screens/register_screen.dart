@@ -22,10 +22,10 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   bool showSpinner = false;
   final _formkey = GlobalKey<FormState>(); // Form 위젯을 쓸 땐 global key 를 넣어야 함
-  String nickname = '';
-  String id = '';
-  String password = '';
-  String passwordCheck = '';
+  TextEditingController nicknameController = TextEditingController();
+  TextEditingController idController = TextEditingController();
+  TextEditingController pwController = TextEditingController();
+  TextEditingController pwCheckController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +55,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 ),
                 TextFormField(
                   // 닉네임
+                  controller: nicknameController,
                   style: const TextStyle(color: Colors.grey),
                   decoration: const InputDecoration(
                     prefixIcon: Icon(
@@ -76,16 +77,13 @@ class _RegisterFormState extends State<RegisterForm> {
                       color: Colors.grey,
                     ),
                   ),
-                  onChanged: (value) {
-                    // value를 input 으로 넣음
-                    nickname = value; // 입력할 때 마다 변할거임
-                  },
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 TextFormField(
                   //아이디
+                  controller: idController,
                   style: const TextStyle(color: Colors.grey),
                   decoration: const InputDecoration(
                     prefixIcon: Icon(
@@ -107,16 +105,13 @@ class _RegisterFormState extends State<RegisterForm> {
                       color: Colors.grey,
                     ),
                   ),
-                  onChanged: (value) {
-                    // value를 input 으로 넣음
-                    id = value; // 입력할 때 마다 변할거임
-                  },
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 TextFormField(
                   //비밀번호
+                  controller: pwController,
                   style: const TextStyle(color: Colors.grey),
                   obscureText: true, // 입력시 ****** 처리
                   obscuringCharacter: "*",
@@ -140,15 +135,13 @@ class _RegisterFormState extends State<RegisterForm> {
                       color: Colors.grey,
                     ),
                   ),
-                  onChanged: (value) {
-                    password = value;
-                  },
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 TextFormField(
                   //비밀번호 확인
+                  controller: pwCheckController,
                   style: const TextStyle(color: Colors.grey),
                   obscureText: true, // 입력시 ****** 처리
                   obscuringCharacter: "*",
@@ -172,9 +165,6 @@ class _RegisterFormState extends State<RegisterForm> {
                       color: Colors.grey,
                     ),
                   ),
-                  onChanged: (value) {
-                    passwordCheck = value;
-                  },
                 ),
                 const SizedBox(
                   height: 40,
@@ -191,16 +181,25 @@ class _RegisterFormState extends State<RegisterForm> {
                   ),
                   onPressed: () {
                     // 비밀번호와 비밀번호 확인 정보가 일치하는지 확인
-                    if (password != passwordCheck) {
+                    if (pwController.text != pwCheckController.text) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('비밀번호를 다시 입력하세요.'),
                           duration: Duration(seconds: 3),
                         ),
                       );
+                    } else if (nicknameController.text == '' ||
+                        idController.text == '' ||
+                        pwController.text == '' ||
+                        pwCheckController.text == '') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('입력하지 않은 값이 있습니다.'),
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
                     } else {
                       // 정상 가입
-
                       Navigator.popUntil(context, ModalRoute.withName('/'));
                     }
                   },
