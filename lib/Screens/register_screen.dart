@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:bwageul/Services/api_services.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -64,8 +65,16 @@ class _RegisterFormState extends State<RegisterForm> {
                       Icons.sentiment_satisfied_alt,
                       color: Colors.black,
                     ),
-                    border: InputBorder.none,
                     enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 3,
+                        color: Colors.black,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         width: 3,
                         color: Colors.black,
@@ -92,8 +101,16 @@ class _RegisterFormState extends State<RegisterForm> {
                       Icons.people,
                       color: Colors.black,
                     ),
-                    border: InputBorder.none,
                     enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 3,
+                        color: Colors.black,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         width: 3,
                         color: Colors.black,
@@ -132,10 +149,22 @@ class _RegisterFormState extends State<RegisterForm> {
                               Icons.visibility_outlined,
                               color: Colors.black,
                             ),
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          isPwVisible = !isPwVisible;
+                        });
+                      },
                     ),
-                    border: InputBorder.none,
                     enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 3,
+                        color: Colors.black,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         width: 3,
                         color: Colors.black,
@@ -174,10 +203,23 @@ class _RegisterFormState extends State<RegisterForm> {
                               Icons.visibility_outlined,
                               color: Colors.black,
                             ),
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          isPwCheckVisible = !isPwCheckVisible;
+                        });
+                      },
                     ),
                     border: InputBorder.none,
-                    enabledBorder: OutlineInputBorder(
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 3,
+                        color: Colors.black,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(
                         width: 3,
                         color: Colors.black,
@@ -187,7 +229,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       ),
                     ),
                     labelText: '비밀번호 확인',
-                    labelStyle: TextStyle(
+                    labelStyle: const TextStyle(
                       color: Colors.grey,
                     ),
                   ),
@@ -196,7 +238,6 @@ class _RegisterFormState extends State<RegisterForm> {
                   height: 40,
                 ),
                 ElevatedButton(
-                  // 회원가입 버튼
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
@@ -205,7 +246,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     // 비밀번호와 비밀번호 확인 정보가 일치하는지 확인
                     if (pwController.text != pwCheckController.text) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -226,6 +267,12 @@ class _RegisterFormState extends State<RegisterForm> {
                       );
                     } else {
                       // 정상 가입
+                      ApiService.signUp(nicknameController.text,
+                          idController.text, pwController.text);
+                      nicknameController.clear();
+                      idController.clear();
+                      pwController.clear();
+                      pwCheckController.clear();
                       //Navigator.popUntil(context, ModalRoute.withName('/'));
                     }
                   },
@@ -238,7 +285,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
-                )
+                ) // 회원가입 버튼
               ],
             ),
           ),
