@@ -1,5 +1,6 @@
-import 'package:bwageul/Widgets/SwipeGuide.dart';
 import 'package:flutter/material.dart';
+
+import '../Widgets/swipe_guide.dart';
 
 class ReadingThumbnailScreen extends StatefulWidget {
   const ReadingThumbnailScreen({Key? key}) : super(key: key);

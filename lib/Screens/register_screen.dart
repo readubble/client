@@ -21,6 +21,8 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   bool showSpinner = false;
+  bool isPwVisible = false;
+  bool isPwCheckVisible = false;
   final _formkey = GlobalKey<FormState>(); // Form 위젯을 쓸 땐 global key 를 넣어야 함
   TextEditingController nicknameController = TextEditingController();
   TextEditingController idController = TextEditingController();
@@ -113,12 +115,24 @@ class _RegisterFormState extends State<RegisterForm> {
                   //비밀번호
                   controller: pwController,
                   style: const TextStyle(color: Colors.grey),
-                  obscureText: true, // 입력시 ****** 처리
+                  obscureText: !isPwVisible, // 입력시 ****** 처리
                   obscuringCharacter: "*",
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.password,
                       color: Colors.black,
+                    ),
+                    suffixIcon: IconButton(
+                      icon: isPwVisible
+                          ? Icon(
+                              Icons.visibility_off_outlined,
+                              color: Colors.black,
+                            )
+                          : Icon(
+                              Icons.visibility_outlined,
+                              color: Colors.black,
+                            ),
+                      onPressed: () {},
                     ),
                     border: InputBorder.none,
                     enabledBorder: OutlineInputBorder(
@@ -143,12 +157,24 @@ class _RegisterFormState extends State<RegisterForm> {
                   //비밀번호 확인
                   controller: pwCheckController,
                   style: const TextStyle(color: Colors.grey),
-                  obscureText: true, // 입력시 ****** 처리
+                  obscureText: !isPwCheckVisible, // 입력시 ****** 처리
                   obscuringCharacter: "*",
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.done_all,
                       color: Colors.black,
+                    ),
+                    suffixIcon: IconButton(
+                      icon: isPwCheckVisible
+                          ? Icon(
+                              Icons.visibility_off_outlined,
+                              color: Colors.black,
+                            )
+                          : Icon(
+                              Icons.visibility_outlined,
+                              color: Colors.black,
+                            ),
+                      onPressed: () {},
                     ),
                     border: InputBorder.none,
                     enabledBorder: OutlineInputBorder(
@@ -200,7 +226,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       );
                     } else {
                       // 정상 가입
-                      Navigator.popUntil(context, ModalRoute.withName('/'));
+                      //Navigator.popUntil(context, ModalRoute.withName('/'));
                     }
                   },
                   child: Container(

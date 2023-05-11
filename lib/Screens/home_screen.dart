@@ -1,9 +1,9 @@
 import 'dart:ui';
+import 'package:bwageul/Widgets/locked_article_tile.dart';
+import 'package:bwageul/Widgets/unlocked_article_tile.dart';
 import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../Widgets/LockedArticleTile.dart';
-import '../Widgets/UnlockedArticleTile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
