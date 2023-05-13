@@ -63,4 +63,22 @@ class ApiService {
       throw Exception('회원가입 실패');
     }
   }
+
+  static Future<void> logout(String id) async {
+    final url = Uri.parse('$baseUrl/users/logout');
+    var userInfo = {'user_id': id};
+    var response =
+        await http.post(url, headers: headers, body: jsonEncode(userInfo));
+    if (response.statusCode == 200) {
+      // 로그아웃 성공
+      print('로그아웃 성공');
+      var body = jsonDecode(response.body);
+    } else {
+      if (response.body.isNotEmpty) {
+        var body = jsonDecode(response.body);
+        print(
+            'Error Code: ${body['code']} / Error Message: ${body['message']}');
+      }
+    }
+  } //로그아웃
 }

@@ -48,7 +48,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
                     textAlign: TextAlign.center,
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/settings');
+                    },
                     icon: const Icon(Icons.settings),
                     iconSize: 30,
                   ), // 설정

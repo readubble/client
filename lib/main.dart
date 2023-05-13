@@ -5,6 +5,7 @@ import 'package:bwageul/Screens/reading_article_screen.dart';
 import 'package:bwageul/Screens/reading_thumbnail_screen.dart';
 import 'package:bwageul/Screens/register_screen.dart';
 import 'package:bwageul/Screens/main_screen.dart';
+import 'package:bwageul/Screens/settings.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/article': (context) => const ReadingArticleScreen(),
         '/finish': (context) => const FinishReading(),
         '/dictionary': (context) => const KoreanDictionary(),
+        '/settings': (context) => const Settings(),
       },
     );
   }
