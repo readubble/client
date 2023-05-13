@@ -53,17 +53,40 @@ class ApiService {
       //print('login함수 -> Access token: ${body['data']['access_token']} / Refresh token: ${body['data']['refresh_token']}');
       saveAccessToken(body['data']['access_token']);
       //getAccessToken().then((value) => print(value));
+      saveRefreshToken(body['data']['refresh_token']);
       saveUserId(userInfo['id']!);
       //getUserId().then((value) => print(value));
-    } else {
-      if (response.body.isNotEmpty) {
+    } else if (response.statusCode == 401) {
+      // 토큰 만료 에러
+      final url2 = Uri.parse('$baseUrl/users/authorize/token');
+      final accessToken = getAccessToken();
+      var refreshToken = {'refresh_token': getRefreshToken()};
+
+      final response2 = await http.post(url2,
+          headers: {
+            'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(refreshToken));
+      if (response2.statusCode == 200) {
+        // 토큰 갱신 성공
+        print('토큰 갱신 성공');
         var body = jsonDecode(response.body);
-        print(
-            'Error Code: ${body['code']} / Error Message: ${body['message']}');
-        print(
-            'Access token: ${body['data']['access_token']} / Refresh token: ${body['data']['refresh_token']}');
+        final newAccessToken = body['data']['access_token'];
+        saveAccessToken(newAccessToken); // storage에 새로운 access token 다시 저장
       }
-      throw Exception('회원가입 실패');
+    } else {
+      //에러
+      {
+        if (response.body.isNotEmpty) {
+          var body = jsonDecode(response.body);
+          print(
+              'Error Code: ${body['code']} / Error Message: ${body['message']}');
+          print(
+              'Access token: ${body['data']['access_token']} / Refresh token: ${body['data']['refresh_token']}');
+        }
+        throw Exception('회원가입 실패');
+      }
     }
   }
 

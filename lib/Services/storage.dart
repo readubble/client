@@ -11,6 +11,15 @@ Future<String?> getAccessToken() async {
   return accessToken;
 }
 
+Future<void> saveRefreshToken(String refreshToken) async {
+  await storage.write(key: 'refresh_token', value: refreshToken);
+}
+
+Future<String?> getRefreshToken() async {
+  final refreshToken = await storage.read(key: 'refresh_token');
+  return refreshToken;
+}
+
 Future<void> saveUserId(String id) async {
   await storage.write(key: 'user_id', value: id);
 }
@@ -18,4 +27,10 @@ Future<void> saveUserId(String id) async {
 Future<String?> getUserId() async {
   final id = await storage.read(key: 'user_id');
   return id;
+}
+
+Future<void> deleteTokenAndId() async {
+  await storage.delete(key: 'access_token');
+  await storage.delete(key: 'refresh_token');
+  await storage.delete(key: 'user_id');
 }
