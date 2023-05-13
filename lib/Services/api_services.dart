@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bwageul/Services/storage.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -49,9 +50,11 @@ class ApiService {
       // 로그인 성공
       print('로그인 성공');
       var body = jsonDecode(response.body);
-      print('Error Code: ${body['code']} / Error Message: ${body['message']}');
-      print(
-          'Access token: ${body['data']['access_token']} / Refresh token: ${body['data']['refresh_token']}');
+      //print('login함수 -> Access token: ${body['data']['access_token']} / Refresh token: ${body['data']['refresh_token']}');
+      saveAccessToken(body['data']['access_token']);
+      //getAccessToken().then((value) => print(value));
+      saveUserId(userInfo['id']!);
+      //getUserId().then((value) => print(value));
     } else {
       if (response.body.isNotEmpty) {
         var body = jsonDecode(response.body);

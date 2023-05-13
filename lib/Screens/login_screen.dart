@@ -172,8 +172,9 @@ class _LoginFormState extends State<LoginForm> {
                         );
                       } else {
                         ApiService.login(idController.text, pwController.text);
-                        // idController.clear();
-                        // pwController.clear();
+                        idController.clear();
+                        pwController.clear();
+                        Navigator.pop(context);
                       }
                     },
                     child: const Text(
