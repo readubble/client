@@ -1,3 +1,4 @@
+import 'package:bwageul/Services/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
@@ -23,10 +24,10 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   bool showSpinner = false;
   final _formkey = GlobalKey<FormState>(); // Form 위젯을 쓸 땐 global key 를 넣어야 함
-  String id = '';
-  String password = '';
-  final bool _showPw = true;
+  bool isPwVisible = false;
   bool _autoLogin = false; // 자동로그인 여부 저장 변수
+  TextEditingController idController = TextEditingController();
+  TextEditingController pwController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,7 @@ class _LoginFormState extends State<LoginForm> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
                       Icon(
-                        Icons.edit_outlined,
+                        Icons.bubble_chart_outlined,
                         size: 60,
                       ),
                       Text(
@@ -65,14 +66,23 @@ class _LoginFormState extends State<LoginForm> {
                     height: 50,
                   ),
                   TextFormField(
+                    controller: idController,
                     style: const TextStyle(color: Colors.grey),
                     decoration: const InputDecoration(
                       prefixIcon: Icon(
                         Icons.people,
                         color: Colors.black,
                       ),
-                      border: InputBorder.none,
                       enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 3,
+                          color: Colors.black,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           width: 3,
                           color: Colors.black,
@@ -86,24 +96,45 @@ class _LoginFormState extends State<LoginForm> {
                         color: Colors.grey,
                       ),
                     ),
-                    onChanged: (value) {
-                      // value를 input 으로 넣음
-                      id = value; // 입력할 때 마다 변할거임
-                    },
-                  ),
+                  ), //아이디
                   const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
+                    controller: pwController,
                     style: const TextStyle(color: Colors.grey),
-                    obscureText: true, // 입력시 ****** 처리
+                    obscureText: !isPwVisible, // 입력시 ****** 처리
                     obscuringCharacter: "*",
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.password,
                         color: Colors.black,
                       ),
-                      border: InputBorder.none,
+                      suffixIcon: IconButton(
+                        icon: isPwVisible
+                            ? Icon(
+                                Icons.visibility_off_outlined,
+                                color: Colors.black,
+                              )
+                            : Icon(
+                                Icons.visibility_outlined,
+                                color: Colors.black,
+                              ),
+                        onPressed: () {
+                          setState(() {
+                            isPwVisible = !isPwVisible;
+                          });
+                        },
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 3,
+                          color: Colors.black,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                      ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           width: 3,
@@ -118,15 +149,11 @@ class _LoginFormState extends State<LoginForm> {
                         color: Colors.grey,
                       ),
                     ),
-                    onChanged: (value) {
-                      password = value;
-                    },
-                  ),
+                  ), //비밀번호
                   const SizedBox(
                     height: 20,
                   ),
                   ElevatedButton(
-                    // 로그인 버튼
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -135,14 +162,26 @@ class _LoginFormState extends State<LoginForm> {
                       foregroundColor: Colors.white,
                       minimumSize: const Size(double.infinity, 50),
                     ),
-                    onPressed: () async {},
+                    onPressed: () async {
+                      if (idController.text == '' || pwController.text == '') {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('입력하지 않은 값이 있습니다.'),
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                      } else {
+                        ApiService.login(idController.text, pwController.text);
+                        // idController.clear();
+                        // pwController.clear();
+                      }
+                    },
                     child: const Text(
                       '로그인',
                       style: TextStyle(fontSize: 16),
                     ),
-                  ),
+                  ), // 로그인 버튼
                   CheckboxListTile(
-                    // 자동 로그인 여부 체크박스
                     controlAffinity: ListTileControlAffinity.leading,
                     title: const Text('자동로그인'),
                     value: _autoLogin,
@@ -152,7 +191,7 @@ class _LoginFormState extends State<LoginForm> {
                         _autoLogin = value!;
                       });
                     },
-                  ),
+                  ), // 자동 로그인 여부 체크박스
                   const SizedBox(
                     height: 20,
                   ),
@@ -171,7 +210,7 @@ class _LoginFormState extends State<LoginForm> {
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
-                            color: Colors.grey),
+                            color: Colors.black),
                       ),
                       Container(
                         //수평선
@@ -180,12 +219,11 @@ class _LoginFormState extends State<LoginForm> {
                         color: Colors.black,
                       ),
                     ],
-                  )),
+                  )), //수평선
                   const SizedBox(
                     height: 20,
                   ),
                   ElevatedButton(
-                    // 회원가입 버튼
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       padding: EdgeInsets.zero,
@@ -206,7 +244,7 @@ class _LoginFormState extends State<LoginForm> {
                         style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
                     ),
-                  )
+                  ) // 회원가입 버튼
                 ],
               ),
             ),

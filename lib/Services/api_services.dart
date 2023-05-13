@@ -34,5 +34,33 @@ class ApiService {
       }
       throw Exception('회원가입 실패');
     }
+  } //회원가입 함수
+
+  static Future<void> login(String id, String password) async {
+    final url = Uri.parse('$baseUrl/users/authorize');
+    var userInfo = {
+      'id': id,
+      'password': password,
+    };
+
+    var response =
+        await http.post(url, headers: headers, body: jsonEncode(userInfo));
+    if (response.statusCode == 200) {
+      // 로그인 성공
+      print('로그인 성공');
+      var body = jsonDecode(response.body);
+      print('Error Code: ${body['code']} / Error Message: ${body['message']}');
+      print(
+          'Access token: ${body['data']['access_token']} / Refresh token: ${body['data']['refresh_token']}');
+    } else {
+      if (response.body.isNotEmpty) {
+        var body = jsonDecode(response.body);
+        print(
+            'Error Code: ${body['code']} / Error Message: ${body['message']}');
+        print(
+            'Access token: ${body['data']['access_token']} / Refresh token: ${body['data']['refresh_token']}');
+      }
+      throw Exception('회원가입 실패');
+    }
   }
 }

@@ -209,7 +209,6 @@ class _RegisterFormState extends State<RegisterForm> {
                         });
                       },
                     ),
-                    border: InputBorder.none,
                     enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(
                         width: 3,
@@ -273,7 +272,8 @@ class _RegisterFormState extends State<RegisterForm> {
                       idController.clear();
                       pwController.clear();
                       pwCheckController.clear();
-                      //Navigator.popUntil(context, ModalRoute.withName('/'));
+                      Navigator.popUntil(
+                          context, ModalRoute.withName('/login'));
                     }
                   },
                   child: Container(
