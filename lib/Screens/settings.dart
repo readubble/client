@@ -1,3 +1,5 @@
+import 'package:bwageul/Services/api_services.dart';
+import 'package:bwageul/Services/storage.dart';
 import 'package:flutter/material.dart';
 
 class Settings extends StatelessWidget {
@@ -42,7 +44,9 @@ class Settings extends StatelessWidget {
               height: 20,
             ),
             TextButton(
-                onPressed: () {},
+                onPressed: () async {
+                  ApiService.logout();
+                },
                 child: Text(
                   '로그아웃',
                   style: TextStyle(

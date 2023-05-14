@@ -34,3 +34,10 @@ Future<void> deleteTokenAndId() async {
   await storage.delete(key: 'refresh_token');
   await storage.delete(key: 'user_id');
 }
+
+Future<bool> isLoggedIn() async {
+  if (await getAccessToken() != null && await getUserId() != null)
+    return true;
+  else
+    return false;
+}
