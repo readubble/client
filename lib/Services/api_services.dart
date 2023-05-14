@@ -41,7 +41,8 @@ class ApiService {
     }
   } //회원가입 함수
 
-  static Future<void> login(String id, String password) async {
+  static Future<void> login(
+      String id, String password, bool isAutoLogin) async {
     final url = Uri.parse('$baseUrl/users/authorize');
     var userInfo = {
       'id': id,
@@ -58,15 +59,18 @@ class ApiService {
       saveRefreshToken(body['data']['refresh_token']);
       saveUserId(userInfo['id']!);
 
-      getAccessToken().then((value) => print(value));
-      getUserId().then((value) => print(value));
+      //getAccessToken().then((value) => print(value));
+      //getUserId().then((value) => print(value));
+
+      if (isAutoLogin)
+        await ApiService.autoLogin(); // 자동 로그인이 체크되어 있으므로 자동 로그인 함수 호출
     } else if (response.statusCode == 401) {
       // 토큰 만료 에러
       final url2 = Uri.parse('$baseUrl/users/authorize/token');
       final accessToken = await getAccessToken(); // 토큰 만료라는 건 이미 토큰이 있다는 뜻이니까!
       var refreshToken = {'refresh_token': await getRefreshToken()};
 
-      final response2 = await http.post(url2,
+      var response2 = await http.post(url2,
           headers: {
             'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
             'Content-Type': 'application/json', 'Accept': 'application/json'
@@ -128,7 +132,7 @@ class ApiService {
       // 로그아웃 성공
       print('로그아웃 성공');
       await deleteTokenAndId();
-      getUserId().then((value) => print(value)); // 로그아웃 됐으니까 null
+      //getUserId().then((value) => print(value)); // 로그아웃 됐으니까 null
       return true;
     } else {
       //로그아웃 실패
@@ -141,4 +145,26 @@ class ApiService {
       return false;
     }
   } //로그아웃 함수
+
+  static Future<void> autoLogin() async {
+    final url = Uri.parse('$baseUrl/users/authorize/auto');
+    final accessToken = await getAccessToken(); // 지금으로선 액세스 토큰이 없네?..
+
+    var response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+        'Content-Type': 'application/json', 'Accept': 'application/json'
+      },
+    );
+    if (response.statusCode == 200) {
+      // 자동 로그인 성공! 자동 로그인을 선택하면 실제로 로그인을 한 게 아니라 로그인 과정을 생략한 것.
+      // 따라서 user_id가 필요한 작업이 있을 때 사용하려고 user_id를 저장해둠.
+      print('자동 로그인 성공');
+      var body = jsonDecode(response.body);
+      saveUserId(body['data']['user_id']);
+    } else {
+      throw Exception('자동 로그인 실패');
+    }
+  } // 자동로그인 함수
 }

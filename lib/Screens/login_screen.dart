@@ -25,7 +25,7 @@ class _LoginFormState extends State<LoginForm> {
   bool showSpinner = false;
   final _formkey = GlobalKey<FormState>(); // Form 위젯을 쓸 땐 global key 를 넣어야 함
   bool isPwVisible = false;
-  bool _autoLogin = false; // 자동로그인 여부 저장 변수
+  bool _autoLogin = true; // 자동로그인 여부 저장 변수
   TextEditingController idController = TextEditingController();
   TextEditingController pwController = TextEditingController();
 
@@ -171,7 +171,9 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                         );
                       } else {
-                        ApiService.login(idController.text, pwController.text);
+                        ApiService.login(
+                            idController.text, pwController.text, _autoLogin);
+
                         idController.clear();
                         pwController.clear();
                         Navigator.pop(context);
@@ -184,7 +186,7 @@ class _LoginFormState extends State<LoginForm> {
                   ), // 로그인 버튼
                   CheckboxListTile(
                     controlAffinity: ListTileControlAffinity.leading,
-                    title: const Text('자동로그인'),
+                    title: const Text('자동 로그인'),
                     value: _autoLogin,
                     activeColor: Colors.black,
                     onChanged: (bool? value) {
