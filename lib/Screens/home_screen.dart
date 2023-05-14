@@ -1,9 +1,14 @@
 import 'dart:ui';
+import 'package:bwageul/Models/UserInfoModel.dart';
+import 'package:bwageul/Services/api_services.dart';
+import 'package:bwageul/Services/storage.dart';
 import 'package:bwageul/Widgets/locked_article_tile.dart';
 import 'package:bwageul/Widgets/unlocked_article_tile.dart';
 import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:bwageul/Services/storage.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,9 +18,42 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String nickname = '홍길동';
-  int days = 100;
   final PageController _quizController = PageController(initialPage: 0);
+  String nickname = '000';
+  int days = 0;
+  late UserInfoModel _user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadUserInfo();
+  }
+
+  Future<void> _loadUserInfo() async {
+    String? userId = await getUserId(); // 사용자 ID
+    print('user id: $userId');
+    if (userId != null) {
+      // 로그인된 경우
+      var user = await ApiService.getUserInfoById(userId);
+      setState(() {
+        _user = user;
+        nickname = _user.nickname;
+        days = calculateDateDifference(_user.date);
+      });
+      //print(nickname);
+      //print(days);
+    }
+  }
+
+  int calculateDateDifference(String dateString) {
+    final now = DateTime.now(); // 현재 시간
+    final date =
+        DateFormat('yy-MM-dd').parse(dateString); // 입력된 날짜 문자열을 DateTime 객체로 변환
+
+    final difference = now.difference(date).inDays;
+    return (difference + 1); // 오늘부터 1일을 기준으로 해야하므로 1을 더해줌
+  }
 
   @override
   Widget build(BuildContext context) {

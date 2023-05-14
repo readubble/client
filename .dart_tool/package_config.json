@@ -164,6 +164,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "intl",
+      "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/intl-0.18.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "iphone_has_notch",
       "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/iphone_has_notch-1.0.0",
       "packageUri": "lib/",
@@ -308,7 +314,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-05-13T14:58:34.902488Z",
+  "generated": "2023-05-14T13:31:40.654703Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

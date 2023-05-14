@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bwageul/Models/UserInfoModel.dart';
 import 'package:bwageul/Services/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -53,7 +54,7 @@ class ApiService {
 
     if (response.statusCode == 200) {
       // 로그인 성공
-      print('로그인 성공');
+      print('${userInfo['id']!} 로그인 성공');
       var body = jsonDecode(response.body);
       saveAccessToken(body['data']['access_token']);
       saveRefreshToken(body['data']['refresh_token']);
@@ -66,25 +67,7 @@ class ApiService {
         await ApiService.autoLogin(); // 자동 로그인이 체크되어 있으므로 자동 로그인 함수 호출
     } else if (response.statusCode == 401) {
       // 토큰 만료 에러
-      final url2 = Uri.parse('$baseUrl/users/authorize/token');
-      final accessToken = await getAccessToken(); // 토큰 만료라는 건 이미 토큰이 있다는 뜻이니까!
-      var refreshToken = {'refresh_token': await getRefreshToken()};
-
-      var response2 = await http.post(url2,
-          headers: {
-            'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
-            'Content-Type': 'application/json', 'Accept': 'application/json'
-          },
-          body: jsonEncode(refreshToken));
-      if (response2.statusCode == 200) {
-        // 토큰 갱신 성공
-        print('토큰 갱신 성공');
-        var body = jsonDecode(response.body);
-        final newAccessToken = body['data']['access_token'];
-        saveAccessToken(newAccessToken); // storage에 새로운 access token 다시 저장
-      } else {
-        throw Exception('토큰 갱신 실패');
-      }
+      updateToken();
     } else {
       // 로그인 실패
       if (response.body.isEmpty) {
@@ -93,8 +76,8 @@ class ApiService {
         var body = jsonDecode(response.body);
         print(
             'Error Code: ${body['code']} / Error Message: ${body['message']}');
-        print(
-            'Access token: ${body['data']['access_token']} / Refresh token: ${body['data']['refresh_token']}');
+        // print(
+        //     'Access token: ${body['data']['access_token']} / Refresh token: ${body['data']['refresh_token']}');
       }
       throw Exception('로그인 실패');
     }
@@ -130,10 +113,14 @@ class ApiService {
         body: jsonEncode(userInfo));
     if (response.statusCode == 200) {
       // 로그아웃 성공
-      print('로그아웃 성공');
+      print('$userInfo 로그아웃 성공');
       await deleteTokenAndId();
       //getUserId().then((value) => print(value)); // 로그아웃 됐으니까 null
       return true;
+    } else if (response.statusCode == 401) {
+      // 토큰 만료 에러
+      updateToken();
+      return false;
     } else {
       //로그아웃 실패
       print('로그아웃 실패');
@@ -167,4 +154,61 @@ class ApiService {
       throw Exception('자동 로그인 실패');
     }
   } // 자동로그인 함수
+
+  static Future<void> updateToken() async {
+    final url = Uri.parse('$baseUrl/users/authorize/token');
+    final accessToken = await getAccessToken(); // 토큰 만료라는 건 이미 토큰이 있다는 뜻이니까!
+    var refreshToken = {"refresh_token": await getRefreshToken()};
+    getUserId().then((value) => print('userID: $value'));
+    print('Access Token: $accessToken');
+    print(refreshToken);
+    var response = await http.post(url,
+        headers: {
+          'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+          'Content-Type': 'application/json', 'Accept': 'application/json'
+        },
+        body: jsonEncode(refreshToken));
+    if (response.statusCode == 200) {
+      // 토큰 갱신 성공
+      print('토큰 갱신 성공');
+      var body = jsonDecode(response.body);
+      final newAccessToken = body['data']['access_token'];
+      saveAccessToken(newAccessToken); // storage에 새로운 access token 다시 저장
+    } else {
+      print('토큰 갱신 실패');
+      if (response.body.isNotEmpty) {
+        var body = jsonDecode(response.body);
+        print(
+            'Error Code: ${body['code']} / Error Message: ${body['message']}');
+      }
+      throw Exception('토큰 갱신 실패');
+    }
+  }
+  // 토큰 갱신 함수
+
+  static Future<UserInfoModel> getUserInfoById(String id) async {
+    UserInfoModel model;
+    final accessToken = await getAccessToken();
+    final url = Uri.parse('$baseUrl/users/$id');
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+      'Content-Type': 'application/json', 'Accept': 'application/json'
+    });
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      model = UserInfoModel.fromJson(body);
+      //print(body['data']['level'].runtimeType); // level은 String이었다...
+      //print("my nickname: " + model.nickname);
+      //print("sign up date: " + model.date);
+      return model;
+    } else if (response.statusCode == 401) {
+      // 토큰 만료
+      await updateToken();
+      return getUserInfoById(id);
+    } else {
+      var body = jsonDecode(response.body);
+      print(body);
+      throw Exception("회원 정보 불러오기 실패");
+    }
+  }
 }
