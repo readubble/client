@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:bwageul/Services/storage.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -95,7 +96,7 @@ class ApiService {
     }
   } //로그인 함수
 
-  static Future<void> logout() async {
+  static Future<bool> logout() async {
     final url = Uri.parse('$baseUrl/users/logout');
     var userInfo;
     final String accessToken;
@@ -128,6 +129,7 @@ class ApiService {
       print('로그아웃 성공');
       await deleteTokenAndId();
       getUserId().then((value) => print(value)); // 로그아웃 됐으니까 null
+      return true;
     } else {
       //로그아웃 실패
       print('로그아웃 실패');
@@ -136,6 +138,7 @@ class ApiService {
         print(
             'Error Code: ${body['code']} / Error Message: ${body['message']}');
       }
+      return false;
     }
   } //로그아웃 함수
 }

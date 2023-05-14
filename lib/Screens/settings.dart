@@ -45,7 +45,22 @@ class Settings extends StatelessWidget {
             ),
             TextButton(
                 onPressed: () async {
-                  ApiService.logout();
+                  bool logoutResult = await ApiService.logout();
+                  if (logoutResult) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('로그아웃 성공'),
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('로그아웃 실패! 다시 시도하세요.'),
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  }
                 },
                 child: Text(
                   '로그아웃',
