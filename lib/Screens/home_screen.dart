@@ -37,13 +37,13 @@ class _HomeScreenState extends State<HomeScreen> {
     if (userId != null) {
       // 로그인된 경우
       var user = await ApiService.getUserInfoById(userId);
-      final userProvider =
+      final userInfoProvider =
           Provider.of<UserInfoProvider>(context, listen: false);
-      userProvider.setUser(user);
+      userInfoProvider.setUser(user);
 
       setState(() {
         nickname = user.nickname;
-        days = userProvider.getDaysFromSignUp();
+        days = userInfoProvider.getDaysFromSignUp();
       });
     }
   }

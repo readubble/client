@@ -32,6 +32,8 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userInfoProvider = Provider.of<UserInfoProvider>(context);
+
     return SingleChildScrollView(
       child: Stack(
         children: [
@@ -76,12 +78,8 @@ class _MyPageScreenState extends State<MyPageScreen> {
                           textAlign: TextAlign.center,
                           text: TextSpan(children: [
                             TextSpan(
-                                text: Provider.of<UserInfoProvider>(context)
-                                            .user !=
-                                        null
-                                    ? Provider.of<UserInfoProvider>(context)
-                                        .user!
-                                        .nickname
+                                text: userInfoProvider.user != null
+                                    ? userInfoProvider.user!.nickname
                                     : '000',
                                 style: TextStyle(
                                     color: Colors.black,
@@ -98,14 +96,12 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 17)),
                             TextSpan(
-                              text:
-                                  Provider.of<UserInfoProvider>(context).user !=
-                                          null
-                                      ? Provider.of<UserInfoProvider>(context)
-                                              .getDaysFromSignUp()
-                                              .toString() +
-                                          "일"
-                                      : '0일',
+                              text: userInfoProvider.user != null
+                                  ? userInfoProvider
+                                          .getDaysFromSignUp()
+                                          .toString() +
+                                      "일"
+                                  : '0일',
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,

@@ -26,8 +26,8 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   void _onItemTapped(int index) async {
-    if (index == 2) {
-      // My Page가 선택되었는데 로그인이 안 되어 있으면
+    if (index == 1 || index == 2) {
+      // 북마크 페이지 또는 My Page가 선택되었는데 로그인이 안 되어 있으면
       bool _isLoggedIn = await isLoggedIn(); // 로그인 여부를 저장하는 변수.
       if (!_isLoggedIn) Navigator.pushNamed(context, '/login'); // 로그인 페이지로 이동
     }
