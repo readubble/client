@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:circular_usage_indicator/circular_usage_indicator.dart';
 import 'package:bwageul/Services/api_services.dart';
+import 'package:provider/provider.dart';
+
+import '../Models/user_info_provider.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({Key? key}) : super(key: key);
@@ -13,7 +16,6 @@ class MyPageScreen extends StatefulWidget {
 }
 
 class _MyPageScreenState extends State<MyPageScreen> {
-  String nickname = '홍길동';
   XFile? _image; // 프로필 사진
 
   Future<void> _getImageFromGallery() async {
@@ -74,7 +76,13 @@ class _MyPageScreenState extends State<MyPageScreen> {
                           textAlign: TextAlign.center,
                           text: TextSpan(children: [
                             TextSpan(
-                                text: '$nickname',
+                                text: Provider.of<UserInfoProvider>(context)
+                                            .user !=
+                                        null
+                                    ? Provider.of<UserInfoProvider>(context)
+                                        .user!
+                                        .nickname
+                                    : '000',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600,
@@ -90,7 +98,14 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 17)),
                             TextSpan(
-                              text: '100일',
+                              text:
+                                  Provider.of<UserInfoProvider>(context).user !=
+                                          null
+                                      ? Provider.of<UserInfoProvider>(context)
+                                              .getDaysFromSignUp()
+                                              .toString() +
+                                          "일"
+                                      : '0일',
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
