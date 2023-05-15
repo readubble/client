@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:bwageul/Models/UserInfoModel.dart';
+import 'package:bwageul/Models/user_info_model.dart';
 import 'package:bwageul/Services/api_services.dart';
 import 'package:bwageul/Services/storage.dart';
 import 'package:bwageul/Widgets/locked_article_tile.dart';
@@ -7,7 +7,6 @@ import 'package:bwageul/Widgets/unlocked_article_tile.dart';
 import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:bwageul/Services/storage.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -41,8 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
         nickname = _user.nickname;
         days = calculateDateDifference(_user.date);
       });
-      //print(nickname);
-      //print(days);
     }
   }
 
@@ -52,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
         DateFormat('yy-MM-dd').parse(dateString); // 입력된 날짜 문자열을 DateTime 객체로 변환
 
     final difference = now.difference(date).inDays;
-    return (difference + 1); // 오늘부터 1일을 기준으로 해야하므로 1을 더해줌
+    return (difference + 1); // 오늘부터 1일을 기준으로 해야 하므로 1을 더해줌
   }
 
   @override
