@@ -3,6 +3,7 @@ import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:circular_usage_indicator/circular_usage_indicator.dart';
+import 'package:bwageul/Services/api_services.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({Key? key}) : super(key: key);
@@ -13,14 +14,18 @@ class MyPageScreen extends StatefulWidget {
 
 class _MyPageScreenState extends State<MyPageScreen> {
   String nickname = '홍길동';
-  File? _image; // 프로필 사진
+  XFile? _image; // 프로필 사진
 
   Future<void> _getImageFromGallery() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
     setState(() {
-      _image = File(pickedFile!.path);
+      _image = pickedFile;
     });
+    if (_image != null) {
+      await ApiService.changeProfileImage(_image!);
+    }
   }
 
   @override
@@ -119,7 +124,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                 color: Colors.white,
                                 image: _image != null
                                     ? DecorationImage(
-                                        image: FileImage(_image!),
+                                        image: FileImage(File(_image!.path)),
                                         fit: BoxFit.cover)
                                     : null,
                               ),
