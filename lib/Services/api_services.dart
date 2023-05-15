@@ -12,7 +12,7 @@ class ApiService {
   static const String baseUrl =
       "http://ec2-3-37-90-240.ap-northeast-2.compute.amazonaws.com";
   static Map<String, String> headers = {
-    "Content-type": "application/json",
+    "Content-type": "application/json; charset=utf-8",
     'Accept': 'application/json'
   };
 
@@ -38,7 +38,7 @@ class ApiService {
     // 회원가입 실패
     else {
       if (response.body.isNotEmpty) {
-        var body = jsonDecode(response.body);
+        var body = jsonDecode(utf8.decode(response.bodyBytes));
         print(
             'Error Code: ${body['code']} / Error Message: ${body['message']}');
       }
@@ -113,7 +113,8 @@ class ApiService {
     var response = await http.post(url,
         headers: {
           'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
-          'Content-Type': 'application/json', 'Accept': 'application/json'
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json'
         },
         body: jsonEncode(userInfo));
     if (response.statusCode == 200) {
@@ -131,7 +132,7 @@ class ApiService {
       //로그아웃 실패
       print('로그아웃 실패');
       if (response.body.isNotEmpty) {
-        var body = jsonDecode(response.body);
+        var body = jsonDecode(utf8.decode(response.bodyBytes));
         print(
             'Error Code: ${body['code']} / Error Message: ${body['message']}');
       }
@@ -148,14 +149,15 @@ class ApiService {
       url,
       headers: {
         'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
-        'Content-Type': 'application/json', 'Accept': 'application/json'
+        'Content-Type': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
       },
     );
     if (response.statusCode == 200) {
       // 자동 로그인 성공! 자동 로그인을 선택하면 실제로 로그인을 한 게 아니라 로그인 과정을 생략한 것.
       // 따라서 user_id가 필요한 작업이 있을 때 사용하려고 user_id를 저장해둠.
       print('자동 로그인 성공');
-      var body = jsonDecode(response.body);
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
       saveUserId(body['data']['user_id']);
     } else {
       throw Exception('자동 로그인 실패');
@@ -175,7 +177,8 @@ class ApiService {
     var response = await http.post(url,
         headers: {
           'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
-          'Content-Type': 'application/json', 'Accept': 'application/json'
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json'
         },
         body: jsonEncode(refreshToken));
     if (response.statusCode == 200) {
@@ -189,7 +192,7 @@ class ApiService {
     } else {
       print('토큰 갱신 실패');
       if (response.body.isNotEmpty) {
-        var body = jsonDecode(response.body);
+        var body = jsonDecode(utf8.decode(response.bodyBytes));
         print(
             'Error Code: ${body['code']} / Error Message: ${body['message']}');
       }
