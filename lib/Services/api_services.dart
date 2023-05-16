@@ -207,21 +207,19 @@ class ApiService {
     final url = Uri.parse('$baseUrl/users/$id');
     var response = await http.get(url, headers: {
       'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
-      'Content-Type': 'application/json', 'Accept': 'application/json'
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
     });
     if (response.statusCode == 200) {
-      final body = jsonDecode(response.body);
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
       model = UserInfoModel.fromJson(body);
-      //print(body['data']['level'].runtimeType); // level은 String이었다...
-      //print("my nickname: " + model.nickname);
-      //print("sign up date: " + model.date);
       return model;
     } else if (response.statusCode == 401) {
       // 토큰 만료
       await updateToken();
       return getUserInfoById(id);
     } else {
-      var body = jsonDecode(response.body);
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
       print(body);
       throw Exception("회원 정보 불러오기 실패");
     }
@@ -244,6 +242,8 @@ class ApiService {
         contentType: MediaType.parse(mimeType!),
       );
       request.files.add(multipartFile);
+      request.headers['Authorization'] = 'Bearer $accessToken';
+      request.headers['Content-Type'] = 'multipart/form-data';
 
       final response = await request.send();
       if (response.statusCode == 200) {
