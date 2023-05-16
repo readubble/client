@@ -138,14 +138,15 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                 ],
                                 shape: BoxShape.circle,
                                 color: Colors.white,
-                                image: userInfoProvider.user != null
+                                image: userInfoProvider.user?.profile.length !=
+                                        0
                                     ? DecorationImage(
                                         image: NetworkImage(
                                             userInfoProvider.getProfileUrl()!),
                                         fit: BoxFit.cover)
                                     : null,
                               ), // 프로필 사진 컨테이너
-                              child: userInfoProvider.user == null
+                              child: userInfoProvider.user?.profile.length == 0
                                   ? Icon(Icons.person,
                                       size: 48, color: Colors.grey[400])
                                   : null,
