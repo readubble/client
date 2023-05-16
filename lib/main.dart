@@ -1,3 +1,4 @@
+import 'package:bwageul/Models/user_info_provider.dart';
 import 'package:bwageul/Screens/dictionary.dart';
 import 'package:bwageul/Screens/finish_reading.dart';
 import 'package:bwageul/Screens/login_screen.dart';
@@ -7,9 +8,18 @@ import 'package:bwageul/Screens/register_screen.dart';
 import 'package:bwageul/Screens/main_screen.dart';
 import 'package:bwageul/Screens/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'Models/profile_image_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => UserInfoProvider()),
+      ChangeNotifierProvider(create: (_) => ProfileImageProvider()),
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

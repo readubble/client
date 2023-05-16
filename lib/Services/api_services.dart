@@ -1,14 +1,18 @@
 import 'dart:convert';
-import 'package:bwageul/Models/UserInfoModel.dart';
+import 'dart:io';
+import 'package:bwageul/Models/user_info_model.dart';
 import 'package:bwageul/Services/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 
 class ApiService {
   static const String baseUrl =
       "http://ec2-3-37-90-240.ap-northeast-2.compute.amazonaws.com";
   static Map<String, String> headers = {
-    "Content-type": "application/json",
+    "Content-type": "application/json; charset=utf-8",
     'Accept': 'application/json'
   };
 
@@ -34,7 +38,7 @@ class ApiService {
     // 회원가입 실패
     else {
       if (response.body.isNotEmpty) {
-        var body = jsonDecode(response.body);
+        var body = jsonDecode(utf8.decode(response.bodyBytes));
         print(
             'Error Code: ${body['code']} / Error Message: ${body['message']}');
       }
@@ -60,8 +64,9 @@ class ApiService {
       saveRefreshToken(body['data']['refresh_token']);
       saveUserId(userInfo['id']!);
 
-      //getAccessToken().then((value) => print(value));
-      //getUserId().then((value) => print(value));
+      // getRefreshToken().then((value) => print('refresh token: $value'));
+      // getAccessToken().then((value) => print('access token: $value'));
+      // getUserId().then((value) => print(value));
 
       if (isAutoLogin)
         await ApiService.autoLogin(); // 자동 로그인이 체크되어 있으므로 자동 로그인 함수 호출
@@ -108,7 +113,8 @@ class ApiService {
     var response = await http.post(url,
         headers: {
           'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
-          'Content-Type': 'application/json', 'Accept': 'application/json'
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json'
         },
         body: jsonEncode(userInfo));
     if (response.statusCode == 200) {
@@ -119,13 +125,14 @@ class ApiService {
       return true;
     } else if (response.statusCode == 401) {
       // 토큰 만료 에러
-      updateToken();
+      print('토큰 만료 에러 401');
+      await updateToken();
       return false;
     } else {
       //로그아웃 실패
       print('로그아웃 실패');
       if (response.body.isNotEmpty) {
-        var body = jsonDecode(response.body);
+        var body = jsonDecode(utf8.decode(response.bodyBytes));
         print(
             'Error Code: ${body['code']} / Error Message: ${body['message']}');
       }
@@ -135,37 +142,43 @@ class ApiService {
 
   static Future<void> autoLogin() async {
     final url = Uri.parse('$baseUrl/users/authorize/auto');
-    final accessToken = await getAccessToken(); // 지금으로선 액세스 토큰이 없네?..
+    final accessToken =
+        await getAccessToken(); // 지금으로선 액세스 토큰이 없음 -> 로그인 함수 호출하고서(액세스 토큰 생기면) 자동 로그인 함수 호출하기
 
     var response = await http.get(
       url,
       headers: {
         'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
-        'Content-Type': 'application/json', 'Accept': 'application/json'
+        'Content-Type': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
       },
     );
     if (response.statusCode == 200) {
       // 자동 로그인 성공! 자동 로그인을 선택하면 실제로 로그인을 한 게 아니라 로그인 과정을 생략한 것.
       // 따라서 user_id가 필요한 작업이 있을 때 사용하려고 user_id를 저장해둠.
       print('자동 로그인 성공');
-      var body = jsonDecode(response.body);
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
       saveUserId(body['data']['user_id']);
     } else {
       throw Exception('자동 로그인 실패');
     }
-  } // 자동로그인 함수
+  } // 자동 로그인 함수
 
   static Future<void> updateToken() async {
     final url = Uri.parse('$baseUrl/users/authorize/token');
-    final accessToken = await getAccessToken(); // 토큰 만료라는 건 이미 토큰이 있다는 뜻이니까!
+    final accessToken = await getAccessToken(); // 토큰 만료 => 이미 토큰이 있다
     var refreshToken = {"refresh_token": await getRefreshToken()};
-    getUserId().then((value) => print('userID: $value'));
-    print('Access Token: $accessToken');
-    print(refreshToken);
+
+    // 테스트용
+    // getUserId().then((value) => print('update token - userID: $value'));
+    // print('update token - Access Token: $accessToken');
+    // print('update token - Refresh Token: ${refreshToken['refresh_token']}');
+
     var response = await http.post(url,
         headers: {
           'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
-          'Content-Type': 'application/json', 'Accept': 'application/json'
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json'
         },
         body: jsonEncode(refreshToken));
     if (response.statusCode == 200) {
@@ -174,10 +187,12 @@ class ApiService {
       var body = jsonDecode(response.body);
       final newAccessToken = body['data']['access_token'];
       saveAccessToken(newAccessToken); // storage에 새로운 access token 다시 저장
+      getAccessToken()
+          .then((value) => print('newly updated access token: $value'));
     } else {
       print('토큰 갱신 실패');
       if (response.body.isNotEmpty) {
-        var body = jsonDecode(response.body);
+        var body = jsonDecode(utf8.decode(response.bodyBytes));
         print(
             'Error Code: ${body['code']} / Error Message: ${body['message']}');
       }
@@ -192,23 +207,58 @@ class ApiService {
     final url = Uri.parse('$baseUrl/users/$id');
     var response = await http.get(url, headers: {
       'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
-      'Content-Type': 'application/json', 'Accept': 'application/json'
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
     });
     if (response.statusCode == 200) {
-      final body = jsonDecode(response.body);
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
       model = UserInfoModel.fromJson(body);
-      //print(body['data']['level'].runtimeType); // level은 String이었다...
-      //print("my nickname: " + model.nickname);
-      //print("sign up date: " + model.date);
       return model;
     } else if (response.statusCode == 401) {
       // 토큰 만료
       await updateToken();
       return getUserInfoById(id);
     } else {
-      var body = jsonDecode(response.body);
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
       print(body);
       throw Exception("회원 정보 불러오기 실패");
     }
   }
+
+  static Future<String> changeProfileImage(XFile image) async {
+    final id = await getUserId();
+    final accessToken = await getAccessToken();
+    final url = Uri.parse('$baseUrl/users/$id/profile');
+    print("프로필 사진을 서버에 업로드 합니다.");
+
+    final request = http.MultipartRequest('POST', url);
+
+    final file = File(image.path);
+    final mimeType = lookupMimeType(file.path);
+    final multipartFile = await http.MultipartFile.fromPath(
+      'file',
+      file.path,
+      contentType: MediaType.parse(mimeType!),
+    );
+    request.files.add(multipartFile);
+    request.headers['Authorization'] = 'Bearer $accessToken';
+    request.headers['Content-Type'] = 'multipart/form-data';
+
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      // 성공적으로 업로드 완료
+      print('프로필 사진이 서버에 업로드되었습니다.');
+      final responseData = await response.stream.bytesToString();
+      final parsedData = jsonDecode(responseData);
+      print(parsedData);
+      return parsedData['data']['url'];
+    } else {
+      // 업로드 실패
+      print('프로필 사진 업로드에 실패했습니다.');
+      final responseData = await response.stream.bytesToString();
+      final parsedData = jsonDecode(responseData);
+      print(parsedData);
+      throw Exception('프로필 사진 업로드 중 오류 발생');
+    }
+  } // 프로필 이미지 변경
 }

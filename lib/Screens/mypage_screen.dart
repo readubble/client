@@ -1,8 +1,13 @@
 import 'dart:io';
 import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image/network.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:circular_usage_indicator/circular_usage_indicator.dart';
+import 'package:bwageul/Services/api_services.dart';
+import 'package:provider/provider.dart';
+import '../Models/profile_image_provider.dart';
+import '../Models/user_info_provider.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({Key? key}) : super(key: key);
@@ -12,19 +17,28 @@ class MyPageScreen extends StatefulWidget {
 }
 
 class _MyPageScreenState extends State<MyPageScreen> {
-  String nickname = '홍길동';
-  File? _image; // 프로필 사진
+  //XFile? _image; // 프로필 사진
+  //String? _imageUrl;
 
   Future<void> _getImageFromGallery() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = File(pickedFile!.path);
-    });
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedFile != null) {
+      final serverImageUrl = await ApiService.changeProfileImage(pickedFile);
+      setState(() {
+        final provider = Provider.of<UserInfoProvider>(context, listen: false);
+        provider.setProfileUrl(serverImageUrl);
+        print('now imageUrl:${provider.getProfileUrl()}');
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final userInfoProvider =
+        Provider.of<UserInfoProvider>(context, listen: false);
+
     return SingleChildScrollView(
       child: Stack(
         children: [
@@ -69,7 +83,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
                           textAlign: TextAlign.center,
                           text: TextSpan(children: [
                             TextSpan(
-                                text: '$nickname',
+                                text: userInfoProvider.user != null
+                                    ? userInfoProvider.user!.nickname
+                                    : '000',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600,
@@ -85,7 +101,12 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 17)),
                             TextSpan(
-                              text: '100일',
+                              text: userInfoProvider.user != null
+                                  ? userInfoProvider
+                                          .getDaysFromSignUp()
+                                          .toString() +
+                                      "일"
+                                  : '0일',
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.black,
@@ -117,13 +138,14 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                 ],
                                 shape: BoxShape.circle,
                                 color: Colors.white,
-                                image: _image != null
+                                image: userInfoProvider.user != null
                                     ? DecorationImage(
-                                        image: FileImage(_image!),
+                                        image: NetworkImage(
+                                            userInfoProvider.getProfileUrl()!),
                                         fit: BoxFit.cover)
                                     : null,
-                              ),
-                              child: _image == null
+                              ), // 프로필 사진 컨테이너
+                              child: userInfoProvider.user == null
                                   ? Icon(Icons.person,
                                       size: 48, color: Colors.grey[400])
                                   : null,
