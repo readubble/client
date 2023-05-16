@@ -10,9 +10,14 @@ import 'package:bwageul/Screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'Models/profile_image_provider.dart';
+
 void main() {
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (_) => UserInfoProvider())],
+    providers: [
+      ChangeNotifierProvider(create: (_) => UserInfoProvider()),
+      ChangeNotifierProvider(create: (_) => ProfileImageProvider()),
+    ],
     child: MyApp(),
   ));
 }

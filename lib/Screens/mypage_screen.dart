@@ -1,11 +1,12 @@
 import 'dart:io';
 import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image/network.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:circular_usage_indicator/circular_usage_indicator.dart';
 import 'package:bwageul/Services/api_services.dart';
 import 'package:provider/provider.dart';
-
+import '../Models/profile_image_provider.dart';
 import '../Models/user_info_provider.dart';
 
 class MyPageScreen extends StatefulWidget {
@@ -16,23 +17,27 @@ class MyPageScreen extends StatefulWidget {
 }
 
 class _MyPageScreenState extends State<MyPageScreen> {
-  XFile? _image; // 프로필 사진
+  //XFile? _image; // 프로필 사진
+  //String? _imageUrl;
 
   Future<void> _getImageFromGallery() async {
     final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
-    setState(() {
-      _image = pickedFile;
-    });
-    if (_image != null) {
-      await ApiService.changeProfileImage(_image!);
+    if (pickedFile != null) {
+      final serverImageUrl = await ApiService.changeProfileImage(pickedFile);
+      setState(() {
+        final provider = Provider.of<UserInfoProvider>(context, listen: false);
+        provider.setProfileUrl(serverImageUrl);
+        print('now imageUrl:${provider.getProfileUrl()}');
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final userInfoProvider = Provider.of<UserInfoProvider>(context);
+    final userInfoProvider =
+        Provider.of<UserInfoProvider>(context, listen: false);
 
     return SingleChildScrollView(
       child: Stack(
@@ -133,13 +138,14 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                 ],
                                 shape: BoxShape.circle,
                                 color: Colors.white,
-                                image: _image != null
+                                image: userInfoProvider.user != null
                                     ? DecorationImage(
-                                        image: FileImage(File(_image!.path)),
+                                        image: NetworkImage(
+                                            userInfoProvider.getProfileUrl()!),
                                         fit: BoxFit.cover)
                                     : null,
-                              ),
-                              child: _image == null
+                              ), // 프로필 사진 컨테이너
+                              child: userInfoProvider.user == null
                                   ? Icon(Icons.person,
                                       size: 48, color: Colors.grey[400])
                                   : null,

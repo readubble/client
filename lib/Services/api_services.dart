@@ -225,42 +225,40 @@ class ApiService {
     }
   }
 
-  static Future<void> changeProfileImage(XFile image) async {
-    try {
-      final id = await getUserId();
-      final accessToken = await getAccessToken();
-      final url = Uri.parse('$baseUrl/users/$id/profile');
-      print("프로필 사진을 서버에 업로드 합니다.");
+  static Future<String> changeProfileImage(XFile image) async {
+    final id = await getUserId();
+    final accessToken = await getAccessToken();
+    final url = Uri.parse('$baseUrl/users/$id/profile');
+    print("프로필 사진을 서버에 업로드 합니다.");
 
-      final request = http.MultipartRequest('POST', url);
+    final request = http.MultipartRequest('POST', url);
 
-      final file = File(image.path);
-      final mimeType = lookupMimeType(file.path);
-      final multipartFile = await http.MultipartFile.fromPath(
-        'file',
-        file.path,
-        contentType: MediaType.parse(mimeType!),
-      );
-      request.files.add(multipartFile);
-      request.headers['Authorization'] = 'Bearer $accessToken';
-      request.headers['Content-Type'] = 'multipart/form-data';
+    final file = File(image.path);
+    final mimeType = lookupMimeType(file.path);
+    final multipartFile = await http.MultipartFile.fromPath(
+      'file',
+      file.path,
+      contentType: MediaType.parse(mimeType!),
+    );
+    request.files.add(multipartFile);
+    request.headers['Authorization'] = 'Bearer $accessToken';
+    request.headers['Content-Type'] = 'multipart/form-data';
 
-      final response = await request.send();
-      if (response.statusCode == 200) {
-        // 성공적으로 업로드 완료
-        print('프로필 사진이 서버에 업로드되었습니다.');
-        final responseData = await response.stream.bytesToString();
-        final parsedData = jsonDecode(responseData);
-        print(parsedData);
-      } else {
-        // 업로드 실패
-        print('프로필 사진 업로드에 실패했습니다.');
-        final responseData = await response.stream.bytesToString();
-        final parsedData = jsonDecode(responseData);
-        print(parsedData);
-      }
-    } catch (e) {
-      print('프로필 사진 업로드 중 오류 발생 : $e');
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      // 성공적으로 업로드 완료
+      print('프로필 사진이 서버에 업로드되었습니다.');
+      final responseData = await response.stream.bytesToString();
+      final parsedData = jsonDecode(responseData);
+      print(parsedData);
+      return parsedData['data']['url'];
+    } else {
+      // 업로드 실패
+      print('프로필 사진 업로드에 실패했습니다.');
+      final responseData = await response.stream.bytesToString();
+      final parsedData = jsonDecode(responseData);
+      print(parsedData);
+      throw Exception('프로필 사진 업로드 중 오류 발생');
     }
   } // 프로필 이미지 변경
 }

@@ -25,4 +25,17 @@ class UserInfoProvider with ChangeNotifier {
     _user = user;
     notifyListeners();
   }
+
+  void setProfileUrl(String url) {
+    _user?.profile = url;
+
+    notifyListeners();
+  }
+
+  String? getProfileUrl() {
+    if (_user != null) {
+      return _user!.profile;
+    }
+    return null;
+  }
 }
