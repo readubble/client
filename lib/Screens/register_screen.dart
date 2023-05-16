@@ -1,3 +1,4 @@
+import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:bwageul/Services/api_services.dart';
@@ -238,7 +239,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: myColor.shade100,
                     foregroundColor: Colors.white,
                     padding: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(

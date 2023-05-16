@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../main.dart';
 
 class LikesScreen extends StatefulWidget {
@@ -66,7 +67,8 @@ class _LikesScreenState extends State<LikesScreen>
                                       height: 100,
                                       width: 100,
                                       decoration: BoxDecoration(
-                                        color: myColor.shade100,
+                                        color: myColor.shade400,
+                                        // color: Color(0xFF4B0082),
                                         boxShadow: [
                                           BoxShadow(
                                               color: myColor.shade800,
@@ -75,10 +77,14 @@ class _LikesScreenState extends State<LikesScreen>
                                         ],
                                         shape: BoxShape.circle,
                                       ),
-                                      child: const Icon(
-                                          Icons.psychology_rounded,
-                                          size: 80,
-                                          color: Colors.white)),
+                                      child: const FaIcon(
+                                        // FontAwesomeIcons.userPen,
+                                        FontAwesomeIcons.bookOpen,
+                                        size: 50,
+                                        color: Colors.white,
+                                      )),
+                                  // child: const Icon(Icons.book,
+                                  //     size: 80, color: Colors.white)),
                                   const Text(
                                     '인문',
                                     style: TextStyle(fontSize: 20),
@@ -86,6 +92,7 @@ class _LikesScreenState extends State<LikesScreen>
                                 ],
                               ),
                             ), // 인문 버튼
+                            // psychology_rounded
                             GestureDetector(
                               onTap: () {
                                 setState(() {
@@ -99,7 +106,7 @@ class _LikesScreenState extends State<LikesScreen>
                                       height: 100,
                                       width: 100,
                                       decoration: BoxDecoration(
-                                        color: myColor.shade100,
+                                        color: myColor.shade200,
                                         boxShadow: [
                                           BoxShadow(
                                               color: myColor.shade800,
@@ -108,8 +115,16 @@ class _LikesScreenState extends State<LikesScreen>
                                         ],
                                         shape: BoxShape.circle,
                                       ),
-                                      child: const Icon(Icons.groups_outlined,
-                                          size: 80, color: Colors.white)),
+                                      // child: const FaIcon(
+                                      //   FontAwesomeIcons.users,
+                                      //   size: 50,
+                                      //   color: Colors.white,
+                                      // )),
+                                      child:
+                                          const Icon(Icons.diversity_3_outlined,
+                                              //groups_outlined
+                                              size: 70,
+                                              color: Colors.white)),
                                   const Text(
                                     '사회',
                                     style: TextStyle(
@@ -132,7 +147,7 @@ class _LikesScreenState extends State<LikesScreen>
                                       height: 100,
                                       width: 100,
                                       decoration: BoxDecoration(
-                                        color: myColor.shade100,
+                                        color: myColor.shade500,
                                         boxShadow: [
                                           BoxShadow(
                                               color: myColor.shade800,
@@ -141,8 +156,13 @@ class _LikesScreenState extends State<LikesScreen>
                                         ],
                                         shape: BoxShape.circle,
                                       ),
-                                      child: const Icon(Icons.science_outlined,
-                                          size: 80, color: Colors.white)),
+                                      child: const FaIcon(
+                                        FontAwesomeIcons.flask,
+                                        size: 50,
+                                        color: Colors.white,
+                                      )),
+                                  // child: const Icon(Icons.science_outlined,
+                                  //     size: 80, color: Colors.white)),
                                   const Text(
                                     '과학',
                                     style: TextStyle(fontSize: 20),
@@ -199,7 +219,7 @@ class _LikesScreenState extends State<LikesScreen>
                             primary: false,
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
-                            crossAxisCount: 3,
+                            crossAxisCount: 2,
                             children: getLikedArticles(),
                           ),
                         ),

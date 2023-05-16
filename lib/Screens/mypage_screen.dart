@@ -188,7 +188,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: RadialGradient(
-                              center: Alignment.topCenter,
+                              center: Alignment.center,
                               radius: 1,
                               colors: [
                                 Colors.white,
@@ -198,6 +198,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                             ),
                           ),
                           child: RichText(
+                            textAlign: TextAlign.center,
                             text: TextSpan(
                               children: [
                                 TextSpan(
@@ -224,7 +225,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: RadialGradient(
-                              center: Alignment.topCenter,
+                              center: Alignment.center,
                               radius: 1,
                               colors: [
                                 Colors.white,
@@ -234,6 +235,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                             ),
                           ),
                           child: RichText(
+                            textAlign: TextAlign.center,
                             text: TextSpan(
                               children: [
                                 TextSpan(
@@ -260,7 +262,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: RadialGradient(
-                              center: Alignment.topCenter,
+                              center: Alignment.center,
                               radius: 1,
                               colors: [
                                 Colors.white,
@@ -270,6 +272,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                             ),
                           ),
                           child: RichText(
+                            textAlign: TextAlign.center,
                             text: TextSpan(
                               children: [
                                 TextSpan(

@@ -1,4 +1,5 @@
 import 'package:bwageul/Services/api_services.dart';
+import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
@@ -158,7 +159,7 @@ class _LoginFormState extends State<LoginForm> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      backgroundColor: Colors.black,
+                      backgroundColor: myColor.shade100,
                       foregroundColor: Colors.white,
                       minimumSize: const Size(double.infinity, 50),
                     ),
@@ -188,7 +189,7 @@ class _LoginFormState extends State<LoginForm> {
                     controlAffinity: ListTileControlAffinity.leading,
                     title: const Text('자동 로그인'),
                     value: _autoLogin,
-                    activeColor: Colors.black,
+                    activeColor: myColor.shade100,
                     onChanged: (bool? value) {
                       setState(() {
                         _autoLogin = value!;

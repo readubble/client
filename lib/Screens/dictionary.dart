@@ -185,27 +185,23 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
                                           borderRadius:
                                               BorderRadius.circular(20)),
                                       shadowColor: myColor.shade800,
-                                      elevation: 5),
+                                      elevation: 0),
                                   child: Row(
                                     children: [
                                       likes[0]
                                           ? Icon(
                                               Icons.favorite,
-                                              size: 20,
-                                              color: myColor.shade300,
+                                              size: 25,
+                                              color: myColor.shade100,
                                             )
                                           : Icon(
                                               Icons.favorite_outline_rounded,
-                                              size: 20,
-                                              color: myColor.shade300,
+                                              size: 25,
+                                              color: myColor.shade100,
                                             ),
                                       SizedBox(
                                         width: 5,
                                       ),
-                                      Text(
-                                        '단어장 추가',
-                                        style: TextStyle(fontSize: 15),
-                                      )
                                     ],
                                   ),
                                 ),
