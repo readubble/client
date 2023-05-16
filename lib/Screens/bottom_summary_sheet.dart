@@ -21,10 +21,40 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
     "quiz3": ["O", "X", "알 수 없음"]
   };
 
-  static const List<Tab> myTabs = <Tab>[
-    Tab(text: '키워드'),
-    Tab(text: '주제문'),
-    Tab(text: '요약문'),
+  static List<Tab> myTabs = <Tab>[
+    Tab(
+      child: Container(
+        child: Text('키워드', style: TextStyle(shadows: [
+          Shadow(
+            color: Colors.grey.withOpacity(1),
+            offset: Offset(0, 1),
+            blurRadius: 7,
+          )
+        ])),
+      ),
+    ),
+    Tab(
+      child: Container(
+        child: Text('주제문', style: TextStyle(shadows: [
+          Shadow(
+            color: Colors.grey.withOpacity(1),
+            offset: Offset(0, 1),
+            blurRadius: 7,
+          )
+        ])),
+      ),
+    ),
+    Tab(
+      child: Container(
+        child: Text('요약문', style: TextStyle(shadows: [
+          Shadow(
+            color: Colors.grey.withOpacity(1),
+            offset: Offset(0, 1),
+            blurRadius: 7,
+          )
+        ])),
+      ),
+    ),
   ];
 
   late TabController _tabController;
