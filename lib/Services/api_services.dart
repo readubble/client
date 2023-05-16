@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:bwageul/Models/user_info_model.dart';
+import 'package:bwageul/Models/word_quiz_model.dart';
 import 'package:bwageul/Services/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -198,8 +199,7 @@ class ApiService {
       }
       throw Exception('토큰 갱신 실패');
     }
-  }
-  // 토큰 갱신 함수
+  } // 토큰 갱신 함수
 
   static Future<UserInfoModel> getUserInfoById(String id) async {
     UserInfoModel model;
@@ -223,7 +223,7 @@ class ApiService {
       print(body);
       throw Exception("회원 정보 불러오기 실패");
     }
-  }
+  } // 회원 정보 가져오기
 
   static Future<String> changeProfileImage(XFile image) async {
     final id = await getUserId();
@@ -261,4 +261,37 @@ class ApiService {
       throw Exception('프로필 사진 업로드 중 오류 발생');
     }
   } // 프로필 이미지 변경
+
+  static Future<List<WordQuizModel>> getWordQuiz() async {
+    List<WordQuizModel> modelList = [];
+    final userId = await getUserId();
+    final accessToken = await getAccessToken();
+    final url = Uri.parse('$baseUrl/quiz/$userId');
+
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    });
+    if (response.statusCode == 200) {
+      // 성공
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print(body);
+      for (int i = 0; i < body['data'].length; i++) {
+        modelList.add(WordQuizModel.fromJson(body['data'][i]));
+      }
+      return modelList;
+    } else if (response.statusCode == 401) {
+      // 토큰 만료
+      updateToken();
+      return getWordQuiz();
+    } else {
+      // 이외의 에러
+      if (response.body != null) {
+        final body = jsonDecode(utf8.decode(response.bodyBytes));
+        print(body);
+      }
+      throw Exception("어휘 퀴즈 정보 불러오기 실패");
+    }
+  } // 어휘 퀴즈 정보 불러오기
 }

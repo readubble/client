@@ -8,9 +8,8 @@ import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:intl/intl.dart';
-
 import '../Models/user_info_provider.dart';
+import '../Widgets/build_each_quiz.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -33,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadUserInfo() async {
     String? userId = await getUserId(); // 사용자 ID
-    print('_loadUserInfo() -> user id: $userId');
+    print('load user info -> userId : $userId');
     if (userId != null) {
       // 로그인된 경우
       var user = await ApiService.getUserInfoById(userId);
@@ -82,8 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
               color: myColor.shade700,
             ),
             Container(
-              // 문해력 퀴즈
-              height: 110,
+              // 어휘 퀴즈
+              height: 140,
+              alignment: Alignment.center,
               width: double.infinity,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -97,13 +97,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   ]),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: PageView(
-                  controller: _quizController,
-                  children: <Widget>[
-                    buildEachQuiz("1. '어디에다'의 준말로 옳은 것은?", '어따', '얻다'),
-                    buildEachQuiz("2. 과자 먹어도 (   )?", "돼", "되"),
-                    buildEachQuiz("3. 한 시간 (       ) 만나자.", "이따가", "있다가"),
-                  ],
+                child: FutureBuilder<List<Widget>>(
+                  future: buildWordQuiz(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<Widget>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator(); // Show a loading indicator while waiting for the data
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          'Error: ${snapshot.error}'); // Show an error message if an error occurs
+                    } else {
+                      // 데이터 전송 성공
+                      List<Widget> quizList = snapshot.data!;
+                      return PageView(
+                        controller: _quizController,
+                        children: quizList,
+                      );
+                    }
+                  },
                 ),
               ),
             ),
@@ -252,67 +263,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-}
-
-Widget buildEachQuiz(String question, String ans1, String ans2) {
-  // 퀴즈 만드는 함수: 퀴즈제목, 보기1, 보기2
-  return Column(
-    children: [
-      Text(
-        question,
-        style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-            shadows: [
-              Shadow(
-                  color: Colors.black.withOpacity(0.3),
-                  offset: const Offset(1, 1),
-                  blurRadius: 1)
-            ]),
-      ),
-      const SizedBox(
-        height: 10,
-      ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              shadowColor: myColor.shade800,
-              elevation: 5,
-              minimumSize: const Size(120, 50),
-              maximumSize: const Size(150, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onPressed: () {},
-            child: Text(
-              ans1,
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-            ),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              shadowColor: myColor.shade800,
-              elevation: 5,
-              minimumSize: const Size(120, 50),
-              maximumSize: const Size(150, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onPressed: () {},
-            child: Text(
-              ans2,
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-            ),
-          ),
-        ],
-      ),
-    ],
-  );
 }
