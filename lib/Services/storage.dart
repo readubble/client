@@ -41,3 +41,12 @@ Future<bool> isLoggedIn() async {
   else
     return false;
 }
+
+Future<void> saveProblemId(int id) async {
+  await storage.write(key: 'problem_id', value: id.toString());
+}
+
+Future<int?> getProblemId() async {
+  final id = await storage.read(key: 'problem_id');
+  return int.parse(id!);
+}

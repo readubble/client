@@ -66,6 +66,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
   Future<void> _loadArticleContents() async {
     if (await isLoggedIn()) {
       final problemId = ModalRoute.of(context)?.settings.arguments as int;
+      saveProblemId(problemId);
       ArticleAndQuiz model = await ApiService.fetchArticleContents(problemId);
       final problemProvider =
           Provider.of<ProblemInfoProvider>(context, listen: false);

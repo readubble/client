@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../Models/user_info_provider.dart';
 import '../main.dart';
 import 'package:bwageul/Models/article_and_quiz.dart';
+import 'package:bwageul/Services/api_services.dart';
 
 class BottomSummarySheet extends StatefulWidget {
   const BottomSummarySheet({Key? key}) : super(key: key);
@@ -25,6 +26,8 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
   late ProblemInfo problemInfo;
   String problemTitle = "";
   List<QuizInfo> quizInfoList = [];
+  String aiSummarization = "";
+  String level = "";
 
   @override
   void initState() {
@@ -51,6 +54,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
         (isSelected.isEmpty ||
             problemTitle != problemProvider.problemInfo!.title)) {
       problemTitle = problemProvider.problemInfo!.title;
+      level = problemProvider.problemInfo!.level;
       _articleSentences =
           problemProvider.problemInfo!.content.expand((list) => list).toList();
       isSelected = List.generate(_articleSentences.length, (_) => false);
@@ -64,6 +68,31 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
       });
     }
   } // 최초 1회 실행. wow... 문제 객체, 퀴즈 객체 초기화
+
+  Future<void> fetchResult() async {
+    List<String> keywords = ["", "", ""];
+    for (int i = 0; i < _textEditingControllers.length; i++) {
+      keywords[i] = _textEditingControllers[i].text;
+    }
+    String summarization = _summaryTextEditingController.text;
+    List<int> choiceList = chosenAnswer;
+    String sentences = ""; // 주제문
+    for (int i = 0; i < isSelected.length; i++) {
+      if (isSelected[i] == true) {
+        sentences += "${_articleSentences[i]}|";
+      }
+    }
+    List<String> resultList = [];
+    for (int i = 0; i < choiceList.length; i++) {
+      if (choiceList[i] == quizInfoList[i].answer) {
+        resultList.add("Y");
+      } else {
+        resultList.add("N");
+      }
+    }
+    aiSummarization = await ApiService.sendProblemSolved(
+        keywords, sentences, summarization, choiceList, resultList);
+  }
 
   static List<Tab> myTabs = <Tab>[
     Tab(
@@ -851,8 +880,41 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                               width: 10,
                             ),
                             ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).pushNamed('/finish');
+                                onPressed: () async {
+                                  if (_textEditingControllers.isEmpty ||
+                                      _summaryTextEditingController.text ==
+                                          "" ||
+                                      isSelected.indexOf(true) == -1 ||
+                                      chosenAnswer.indexOf(0) != -1) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text("입력하지 않은 값이 있습니다."),
+                                      duration: Duration(seconds: 2),
+                                    ));
+                                  } else {
+                                    await fetchResult();
+
+                                    List<String> keySentences = [];
+                                    for (int i = 0;
+                                        i < isSelected.length;
+                                        i++) {
+                                      if (isSelected[i] == true) {
+                                        keySentences.add(_articleSentences[i]);
+                                      }
+                                    }
+                                    Navigator.of(context)
+                                        .pushNamed('/finish', arguments: {
+                                      'ai_summarization': aiSummarization,
+                                      'title': problemTitle,
+                                      'level': level,
+                                      'keyword_list': _textEditingControllers
+                                          .map((e) => e.text)
+                                          .toList(),
+                                      'key_sentences': keySentences,
+                                      'my_summarization':
+                                          _summaryTextEditingController.text
+                                    });
+                                  }
                                 },
                                 child: Text(
                                   "완료",

@@ -397,4 +397,44 @@ class ApiService {
       throw Exception('사전 검색 결과 가져오기 실패');
     }
   } // 사전에 "word"에 대한 검색 결과 리턴
+
+  static Future<String> sendProblemSolved(
+      List<String> keywordList,
+      String topicSentences,
+      String summarization,
+      List<int> choiceList,
+      List<String> resultList) async {
+    final problemId = await getProblemId();
+    final accessToken = await getAccessToken();
+    final userId = await getUserId();
+    var input = {
+      "user_id": userId,
+      "keyword": keywordList,
+      "sentence": topicSentences,
+      "summarization": summarization,
+      "quiz_id": [1, 2, 3],
+      "quiz_choice": choiceList,
+      "quiz_result": resultList,
+      "start_time": "00:00:00",
+      "finish_time": "00:00:00",
+      "total_time": "00:00:00"
+    };
+    final url = Uri.parse("$baseUrl/problem/$problemId");
+    var response = await http.post(url,
+        headers: {
+          'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json'
+        },
+        body: jsonEncode(input));
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print(body['data']);
+      return body['data']['ai_summarization'];
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print(body);
+      throw Exception("문제 풀이 결과 보내기 실패");
+    }
+  }
 }
