@@ -9,6 +9,8 @@ import 'package:bwageul/Screens/main_screen.dart';
 import 'package:bwageul/Screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:page_transition/page_transition.dart';
 
 import 'Models/profile_image_provider.dart';
 
@@ -31,10 +33,9 @@ class MyApp extends StatelessWidget {
       title: 'Readubble',
       theme: ThemeData(primarySwatch: myColor),
       debugShowCheckedModeBanner: false, //오른쪽 상단 DEBUG 배너 비활성화
-
       initialRoute: '/',
       routes: {
-        '/': (context) => const MainScreen(),
+        // '/': (context) => const MainScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/startReading': (context) => const ReadingThumbnailScreen(),
@@ -43,6 +44,23 @@ class MyApp extends StatelessWidget {
         '/dictionary': (context) => const KoreanDictionary(),
         '/settings': (context) => const Settings(),
       },
+      home: AnimatedSplashScreen(
+        duration: 3000,
+        splash: SizedBox(
+          width: 1500,
+          height: 1500,
+          child: Image.asset(
+              'assets/images/loading.jpeg',
+            // fit: BoxFit.scaleDown,
+            // fit: BoxFit.fill,
+            // fit: BoxFit.contain,
+            fit: BoxFit.cover,
+          ),
+        ),
+        nextScreen: MainScreen(),
+        splashTransition: SplashTransition.fadeTransition,
+        backgroundColor: myColor.shade100,
+      ),
     );
   }
 }
