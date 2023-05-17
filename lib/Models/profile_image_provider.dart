@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ProfileImageProvider extends ChangeNotifier {
+class ProfileImageProvider with ChangeNotifier {
   String? _imageUrl;
   String? get imageUrl => _imageUrl;
 

@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../Models/user_info_provider.dart';
-import '../Widgets/build_each_quiz.dart';
+import '../Models/word_quiz_model.dart';
+import '../Models/word_quiz_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -45,6 +46,109 @@ class _HomeScreenState extends State<HomeScreen> {
         days = userInfoProvider.getDaysFromSignUp();
       });
     }
+  }
+
+  Future<List<Widget>> buildWordQuiz(BuildContext context) async {
+    if (await isLoggedIn()) {
+      // 로그인 된 경우에만 어휘 퀴즈 불러오기
+      List<WordQuizModel> quizDataList = await ApiService.getWordQuiz();
+
+      WordQuizProvider wordQuizModelProvider1 =
+          Provider.of<WordQuizProvider>(context, listen: false);
+      WordQuizProvider wordQuizModelProvider2 =
+          Provider.of<WordQuizProvider>(context, listen: false);
+      WordQuizProvider wordQuizModelProvider3 =
+          Provider.of<WordQuizProvider>(context, listen: false);
+
+      wordQuizModelProvider1.setWordQuizModel(quizDataList[0]);
+      wordQuizModelProvider2.setWordQuizModel(quizDataList[1]);
+      wordQuizModelProvider3.setWordQuizModel(quizDataList[2]);
+
+      List<Widget> quizList = [];
+
+      for (final data in quizDataList) {
+        // data는 WordQuizModel 각각
+        quizList.add(buildEachQuiz(data));
+      }
+
+      return quizList;
+    } else {
+      throw Exception('로그인이 필요합니다.');
+    }
+  } // 3개 퀴즈 다 가져오기
+
+  Widget buildEachQuiz(WordQuizModel model) {
+    // 퀴즈 만드는 함수: 퀴즈제목, 보기1, 보기2
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Text(
+            model.quiz,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+                shadows: [
+                  Shadow(
+                      color: Colors.black.withOpacity(0.3),
+                      offset: const Offset(1, 1),
+                      blurRadius: 1)
+                ]),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                shadowColor: myColor.shade800,
+                elevation: 5,
+                minimumSize: const Size(120, 40),
+                maximumSize: const Size(150, 40),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () {},
+              child: Text(
+                model.choices[0],
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ), // 왼쪽 보기
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                shadowColor: myColor.shade800,
+                elevation: 5,
+                minimumSize: const Size(120, 40),
+                maximumSize: const Size(150, 40),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () {},
+              child: Text(
+                model.choices[1],
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ), // 오른쪽 보기
+          ],
+        ),
+      ],
+    );
   }
 
   @override
@@ -98,12 +202,13 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: FutureBuilder<List<Widget>>(
-                  future: buildWordQuiz(),
+                  future: buildWordQuiz(context),
                   builder: (BuildContext context,
                       AsyncSnapshot<List<Widget>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator(); // Show a loading indicator while waiting for the data
                     } else if (snapshot.hasError) {
+                      print(snapshot.error);
                       return Text(
                         '${snapshot.error}',
                         style: TextStyle(
