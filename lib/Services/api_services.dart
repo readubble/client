@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:bwageul/Models/article_info_model.dart';
 import 'package:bwageul/Models/user_info_model.dart';
+import 'package:bwageul/Models/word_quiz_model.dart';
 import 'package:bwageul/Services/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -213,7 +215,7 @@ class ApiService {
       }
       throw Exception('토큰 갱신 실패');
     }
-  }
+  } // 토큰 갱신 함수
 
   // 토큰 갱신 함수
   // 사용자 정보 조회 요청을 처리합니다. 지정된 사용자 ID를 사용하여 서버에 GET 요청을 전송하여 사용자 정보를 조회합니다.
@@ -229,7 +231,7 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      model = UserInfoModel.fromJson(body);
+      model = UserInfoModel.fromJson(body['data']);
       return model;
     } else if (response.statusCode == 401) {
       // 토큰 만료
@@ -240,7 +242,7 @@ class ApiService {
       print(body);
       throw Exception("회원 정보 불러오기 실패");
     }
-  }
+  } // 회원 정보 가져오기
 
   // 프로필 이미지 변경 요청을 처리합니다. 사용자 ID와 액세스 토큰을 사용하여 서버에 POST 요청을 전송하여 프로필 이미지를 업로드한다.
   // 응답 상태 코드에 따라 성공 또는 실패를 판단하고, 성공 시 업로드된 이미지의 URL을 반환
@@ -280,4 +282,126 @@ class ApiService {
       throw Exception('프로필 사진 업로드 중 오류 발생');
     }
   } // 프로필 이미지 변경
+
+  static Future<List<WordQuizModel>> getWordQuiz() async {
+    List<WordQuizModel> modelList = [];
+    final userId = await getUserId();
+    final accessToken = await getAccessToken();
+    final url = Uri.parse('$baseUrl/quiz/$userId');
+
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    });
+    if (response.statusCode == 200) {
+      // 성공
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print(body);
+      for (int i = 0; i < body['data'].length; i++) {
+        modelList.add(WordQuizModel.fromJson(body['data'][i]));
+      }
+      return modelList;
+    } else if (response.statusCode == 401) {
+      // 토큰 만료
+      await updateToken();
+      return getWordQuiz();
+    } else {
+      // 이외의 에러
+      if (response.body != null) {
+        final body = jsonDecode(utf8.decode(response.bodyBytes));
+        print(body);
+      }
+      throw Exception("어휘 퀴즈 정보 불러오기 실패");
+    }
+  } // 어휘 퀴즈 정보 불러오기
+
+  static Future<List<ArticleInfoModel>> fetchArticleList(int category) async {
+    List<ArticleInfoModel> articleList = [];
+    final userId = await getUserId();
+    final accessToken = await getAccessToken();
+    final url = Uri.parse("$baseUrl/problem/users/$userId?category=$category");
+
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    });
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print("articleList() 글 -> ${body['data']}");
+      if (body['data'] != null) {
+        for (int i = 0; i < body['data'].length; i++) {
+          articleList.add(ArticleInfoModel.fromJson(body['data'][i]));
+        }
+        return articleList;
+      }
+      throw Exception('body[\'data\'] 가져오는데 에러 발생..');
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print("articleList() 글 -> ${body['data']}");
+      throw Exception("글 목록 가져오기 실패");
+    }
+  } // 글 목록 가져오기. 1: 인문, 2: 사회, 3: 과학
+
+  static Future<void> fetchArticleContents(int problemId) async {
+    final accessToken = await getAccessToken();
+    final url = Uri.parse("$baseUrl/problem/$problemId");
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    });
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('articleContents(problemId 1) = 브람스 글 -> $body');
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('articleContents(problemId 1) = 브람스 글 -> $body');
+      throw Exception('글+문제 내용 가져오기 실패');
+    }
+  } // 문제 내용 (글 본문 + 추가 문제)
+
+  static Future<void> articleReadingResult() async {
+    final userId = await getUserId();
+    final accessToken = await getAccessToken();
+
+    final url = Uri.parse("$baseUrl/problem");
+
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    });
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print(body);
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print(body);
+    }
+  } //문제 풀이 결과
+
+  static Future<void> dictionaryResult(String word) async {
+    final userId = await getUserId();
+    final accessToken = await getAccessToken();
+    var input = {"id": userId, "keyword": word};
+    final url = Uri.parse("$baseUrl/word");
+    var response = await http.post(url,
+        headers: {
+          'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json'
+        },
+        body: jsonEncode(input));
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('사전 -> $body');
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('사전 -> $body');
+      throw Exception('사전 검색 결과 가져오기 실패');
+    }
+  } // 사전에 "word"에 대한 검색 결과 리턴
 }

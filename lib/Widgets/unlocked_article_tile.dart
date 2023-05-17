@@ -1,4 +1,30 @@
 import 'package:flutter/material.dart';
+import '../Models/article_info_model.dart';
+
+Widget buildArticleList(List<ArticleInfoModel> articleList) {
+  return SizedBox(
+    height: 240,
+    child: ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: articleList.length,
+      itemBuilder: (BuildContext context, int index) {
+        ArticleInfoModel article = articleList[index];
+
+        return Row(children: [
+          unlockedArticleTile(
+            article.photo,
+            article.genre,
+            article.difficulty,
+            article.title,
+          ),
+          const SizedBox(
+            width: 15,
+          )
+        ]);
+      },
+    ),
+  );
+}
 
 Widget unlockedArticleTile(
     String imageURL, String subCategory, String level, String title) {
@@ -10,7 +36,7 @@ Widget unlockedArticleTile(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         image: DecorationImage(
-          image: AssetImage(imageURL),
+          image: NetworkImage(imageURL),
           fit: BoxFit.cover,
         ),
       ),
