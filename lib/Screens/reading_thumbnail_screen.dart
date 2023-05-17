@@ -1,3 +1,4 @@
+import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 
 import '../Widgets/swipe_guide.dart';
@@ -12,6 +13,9 @@ class ReadingThumbnailScreen extends StatefulWidget {
 class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
   @override
   Widget build(BuildContext context) {
+    final arguments =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+
     return GestureDetector(
       onHorizontalDragUpdate: (details) {
         if (details.delta.direction > 0) {
@@ -27,7 +31,7 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(0),
                   image: DecorationImage(
-                    image: AssetImage('assets/images/hum1.jpeg'),
+                    image: NetworkImage(arguments['photo']),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -47,15 +51,23 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text("예술",
+                      Text(arguments['genre'],
                           style: TextStyle(color: Colors.white, fontSize: 20)),
-                      Text("난이도 상",
-                          style: TextStyle(color: Colors.white, fontSize: 20)),
+                      RichText(
+                          text: TextSpan(children: [
+                        TextSpan(text: "난이도 ", style: TextStyle(fontSize: 20)),
+                        TextSpan(
+                            text: arguments['difficulty'],
+                            style: TextStyle(
+                                color: myColor.shade100,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600))
+                      ])),
                       SizedBox(
                         height: 10,
                       ),
                       Text(
-                        "브람스 교향곡 4번",
+                        arguments['title'],
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
@@ -64,7 +76,7 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      Text("출처: 클래식 명곡 명연주, 최은규",
+                      Text(arguments['writer'],
                           style: TextStyle(
                               color: Colors.white.withOpacity(0.5),
                               fontSize: 15)),

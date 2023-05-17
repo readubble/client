@@ -1,3 +1,4 @@
+import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 import '../Models/article_info_model.dart';
 
@@ -11,11 +12,22 @@ Widget buildArticleList(List<ArticleInfoModel> articleList) {
         ArticleInfoModel article = articleList[index];
 
         return Row(children: [
-          unlockedArticleTile(
-            article.photo,
-            article.genre,
-            article.difficulty,
-            article.title,
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/startReading', arguments: {
+                'photo': article.photo,
+                'genre': article.genre,
+                'difficulty': article.difficulty,
+                'title': article.title,
+                'writer': article.writer,
+              });
+            },
+            child: unlockedArticleTile(
+              article.photo,
+              article.genre,
+              article.difficulty,
+              article.title,
+            ),
           ),
           const SizedBox(
             width: 15,
@@ -56,7 +68,15 @@ Widget unlockedArticleTile(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(subCategory, style: const TextStyle(color: Colors.white)),
-            Text('난이도 $level', style: const TextStyle(color: Colors.white)),
+            RichText(
+                text: TextSpan(children: [
+              TextSpan(
+                  text: '난이도 ', style: const TextStyle(color: Colors.white)),
+              TextSpan(
+                  text: level,
+                  style: TextStyle(
+                      color: myColor.shade100, fontWeight: FontWeight.w600))
+            ])),
             const SizedBox(
               height: 10,
             ),

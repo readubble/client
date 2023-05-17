@@ -9,7 +9,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../Models/article_info_model.dart';
 import '../Models/user_info_provider.dart';
 import '../Models/word_quiz_model.dart';
-import '../Models/word_quiz_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -73,17 +72,17 @@ class _HomeScreenState extends State<HomeScreen> {
       // 로그인 된 경우에만 어휘 퀴즈 불러오기
       List<WordQuizModel> quizDataList = await ApiService.getWordQuiz();
 
-      WordQuizProvider wordQuizModelProvider1 =
-          Provider.of<WordQuizProvider>(context, listen: false);
-      WordQuizProvider wordQuizModelProvider2 =
-          Provider.of<WordQuizProvider>(context, listen: false);
-      WordQuizProvider wordQuizModelProvider3 = Provider.of<WordQuizProvider>(
-          context,
-          listen: false); // 이거 이렇게 쓰면 안 되네.. 프로바이더가 어휘퀴즈 모델을 관리하도록 해야 함.
-
-      wordQuizModelProvider1.setWordQuizModel(quizDataList[0]);
-      wordQuizModelProvider2.setWordQuizModel(quizDataList[1]);
-      wordQuizModelProvider3.setWordQuizModel(quizDataList[2]);
+      // WordQuizProvider wordQuizModelProvider1 =
+      //     Provider.of<WordQuizProvider>(context, listen: false);
+      // WordQuizProvider wordQuizModelProvider2 =
+      //     Provider.of<WordQuizProvider>(context, listen: false);
+      // WordQuizProvider wordQuizModelProvider3 = Provider.of<WordQuizProvider>(
+      //     context,
+      //     listen: false); // 이거 이렇게 쓰면 안 되네.. 프로바이더가 어휘퀴즈 모델을 관리하도록 해야 함.
+      //
+      // wordQuizModelProvider1.setWordQuizModel(quizDataList[0]);
+      // wordQuizModelProvider2.setWordQuizModel(quizDataList[1]);
+      // wordQuizModelProvider3.setWordQuizModel(quizDataList[2]);
 
       List<Widget> quizList = [];
 
@@ -137,7 +136,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                print('왼쪽 버튼 클릭!');
+              },
               child: Text(
                 model.choices[0],
                 style: TextStyle(
@@ -157,7 +158,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                print('오른쪽 버튼 클릭');
+              },
               child: Text(
                 model.choices[1],
                 style: TextStyle(
