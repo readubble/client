@@ -283,7 +283,7 @@ class ApiService {
       return modelList;
     } else if (response.statusCode == 401) {
       // 토큰 만료
-      updateToken();
+      await updateToken();
       return getWordQuiz();
     } else {
       // 이외의 에러

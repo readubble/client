@@ -105,7 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       return CircularProgressIndicator(); // Show a loading indicator while waiting for the data
                     } else if (snapshot.hasError) {
                       return Text(
-                          'Error: ${snapshot.error}'); // Show an error message if an error occurs
+                        '${snapshot.error}',
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600),
+                      ); // Show an error message if an error occurs
                     } else {
                       // 데이터 전송 성공
                       List<Widget> quizList = snapshot.data!;

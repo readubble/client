@@ -1,16 +1,21 @@
+import 'package:bwageul/Services/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:bwageul/Services/api_services.dart';
 import '../Models/word_quiz_model.dart';
 import '../main.dart';
 
 Future<List<Widget>> buildWordQuiz() async {
-  List<WordQuizModel> quizDataList = await ApiService.getWordQuiz();
+  if (await isLoggedIn()) {
+    List<WordQuizModel> quizDataList = await ApiService.getWordQuiz();
 
-  List<Widget> quizList = [];
-  for (final data in quizDataList) {
-    quizList.add(buildEachQuiz(data));
+    List<Widget> quizList = [];
+    for (final data in quizDataList) {
+      quizList.add(buildEachQuiz(data));
+    }
+    return quizList;
+  } else {
+    throw Exception('로그인이 필요합니다.');
   }
-  return quizList;
 }
 
 Widget buildEachQuiz(WordQuizModel model) {

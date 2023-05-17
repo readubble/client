@@ -17,9 +17,6 @@ class MyPageScreen extends StatefulWidget {
 }
 
 class _MyPageScreenState extends State<MyPageScreen> {
-  //XFile? _image; // 프로필 사진
-  //String? _imageUrl;
-
   Future<void> _getImageFromGallery() async {
     final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
