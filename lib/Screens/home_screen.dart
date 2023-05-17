@@ -1,13 +1,12 @@
 import 'dart:ui';
-import 'package:bwageul/Models/user_info_model.dart';
 import 'package:bwageul/Services/api_services.dart';
 import 'package:bwageul/Services/storage.dart';
-import 'package:bwageul/Widgets/locked_article_tile.dart';
 import 'package:bwageul/Widgets/unlocked_article_tile.dart';
 import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../Models/article_info_model.dart';
 import '../Models/user_info_provider.dart';
 import '../Models/word_quiz_model.dart';
 import '../Models/word_quiz_provider.dart';
@@ -23,12 +22,32 @@ class _HomeScreenState extends State<HomeScreen> {
   final PageController _quizController = PageController(initialPage: 0);
   String nickname = '000';
   int days = 0;
+  List<ArticleInfoModel> humArticleList = [];
+  List<ArticleInfoModel> socArticleList = [];
+  List<ArticleInfoModel> sciArticleList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _loadUserInfo();
+    _loadArticleList();
+    //ApiService.articleContents(1); // 브람스 글 가져와
+    //ApiService.dictionaryResult("나무");
+  }
+
+  Future<void> _loadArticleList() async {
+    if (await isLoggedIn()) {
+      List<ArticleInfoModel> list1 =
+          await ApiService.fetchArticleList(1); // 1: 인문, 2: 사회, 3: 과학
+      List<ArticleInfoModel> list2 = await ApiService.fetchArticleList(2);
+      List<ArticleInfoModel> list3 = await ApiService.fetchArticleList(3);
+      setState(() {
+        humArticleList = list1;
+        socArticleList = list2;
+        sciArticleList = list3;
+      });
+    }
   }
 
   Future<void> _loadUserInfo() async {
@@ -36,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print('load user info -> userId : $userId');
     if (userId != null) {
       // 로그인된 경우
+
       var user = await ApiService.getUserInfoById(userId);
       final userInfoProvider =
           Provider.of<UserInfoProvider>(context, listen: false);
@@ -57,8 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Provider.of<WordQuizProvider>(context, listen: false);
       WordQuizProvider wordQuizModelProvider2 =
           Provider.of<WordQuizProvider>(context, listen: false);
-      WordQuizProvider wordQuizModelProvider3 =
-          Provider.of<WordQuizProvider>(context, listen: false);
+      WordQuizProvider wordQuizModelProvider3 = Provider.of<WordQuizProvider>(
+          context,
+          listen: false); // 이거 이렇게 쓰면 안 되네.. 프로바이더가 어휘퀴즈 모델을 관리하도록 해야 함.
 
       wordQuizModelProvider1.setWordQuizModel(quizDataList[0]);
       wordQuizModelProvider2.setWordQuizModel(quizDataList[1]);
@@ -249,41 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
               ),
             ),
-            SingleChildScrollView(
-              //인문 카테고리 글 모음
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/startReading');
-                    },
-                    child: unlockedArticleTile(
-                        'assets/images/hum1.jpeg', "예술", "중", "브람스 교향곡 4번"),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  lockedArticleTile(context, 'assets/images/hum2.png', '철학',
-                      '상', '호모 루덴스와 호모 파베르, 그리고 호모 파덴스'),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  lockedArticleTile(
-                      context, 'assets/images/hum3.png', '철학', '상', '칸트의 시간이론'),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  lockedArticleTile(context, 'assets/images/hum4.png', '역사',
-                      '중', '정약용의 다산초당'),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  lockedArticleTile(context, 'assets/images/hum5.png', '미술',
-                      '하', '프리다 칼로의 삶'),
-                ],
-              ),
-            ),
+            buildArticleList(humArticleList), //인문 카테고리 글 모음
             Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -292,40 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
               ),
             ),
-            SingleChildScrollView(
-              //사회 카테고리 글 모음
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/startReading');
-                      },
-                      child: unlockedArticleTile('assets/images/soc1.png', '사회',
-                          '중', '법무부 ‘제시카법’은 성범죄만…강력범죄 피해자 보호는 구멍')),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  lockedArticleTile(context, 'assets/images/soc2.png', '경제',
-                      '상', '‘최대주주 지배력 강화 막아라’…전환우선주도 콜옵션 규제 적용'),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  lockedArticleTile(context, 'assets/images/soc1.png', '경제',
-                      '상', '‘최대주주 지배력 강화 막아라’…전환우선주도 콜옵션 규제 적용'),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  lockedArticleTile(context, 'assets/images/soc2.png', '경제',
-                      '상', '‘최대주주 지배력 강화 막아라’…전환우선주도 콜옵션 규제 적용'),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  lockedArticleTile(context, 'assets/images/soc1.png', '경제',
-                      '상', '‘최대주주 지배력 강화 막아라’…전환우선주도 콜옵션 규제 적용'),
-                ],
-              ),
-            ),
+            buildArticleList(socArticleList),
             Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -334,40 +288,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
               ),
             ),
-            SingleChildScrollView(
-              //사회 카테고리 글 모음
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/startReading');
-                      },
-                      child: unlockedArticleTile('assets/images/sci1.png', 'IT',
-                          '중', 'AI의 등장에 따른 윤리적 문제')),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  lockedArticleTile(
-                      context, 'assets/images/sci2.jpeg', '물리', '상', '빅뱅 우주론'),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  lockedArticleTile(
-                      context, 'assets/images/sci2.jpeg', '물리', '상', '빅뱅 우주론'),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  lockedArticleTile(
-                      context, 'assets/images/sci2.jpeg', '물리', '상', '빅뱅 우주론'),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  lockedArticleTile(
-                      context, 'assets/images/sci2.jpeg', '물리', '상', '빅뱅 우주론'),
-                ],
-              ),
-            ),
+            buildArticleList(sciArticleList),
           ],
         ),
       ),

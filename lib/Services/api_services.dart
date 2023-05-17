@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:bwageul/Models/article_info_model.dart';
 import 'package:bwageul/Models/user_info_model.dart';
 import 'package:bwageul/Models/word_quiz_model.dart';
 import 'package:bwageul/Services/storage.dart';
@@ -212,7 +213,7 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      model = UserInfoModel.fromJson(body);
+      model = UserInfoModel.fromJson(body['data']);
       return model;
     } else if (response.statusCode == 401) {
       // 토큰 만료
@@ -294,4 +295,93 @@ class ApiService {
       throw Exception("어휘 퀴즈 정보 불러오기 실패");
     }
   } // 어휘 퀴즈 정보 불러오기
+
+  static Future<List<ArticleInfoModel>> fetchArticleList(int category) async {
+    List<ArticleInfoModel> articleList = [];
+    final userId = await getUserId();
+    final accessToken = await getAccessToken();
+    final url = Uri.parse("$baseUrl/problem/users/$userId?category=$category");
+
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    });
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print("articleList() 글 -> ${body['data']}");
+      if (body['data'] != null) {
+        for (int i = 0; i < body['data'].length; i++) {
+          articleList.add(ArticleInfoModel.fromJson(body['data'][i]));
+        }
+        return articleList;
+      }
+      throw Exception('body[\'data\'] 가져오는데 에러 발생..');
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print("articleList() 글 -> ${body['data']}");
+      throw Exception("글 목록 가져오기 실패");
+    }
+  } // 글 목록 가져오기. 1: 인문, 2: 사회, 3: 과학
+
+  static Future<void> fetchArticleContents(int problemId) async {
+    final accessToken = await getAccessToken();
+    final url = Uri.parse("$baseUrl/problem/$problemId");
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    });
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('articleContents(problemId 1) = 브람스 글 -> $body');
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('articleContents(problemId 1) = 브람스 글 -> $body');
+      throw Exception('글+문제 내용 가져오기 실패');
+    }
+  } // 문제 내용 (글 본문 + 추가 문제)
+
+  static Future<void> articleReadingResult() async {
+    final userId = await getUserId();
+    final accessToken = await getAccessToken();
+
+    final url = Uri.parse("$baseUrl/problem");
+
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    });
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print(body);
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print(body);
+    }
+  } //문제 풀이 결과
+
+  static Future<void> dictionaryResult(String word) async {
+    final userId = await getUserId();
+    final accessToken = await getAccessToken();
+    var input = {"id": userId, "keyword": word};
+    final url = Uri.parse("$baseUrl/word");
+    var response = await http.post(url,
+        headers: {
+          'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json'
+        },
+        body: jsonEncode(input));
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('사전 -> $body');
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('사전 -> $body');
+      throw Exception('사전 검색 결과 가져오기 실패');
+    }
+  } // 사전에 "word"에 대한 검색 결과 리턴
 }
