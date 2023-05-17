@@ -20,6 +20,7 @@ Widget buildArticleList(List<ArticleInfoModel> articleList) {
                 'difficulty': article.difficulty,
                 'title': article.title,
                 'writer': article.writer,
+                'problemId': article.id,
               });
             },
             child: unlockedArticleTile(

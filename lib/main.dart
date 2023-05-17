@@ -11,16 +11,18 @@ import 'package:bwageul/Screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:page_transition/page_transition.dart';
-
+import 'Models/problem_info_provider.dart';
 import 'Models/profile_image_provider.dart';
+import 'Models/quiz_list_provider.dart';
 
 void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => UserInfoProvider()),
       ChangeNotifierProvider(create: (_) => ProfileImageProvider()),
-      ChangeNotifierProvider(create: (_) => WordQuizProvider())
+      ChangeNotifierProvider(create: (_) => WordQuizProvider()),
+      ChangeNotifierProvider(create: (_) => ProblemInfoProvider()),
+      ChangeNotifierProvider(create: (_) => QuizListProvider()),
     ],
     child: MyApp(),
   ));
@@ -52,7 +54,7 @@ class MyApp extends StatelessWidget {
           width: 1500,
           height: 1500,
           child: Image.asset(
-              'assets/images/loading.jpeg',
+            'assets/images/loading.jpeg',
             // fit: BoxFit.scaleDown,
             // fit: BoxFit.fill,
             // fit: BoxFit.contain,

@@ -20,7 +20,8 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
       onHorizontalDragUpdate: (details) {
         if (details.delta.direction > 0) {
           // <- 방향 스와이프 시 다음 단계로 넘어감
-          Navigator.of(context).pushNamed('/article');
+          Navigator.of(context)
+              .pushNamed('/article', arguments: arguments['problemId']);
         }
       },
       child: SafeArea(

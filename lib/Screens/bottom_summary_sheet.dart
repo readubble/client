@@ -1,6 +1,11 @@
+import 'package:bwageul/Models/problem_info_provider.dart';
+import 'package:bwageul/Models/quiz_list_provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../Models/user_info_provider.dart';
 import '../main.dart';
+import 'package:bwageul/Models/article_and_quiz.dart';
 
 class BottomSummarySheet extends StatefulWidget {
   const BottomSummarySheet({Key? key}) : super(key: key);
@@ -11,74 +16,99 @@ class BottomSummarySheet extends StatefulWidget {
 
 class _BottomSummarySheetState extends State<BottomSummarySheet>
     with SingleTickerProviderStateMixin {
-  final String nickname = '홍길동';
+  String nickname = '';
   final PageController _pageController = PageController(initialPage: 0);
-
+  List<String> _articleSentences = [];
   List<int> chosenAnswer = [0, 0, 0]; //총 3문제
-  Map<String, List<String>> choices = {
-    "quiz1": ["바로 다음의 해", "올해", "지난해"],
-    "quiz2": ["하이든", "바흐", "베토벤"],
-    "quiz3": ["O", "X", "알 수 없음"]
-  };
+  late TabController _tabController;
+  List<bool> isSelected = []; // 각 문장이 선택되었는지 true/false
+  late ProblemInfo problemInfo;
+  String problemTitle = "";
+  List<QuizInfo> quizInfoList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(vsync: this, length: myTabs.length);
+    _textEditingControllers.add(TextEditingController());
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _textEditingControllers.forEach((controller) => controller.dispose());
+    super.dispose();
+  }
+
+  void load_problem_quiz_info() {
+    final problemProvider =
+        Provider.of<ProblemInfoProvider>(context, listen: false);
+    final quizProvider = Provider.of<QuizListProvider>(context, listen: false);
+    final userInfoProvider =
+        Provider.of<UserInfoProvider>(context, listen: false);
+
+    if (problemProvider.problemInfo != null &&
+        (isSelected.isEmpty ||
+            problemTitle != problemProvider.problemInfo!.title)) {
+      problemTitle = problemProvider.problemInfo!.title;
+      _articleSentences =
+          problemProvider.problemInfo!.content.expand((list) => list).toList();
+      isSelected = List.generate(_articleSentences.length, (_) => false);
+      problemInfo = problemProvider.problemInfo!;
+      quizInfoList = quizProvider.quizList;
+    }
+
+    if (userInfoProvider.user != null) {
+      setState(() {
+        nickname = userInfoProvider.user!.nickname;
+      });
+    }
+  } // 최초 1회 실행. wow... 문제 객체, 퀴즈 객체 초기화
 
   static List<Tab> myTabs = <Tab>[
     Tab(
       child: Container(
-        child: Text('키워드', style: TextStyle(shadows: [
-          Shadow(
-            color: Colors.grey.withOpacity(1),
-            offset: Offset(0, 1),
-            blurRadius: 7,
-          )
-        ])),
+        child: Text('키워드',
+            style: TextStyle(shadows: [
+              Shadow(
+                color: Colors.grey.withOpacity(1),
+                offset: Offset(0, 1),
+                blurRadius: 7,
+              )
+            ])),
       ),
     ),
     Tab(
       child: Container(
-        child: Text('주제문', style: TextStyle(shadows: [
-          Shadow(
-            color: Colors.grey.withOpacity(1),
-            offset: Offset(0, 1),
-            blurRadius: 7,
-          )
-        ])),
+        child: Text('주제문',
+            style: TextStyle(shadows: [
+              Shadow(
+                color: Colors.grey.withOpacity(1),
+                offset: Offset(0, 1),
+                blurRadius: 7,
+              )
+            ])),
       ),
     ),
     Tab(
       child: Container(
-        child: Text('요약문', style: TextStyle(shadows: [
-          Shadow(
-            color: Colors.grey.withOpacity(1),
-            offset: Offset(0, 1),
-            blurRadius: 7,
-          )
-        ])),
+        child: Text('요약문',
+            style: TextStyle(shadows: [
+              Shadow(
+                color: Colors.grey.withOpacity(1),
+                offset: Offset(0, 1),
+                blurRadius: 7,
+              )
+            ])),
       ),
     ),
   ];
 
-  late TabController _tabController;
-
+  // 키워드 추가 부분
   int _rowsCount = 1;
-  List<TextEditingController> _textEditingControllers = [];
-  TextEditingController _summaryTextEditingController = TextEditingController();
-
-  final List<String> _articleSentences = [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit Sed non risus.',
-    'Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.',
-    'Cras elementum ultrices diam Maecenas ligula massa, varius a, semper congue, euismod non, mi.',
-    'Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat.',
-    'Duis semper Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim.',
-    'Pellentesque congue Ut in risus volutpat libero pharetra tempor.',
-    'Cras vestibulum bibendum augue Praesent egestas leo in pede Praesent blandit odio eu enim.',
-    'Pellentesque sed dui ut augue blandit sodales.',
-    'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh.',
-    'Mauris ac mauris sed pede pellentesque fermentum.',
-    'Maecenas adipiscing ante non diam sodales hendrerit.',
-    'Ut velit mauris, egestas sed, gravida nec, ornare ut, mi.',
-  ];
-  late List<bool> isSelected; // 각 문장이 선택되었는지 true/false
-
+  List<TextEditingController> _textEditingControllers = []; // 키워드 작성 텍스트 컨트롤러
+  TextEditingController _summaryTextEditingController =
+      TextEditingController(); // 요약문 작성 텍스트 컨트롤러
   void _addRow() {
     setState(() {
       if (_rowsCount < 3) {
@@ -86,28 +116,27 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
         _rowsCount++;
       }
     });
-  }
+  } // 키워드 칸 추가
 
   void _removeRow(int index) {
     setState(() {
       _textEditingControllers.removeAt(index);
       _rowsCount--;
     });
-  }
+  } // 키워드 칸 삭제
 
   void _copyText() {
     //_summaryTextEditingController.text += "THIS TEXT";
-  }
+  } // 복사되게 하고 싶음.
 
   void updateSelection(int index) {
     setState(() {
       isSelected[index] = !isSelected[index];
     });
-  }
+  } // 선택 여부 업데이트
 
   List<Widget> getElevatedButtonList() {
     List<Widget> buttonList = [];
-
     for (int i = 0; i < _articleSentences.length; i++) {
       Container button = Container(
           margin: EdgeInsets.symmetric(vertical: 5),
@@ -117,8 +146,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
               updateSelection(i);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  isSelected[i] ? myColor.shade50 : myColor.shade700,
+              backgroundColor: isSelected[i]
+                  ? myColor.shade50
+                  : myColor.shade700, // 선택되면 색상 바꾸기
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
@@ -130,11 +160,10 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
       buttonList.add(button);
     }
     return buttonList;
-  }
+  } // 주제문 버튼 리스트
 
   List<Widget> getTopicSentences() {
     List<Widget> sentencesTile = [];
-
     for (int i = 0; i < _articleSentences.length; i++) {
       if (isSelected[i]) {
         Container button = Container(
@@ -158,28 +187,14 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
         );
 
         sentencesTile.add(button);
-      }
+      } // 눌렸으면 요약문 작성 탭에서 보이도록
     }
     return sentencesTile;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(vsync: this, length: myTabs.length);
-    _textEditingControllers.add(TextEditingController());
-    isSelected = List.generate(_articleSentences.length, (_) => false);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    _textEditingControllers.forEach((controller) => controller.dispose());
-    super.dispose();
-  }
+  } // 주제문 선택용 본문 텍스트 타일
 
   @override
   Widget build(BuildContext context) {
+    load_problem_quiz_info();
     return DraggableScrollableSheet(
       initialChildSize: 0.1,
       minChildSize: 0.1,
@@ -225,7 +240,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                           height: 20,
                         ),
                         Text(
-                          "‘이듬해’와 같은 뜻의 단어를 고르세요.",
+                          quizInfoList.isNotEmpty
+                              ? quizInfoList[0].problem
+                              : ' ',
                           style: TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 18),
                         ),
@@ -234,7 +251,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                         ),
                         RadioListTile(
                             title: Text(
-                              choices["quiz1"]![0],
+                              quizInfoList.isNotEmpty
+                                  ? quizInfoList[0].choices[0]
+                                  : ' ',
                               style: TextStyle(fontSize: 16),
                             ),
                             value: 1,
@@ -246,7 +265,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                             }),
                         RadioListTile(
                             title: Text(
-                              choices["quiz1"]![1],
+                              quizInfoList.isNotEmpty
+                                  ? quizInfoList[0].choices[1]
+                                  : ' ',
                               style: TextStyle(fontSize: 16),
                             ),
                             value: 2,
@@ -258,7 +279,10 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                             }),
                         RadioListTile(
                             title: Text(
-                              choices["quiz1"]![2],
+                              quizInfoList.isNotEmpty &&
+                                      quizInfoList[0].choices.length == 3
+                                  ? quizInfoList[0].choices[2]
+                                  : ' ',
                               style: TextStyle(fontSize: 16),
                             ),
                             value: 3,
@@ -633,7 +657,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                           height: 20,
                         ),
                         Text(
-                          "교향곡을 공개할 때마다 ‘이 작곡가’와 유사하다는 비판을 받던 브람스는 4번째 교향곡에서 진정한 자신만의 교향곡 모델을 만들었다는 평가를 받았습니다. ‘이 작곡가’는 누구일까요?",
+                          quizInfoList.isNotEmpty
+                              ? quizInfoList[1].problem
+                              : ' ',
                           style: TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 18),
                         ),
@@ -642,7 +668,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                         ),
                         RadioListTile(
                             title: Text(
-                              choices["quiz2"]![0],
+                              quizInfoList.isNotEmpty
+                                  ? quizInfoList[1].choices[0]
+                                  : ' ',
                               style: TextStyle(fontSize: 16),
                             ),
                             value: 1,
@@ -654,7 +682,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                             }),
                         RadioListTile(
                             title: Text(
-                              choices["quiz2"]![1],
+                              quizInfoList.isNotEmpty
+                                  ? quizInfoList[1].choices[1]
+                                  : ' ',
                               style: TextStyle(fontSize: 16),
                             ),
                             value: 2,
@@ -666,7 +696,10 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                             }),
                         RadioListTile(
                             title: Text(
-                              choices["quiz2"]![2],
+                              quizInfoList.isNotEmpty &&
+                                      quizInfoList[1].choices.length == 3
+                                  ? quizInfoList[1].choices[2]
+                                  : ' ',
                               style: TextStyle(fontSize: 16),
                             ),
                             value: 3,
@@ -739,7 +772,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                           height: 20,
                         ),
                         Text(
-                          "브람스는 자신의 교향곡 4번을 마이닝겐에서 처음 공개하던 때, 직접 지휘했다.",
+                          quizInfoList.isNotEmpty
+                              ? quizInfoList[2].problem
+                              : ' ',
                           style: TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 18),
                         ),
@@ -748,7 +783,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                         ),
                         RadioListTile(
                             title: Text(
-                              choices["quiz3"]![0],
+                              quizInfoList.isNotEmpty
+                                  ? quizInfoList[2].choices[0]
+                                  : ' ',
                               style: TextStyle(fontSize: 16),
                             ),
                             value: 1,
@@ -760,7 +797,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                             }),
                         RadioListTile(
                             title: Text(
-                              choices["quiz3"]![1],
+                              quizInfoList.isNotEmpty
+                                  ? quizInfoList[2].choices[1]
+                                  : ' ',
                               style: TextStyle(fontSize: 16),
                             ),
                             value: 2,
@@ -772,7 +811,10 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                             }),
                         RadioListTile(
                             title: Text(
-                              choices["quiz3"]![2],
+                              quizInfoList.isNotEmpty &&
+                                      quizInfoList[2].choices.length == 3
+                                  ? quizInfoList[2].choices[2]
+                                  : ' ',
                               style: TextStyle(fontSize: 16),
                             ),
                             value: 3,
@@ -788,6 +830,26 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                _pageController.previousPage(
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: myColor.shade800,
+                                  foregroundColor: Colors.white,
+                                  shadowColor: myColor.shade800,
+                                  elevation: 4),
+                              child: Icon(
+                                Icons.arrow_back_rounded,
+                                size: 25,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
                             ElevatedButton(
                                 onPressed: () {
                                   Navigator.of(context).pushNamed('/finish');
