@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:bwageul/Services/api_services.dart';
 import '../Models/user_info_provider.dart';
 import '../main.dart';
 
@@ -19,6 +19,7 @@ class _FinishReadingState extends State<FinishReading> {
   String aiSummarization = "";
   bool isLiked = false;
   String level = '';
+  String title = '';
 
   @override
   void initState() {
@@ -35,6 +36,7 @@ class _FinishReadingState extends State<FinishReading> {
         .arguments; // pushNamed 인자로 받아온 aiSummarization
     if (arguments is Map<String, dynamic>) {
       setState(() {
+        title = arguments['title'];
         aiSummarization = arguments['ai_summarization'];
         summarization = arguments['my_summarization'];
         level = arguments['level'];
@@ -66,10 +68,11 @@ class _FinishReadingState extends State<FinishReading> {
                     onPressed: () => Navigator.pop(context),
                   ),
                   IconButton(
-                      onPressed: () {
+                      onPressed: () async {
                         setState(() {
                           isLiked = !isLiked;
                         });
+                        await ApiService.problemBookmark();
                       },
                       icon: isLiked
                           ? Icon(
@@ -92,7 +95,7 @@ class _FinishReadingState extends State<FinishReading> {
                 child: Column(
                   children: [
                     Text(
-                      "브람스 교향곡 4번",
+                      title,
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                     ),

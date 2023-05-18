@@ -436,5 +436,47 @@ class ApiService {
       print(body);
       throw Exception("문제 풀이 결과 보내기 실패");
     }
-  }
+  } // 글 읽고, 문제 푼 결과 서버에 보내기
+
+  static Future<void> problemBookmark() async {
+    final problemId = await getProblemId();
+    final accessToken = await getAccessToken();
+    final userId = await getUserId();
+    final url = Uri.parse('$baseUrl/problem/$problemId/bookmark');
+    var input = {'user_id': userId};
+    var response = await http.post(url,
+        headers: {
+          'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json'
+        },
+        body: jsonEncode(input));
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('북마크 여부 보내기 problemBookmark() 호출: $body');
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('북마크 여부 보내기 problemBookmark() 호출: $body');
+      throw Exception("북마크 api 호출 실패");
+    }
+  } // 글의 북마크 여부 보내기
+
+  static Future<void> getProblemBookmarkList() async {
+    final accessToken = await getAccessToken();
+    final userId = await getUserId();
+    final url = Uri.parse('$baseUrl/problem/bookmark/users/$userId');
+    var response = await http.post(url, headers: {
+      'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    });
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print(body);
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print(body);
+      throw Exception("글 북마크 리스트 api 호출 실패");
+    }
+  } // 북마크된 글의 리스트 가져오기
 }

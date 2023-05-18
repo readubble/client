@@ -904,6 +904,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                     }
                                     Navigator.of(context)
                                         .pushNamed('/finish', arguments: {
+                                      'title': problemTitle,
                                       'ai_summarization': aiSummarization,
                                       'title': problemTitle,
                                       'level': level,
