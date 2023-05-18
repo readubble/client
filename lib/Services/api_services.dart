@@ -4,6 +4,7 @@ import 'package:bwageul/Models/article_info_model.dart';
 import 'package:bwageul/Models/article_bookmark_model.dart';
 import 'package:bwageul/Models/reading_result.dart';
 import 'package:bwageul/Models/user_info_model.dart';
+import 'package:bwageul/Models/word_info_model.dart';
 import 'package:bwageul/Models/word_quiz_model.dart';
 import 'package:bwageul/Services/storage.dart';
 import 'package:http/http.dart' as http;
@@ -380,7 +381,8 @@ class ApiService {
     }
   } // 문제 풀이 결과
 
-  static Future<void> dictionaryResult(String word) async {
+  static Future<List<WordInfoModel>> dictionaryResult(String word) async {
+    List<WordInfoModel> wordList = [];
     final userId = await getUserId();
     final accessToken = await getAccessToken();
     var input = {"id": userId, "keyword": word};
@@ -396,6 +398,14 @@ class ApiService {
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       print('사전 -> $body');
+      if (body['data'] != null) {
+        for (int i = 0; i < body['data'].length; i++) {
+          wordList.add(WordInfoModel.fromJson(body['data'][i]));
+          // print(body['data'][0]);
+        }
+        return wordList;
+      }
+      throw Exception('body[\'data\'] 가져오는데 에러 발생..');
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       print('사전 -> $body');
@@ -494,3 +504,4 @@ class ApiService {
     }
   } // 북마크된 글의 리스트 가져오기
 }
+
