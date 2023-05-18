@@ -48,14 +48,13 @@ class MyApp extends StatelessWidget {
       },
       home: AnimatedSplashScreen(
         duration: 3000,
+        splashIconSize: 700.0,
         splash: SizedBox(
-          width: 1500,
-          height: 1500,
           child: Image.asset(
-              'assets/images/loading.jpeg',
+              'assets/images/go.jpeg',
             // fit: BoxFit.scaleDown,
             // fit: BoxFit.fill,
-            // fit: BoxFit.contain,
+            // fit: BoxFit.fill,
             fit: BoxFit.cover,
           ),
         ),
