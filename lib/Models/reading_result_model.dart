@@ -5,6 +5,7 @@ class ReadingResultModel {
   final String summarization;
   final String aiSummarization;
   final String saveFl;
+  final int problemId;
 
   ReadingResultModel(
       {required this.time,
@@ -12,7 +13,8 @@ class ReadingResultModel {
       required this.sentence,
       required this.summarization,
       required this.aiSummarization,
-      required this.saveFl});
+      required this.saveFl,
+      required this.problemId});
 
   factory ReadingResultModel.fromJson(Map<String, dynamic> json) {
     // final sentenceList = List<String>.from(
@@ -25,6 +27,7 @@ class ReadingResultModel {
       summarization: json['summarization'],
       aiSummarization: json['ai-summarization'],
       saveFl: json['save_fl'],
+      problemId: json['problem_id'],
     );
   }
 }

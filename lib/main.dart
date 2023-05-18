@@ -1,3 +1,4 @@
+import 'package:bwageul/Models/problem_id_provider.dart';
 import 'package:bwageul/Models/user_info_provider.dart';
 import 'package:bwageul/Screens/dictionary.dart';
 import 'package:bwageul/Screens/finish_reading.dart';
@@ -21,6 +22,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => ProfileImageProvider()),
       ChangeNotifierProvider(create: (_) => ProblemInfoProvider()),
       ChangeNotifierProvider(create: (_) => QuizListProvider()),
+      ChangeNotifierProvider(create: (_) => ProblemIdProvider()),
     ],
     child: MyApp(),
   ));

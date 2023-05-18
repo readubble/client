@@ -4,6 +4,7 @@ import 'package:bwageul/Models/quiz_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../Models/problem_id_provider.dart';
 import '../Services/api_services.dart';
 import '../Services/storage.dart';
 import '../main.dart';
@@ -65,8 +66,13 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
 
   Future<void> _loadArticleContents() async {
     if (await isLoggedIn()) {
-      final problemId = ModalRoute.of(context)?.settings.arguments as int;
-      saveProblemId(problemId);
+      final problemId = ModalRoute.of(context)?.settings.arguments
+          as int; // 썸네일 화면으로부터 problemId를 인자로 받음
+      //await saveProblemId(problemId);
+      final problemIdProvider =
+          Provider.of<ProblemIdProvider>(context, listen: false);
+      problemIdProvider.setProblemId(problemId); // 프로바이더에 pid 등록
+
       ArticleAndQuiz model = await ApiService.fetchArticleContents(problemId);
       final problemProvider =
           Provider.of<ProblemInfoProvider>(context, listen: false);
@@ -74,16 +80,12 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
       final quizProvider =
           Provider.of<QuizListProvider>(context, listen: false);
       quizProvider.setQuizList(model.quizList);
-      // var user = await ApiService.getUserInfoById(userId);
-      // final userInfoProvider =
-      // Provider.of<UserInfoProvider>(context, listen: false);
-      // userInfoProvider.setUser(user);
       setState(() {
         info = model;
         thisText = makeText(info.problem.content);
       });
     }
-  }
+  } // 글에 대한 정보를 가져옴.
 
   String makeText(List<List<String>> lst) {
     String txt = ' ';

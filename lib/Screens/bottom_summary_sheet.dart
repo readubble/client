@@ -1,9 +1,10 @@
 import 'package:bwageul/Models/problem_info_provider.dart';
 import 'package:bwageul/Models/quiz_list_provider.dart';
-import 'package:bwageul/Models/reading_result.dart';
+import 'package:bwageul/Models/reading_result_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../Models/problem_id_provider.dart';
 import '../Models/user_info_provider.dart';
 import '../main.dart';
 import 'package:bwageul/Models/article_and_quiz.dart';
@@ -91,9 +92,21 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
         resultList.add("N");
       }
     }
-    aiSummarization = await ApiService.sendProblemSolved(
-        keywords, sentences, summarization, choiceList, resultList);
-  }
+    final problemIdProvider =
+        Provider.of<ProblemIdProvider>(context, listen: false);
+    final problemId = problemIdProvider.problemId;
+    final result = await ApiService.sendProblemSolved(
+        keywords,
+        sentences,
+        summarization,
+        choiceList,
+        resultList,
+        problemId!); // 문제 다 풀고 '완료' 버튼 누르면 서버로 결과 전송 & ai 요약 결과 가져옴.
+    // Map<String, dynamic>으로, result['problem_id], result['ai_summarization']으로 받음
+    aiSummarization = result['ai_summarization'];
+    problemIdProvider.setProblemId(
+        result['problem_id']); // 글을 읽자마자 가져온 거라 어차피 같은 pid이지만 한번 더 업데이트해줌.
+  } // this bottom sheet에서 작성한 결과를 정리해서 서버에 보내는 작업.
 
   static List<Tab> myTabs = <Tab>[
     Tab(
@@ -893,7 +906,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                       duration: Duration(seconds: 2),
                                     ));
                                   } else {
-                                    await fetchResult();
+                                    await fetchResult(); // 이 시트에서 쓴 내용 정리해서 서버에 전송.
 
                                     List<String> keySentences = [];
                                     for (int i = 0;
@@ -903,7 +916,11 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                         keySentences.add(_articleSentences[i]);
                                       }
                                     }
-
+                                    final problemIdProvider =
+                                        Provider.of<ProblemIdProvider>(context,
+                                            listen: false);
+                                    final problemId = problemIdProvider
+                                        .problemId; // 프로바이더로 pid 받아옴. 현재 읽고 있는 글의 pid를 다시 풀기 버튼에 대비하여 결과 화면에 보내줌.
                                     Navigator.of(context)
                                         .pushNamed('/finish', arguments: {
                                       'ai_summarization': aiSummarization,
@@ -916,7 +933,8 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                       'my_summarization':
                                           _summaryTextEditingController.text,
                                       'save_fl': "N",
-                                    });
+                                      'problem_id': problemId,
+                                    }); // 바로 다음 페이지니까 서버 거치지 않고 바로 인자로 넘기기
                                   }
                                 },
                                 child: Text(

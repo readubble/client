@@ -43,11 +43,17 @@ Future<bool> isLoggedIn() async {
 }
 
 Future<void> saveProblemId(int id) async {
-  await storage.write(key: 'problem_id', value: id.toString());
+  try {
+    await storage.write(key: 'problem_id', value: id.toString());
+    print(await storage.read(key: 'problem_id'));
+  } catch (e) {
+    print(e);
+  }
 }
 
 Future<int?> getProblemId() async {
   final id = await storage.read(key: 'problem_id');
+
   return int.parse(id!);
 }
 
@@ -57,5 +63,5 @@ Future<void> saveTargetCode(int id) async {
 
 Future<int?> getTargetCode() async {
   final id = await storage.read(key: 'target_code');
-    return int.parse(id!);
+  return int.parse(id!);
 }

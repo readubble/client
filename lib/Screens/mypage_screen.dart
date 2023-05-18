@@ -296,7 +296,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                     height: 20,
                   ),
                   Text(
-                    '오늘의 문해력 퀴즈',
+                    '오늘의 어휘 퀴즈',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,

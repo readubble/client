@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:bwageul/Models/article_info_model.dart';
 import 'package:bwageul/Models/article_bookmark_model.dart';
-import 'package:bwageul/Models/reading_result.dart';
+import 'package:bwageul/Models/reading_result_model.dart';
 import 'package:bwageul/Models/user_info_model.dart';
 import 'package:bwageul/Models/word_bookmark_model.dart';
 import 'package:bwageul/Models/word_info_model.dart';
@@ -355,7 +356,7 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      //print("articleList() 글 -> ${body['data']}");
+      print("fetchArticleList() 글 -> ${body['data']}");
       if (body['data'] != null) {
         for (int i = 0; i < body['data'].length; i++) {
           articleList.add(ArticleInfoModel.fromJson(body['data'][i]));
@@ -380,7 +381,7 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print('articleContents(problemId) -> ${body['data']['quiz']}');
+      print('fetchArticleContents(problemId) -> ${body['data']}');
       return ArticleAndQuiz.fromJson(body['data']);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
@@ -389,11 +390,10 @@ class ApiService {
     }
   } // 문제 내용 (글 본문 + 추가 문제)
 
-  static Future<ReadingResultModel> articleReadingResult() async {
+  static Future<ReadingResultModel> articleReadingResult(int problemId) async {
     final userId = await getUserId();
     final accessToken = await getAccessToken();
-    final problemId = await getProblemId();
-
+    //final problemId = await getProblemId();
     final url = Uri.parse("$baseUrl/problem/$problemId/users/$userId");
 
     var response = await http.get(url, headers: {
@@ -403,14 +403,14 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print('문제 풀이 결과 호출 -> ${body['data']['sentence']}');
+      print('문제 풀이 결과 호출 -> ${body['data']}');
       return ReadingResultModel.fromJson(body['data']);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       print(body);
       throw Exception('문제 풀이 결과 리턴 실패');
     }
-  } // 문제 풀이 결과
+  } // 문제 풀이 결과 가져오기. pid 리턴함
 
   static Future<List<WordInfoModel>> dictionaryResult(String word) async {
     List<WordInfoModel> wordList = [];
@@ -444,13 +444,13 @@ class ApiService {
     }
   } // 사전에 "word"에 대한 검색 결과 리턴
 
-  static Future<String> sendProblemSolved(
+  static Future<Map<String, dynamic>> sendProblemSolved(
       List<String> keywordList,
       String topicSentences,
       String summarization,
       List<int> choiceList,
-      List<String> resultList) async {
-    final problemId = await getProblemId();
+      List<String> resultList,
+      int problemId) async {
     final accessToken = await getAccessToken();
     final userId = await getUserId();
     var input = {
@@ -475,17 +475,20 @@ class ApiService {
         body: jsonEncode(input));
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      // print(body['data']);
-      return body['data']['ai_summarization'];
+      print('sendProblemSolved -> ${body['data']}');
+      print('sendProblemSolved -> ${body['data'].runtimeType}');
+      print('sendProblemSolved -> ${body['data']['problem_id']}');
+
+      return body['data'];
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       print(body);
       throw Exception("문제 풀이 결과 보내기 실패");
     }
-  } // 글 읽고, 문제 푼 결과 서버에 보내기
+  } // 문제 풀이: 글 읽고, 문제 푼 결과 서버에 보내기. problem_id & ai_summarization 리턴
 
-  static Future<void> problemBookmark() async {
-    final problemId = await getProblemId();
+  static Future<void> problemBookmark(int problemId) async {
+    //final problemId = await getProblemId();
     final accessToken = await getAccessToken();
     final userId = await getUserId();
     final url = Uri.parse('$baseUrl/problem/$problemId/bookmark');
@@ -535,15 +538,12 @@ class ApiService {
     }
   } // 북마크된 글의 리스트 가져오기
 
-  static Future<void> wordBookmark(int wordId, String wordNm, String wordMean) async {
+  static Future<void> wordBookmark(
+      int wordId, String wordNm, String wordMean) async {
     final accessToken = await getAccessToken();
     final userId = await getUserId();
     final url = Uri.parse('$baseUrl/word/$wordId/bookmark');
-    var input = {
-      'user_id': userId,
-      'word_nm': wordNm,
-      'word_mean': wordMean
-    };
+    var input = {'user_id': userId, 'word_nm': wordNm, 'word_mean': wordMean};
     var response = await http.post(url,
         headers: {
           'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
@@ -565,8 +565,7 @@ class ApiService {
   static Future<List<WordBookmarkModel>> getWordBookmarkList() async {
     final accessToken = await getAccessToken();
     final userId = await getUserId();
-    final url =
-    Uri.parse('$baseUrl/word/bookmark/users/$userId');
+    final url = Uri.parse('$baseUrl/word/bookmark/users/$userId');
     var response = await http.get(url, headers: {
       'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
       'Content-Type': 'application/json; charset=utf-8',
@@ -577,7 +576,7 @@ class ApiService {
       final data = body['data'] as List<dynamic>;
       List<WordBookmarkModel> wordBookmarkList = data
           .map((item) =>
-          WordBookmarkModel.fromJson(item as Map<String, dynamic>))
+              WordBookmarkModel.fromJson(item as Map<String, dynamic>))
           .toList();
       // print('북마크된 단어 리스트 호출 : ${body['data']}');
       return wordBookmarkList;

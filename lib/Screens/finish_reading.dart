@@ -20,6 +20,7 @@ class _FinishReadingState extends State<FinishReading> {
   bool isLiked = false;
   String level = '';
   String title = '';
+  int problemId = 0;
 
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _FinishReadingState extends State<FinishReading> {
         keywordList = arguments['keyword_list'];
         sentenceList = arguments['key_sentences'];
         isLiked = (arguments['save_fl'] == "Y") ? true : false;
+        problemId = arguments['problem_id'];
       });
     }
   }
@@ -80,7 +82,7 @@ class _FinishReadingState extends State<FinishReading> {
                               ? arguments['save_fl'] = 'N'
                               : arguments['save_fl'] = 'Y';
                         });
-                        await ApiService.problemBookmark();
+                        await ApiService.problemBookmark(problemId);
                       },
                       icon: isLiked
                           ? Icon(
@@ -145,7 +147,19 @@ class _FinishReadingState extends State<FinishReading> {
                       children: [
                         ElevatedButton(
                             onPressed: () {
-                              Navigator.of(context).pushNamed('/article');
+                              // Navigator.popUntil(
+                              //     context,
+                              //     ModalRoute.withName(
+                              //         '/article')); // 글 읽기 시작하는 화면으로 돌아감
+                              Navigator.popUntil(
+                                context,
+                                ModalRoute.withName('/'),
+                              ); // 앞에 쌓인 페이지 다 치우고 글 읽는 화면으로 이동
+                              Navigator.pushNamed(
+                                context,
+                                '/article',
+                                arguments: problemId, // 전달할 int 인자
+                              );
                             },
                             child: Row(
                               children: [
@@ -157,7 +171,7 @@ class _FinishReadingState extends State<FinishReading> {
                                   width: 5,
                                 ),
                                 Text(
-                                  "원문 보기",
+                                  "다시 풀기",
                                   style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w600),
@@ -430,7 +444,7 @@ class _FinishReadingState extends State<FinishReading> {
                             onPressed: () {
                               Navigator.popUntil(
                                   context, ModalRoute.withName('/'));
-                                  // context, ModalRoute.withName('/'));
+                              // context, ModalRoute.withName('/'));
                             },
                             child: Text(
                               "완료",

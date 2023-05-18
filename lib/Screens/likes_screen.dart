@@ -1,5 +1,5 @@
 import 'package:bwageul/Models/article_bookmark_model.dart';
-import 'package:bwageul/Models/reading_result.dart';
+import 'package:bwageul/Models/reading_result_model.dart';
 import 'package:bwageul/Models/word_bookmark_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -27,7 +27,7 @@ class _LikesScreenState extends State<LikesScreen>
   ];
   int articleCount = 0;
   int wordCount = 0;
-  String category = '[인문]';
+  String category = '[인문]'; // 기본값: 인문
   List<ArticleBookmarkModel> resultDataList = [];
   List<WordBookmarkModel> wordDataList = [];
   int catNo = 1;
@@ -59,12 +59,10 @@ class _LikesScreenState extends State<LikesScreen>
   Future<void> loadWord() async {
     // 북마크된 단어 정보 불러오기
     final data = await ApiService.getWordBookmarkList();
-    // print("data:${data}");
     setState(() {
       wordDataList = data;
       wordCount = wordDataList.length;
       likes = data.map((e) => true).toList();
-
     });
   }
 
@@ -110,7 +108,6 @@ class _LikesScreenState extends State<LikesScreen>
                   onPressed: () async {
                     setState(() {
                       likes[i] = !likes[i];
-
                     });
                     // print(likes[i]);
                     await ApiService.wordBookmark(
@@ -121,15 +118,15 @@ class _LikesScreenState extends State<LikesScreen>
                   },
                   icon: likes[i]
                       ? Icon(
-                    Icons.favorite,
-                    size: 25,
-                    color: myColor.shade100,
-                  )
+                          Icons.favorite,
+                          size: 25,
+                          color: myColor.shade100,
+                        )
                       : Icon(
-                    Icons.favorite_outline_rounded,
-                    size: 25,
-                    color: myColor.shade100,
-                  ),
+                          Icons.favorite_outline_rounded,
+                          size: 25,
+                          color: myColor.shade100,
+                        ),
                 ),
               ],
             ),
@@ -402,7 +399,8 @@ List<Widget> getLikedArticles(
     articles.add(Container(
       child: GestureDetector(
         onTap: () async {
-          ReadingResultModel model = await ApiService.articleReadingResult();
+          ReadingResultModel model =
+              await ApiService.articleReadingResult(resultDataList[i].id);
           Navigator.of(context).pushNamed('/finish', arguments: {
             'ai_summarization': model.aiSummarization,
             'title': resultDataList[i].atcTitle,
@@ -411,6 +409,7 @@ List<Widget> getLikedArticles(
             'key_sentences': model.sentence,
             'my_summarization': model.summarization,
             'save_fl': model.saveFl,
+            'problem_id': model.problemId,
           }); // 문제 풀이 결과 정보를 넘겨줘야 finishReading 스크린에 그릴 수 있음.
         },
         child: unlockedArticleTile(
