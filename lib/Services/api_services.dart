@@ -311,6 +311,36 @@ class ApiService {
     }
   } // 어휘 퀴즈 정보 불러오기
 
+  static Future<void> sendWordQuiz(
+      int quizId, int quizChoice, String quizResult) async {
+    final accessToken = await getAccessToken();
+    final userId = await getUserId();
+    final url = Uri.parse('$baseUrl/quiz');
+    var input = {
+      'user_id': userId,
+      'quiz_id': quizId,
+      'quiz_choice': quizChoice,
+      'quiz_result': quizResult
+    };
+
+    var response = await http.post(url,
+        headers: {
+          'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json'
+        },
+        body: jsonEncode(input));
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print(body);
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print(body);
+      throw Exception('어휘 퀴즈 결과 제출 실패');
+    }
+  } // 어휘 퀴즈 결과 제출
+
   static Future<List<ArticleInfoModel>> fetchArticleList(int category) async {
     List<ArticleInfoModel> articleList = [];
     final userId = await getUserId();
@@ -504,4 +534,3 @@ class ApiService {
     }
   } // 북마크된 글의 리스트 가져오기
 }
-

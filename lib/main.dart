@@ -1,5 +1,4 @@
 import 'package:bwageul/Models/user_info_provider.dart';
-import 'package:bwageul/Models/word_quiz_provider.dart';
 import 'package:bwageul/Screens/dictionary.dart';
 import 'package:bwageul/Screens/finish_reading.dart';
 import 'package:bwageul/Screens/login_screen.dart';
@@ -20,7 +19,6 @@ void main() {
     providers: [
       ChangeNotifierProvider(create: (_) => UserInfoProvider()),
       ChangeNotifierProvider(create: (_) => ProfileImageProvider()),
-      ChangeNotifierProvider(create: (_) => WordQuizProvider()),
       ChangeNotifierProvider(create: (_) => ProblemInfoProvider()),
       ChangeNotifierProvider(create: (_) => QuizListProvider()),
     ],

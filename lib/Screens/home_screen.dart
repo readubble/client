@@ -24,6 +24,10 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ArticleInfoModel> humArticleList = [];
   List<ArticleInfoModel> socArticleList = [];
   List<ArticleInfoModel> sciArticleList = [];
+  List<bool> isQuizEnabled = [true, true, true];
+  List<bool> isCorrect = [false, false, false];
+  List<WordQuizModel> quizDataList = [];
+  List<int> isClicked = [0, 0, 0];
 
   @override
   void initState() {
@@ -31,8 +35,24 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _loadUserInfo();
     _loadArticleList();
-    //ApiService.articleContents(1); // 브람스 글 가져와
-    //ApiService.dictionaryResult("나무");
+    _loadWordQuiz();
+  }
+
+  Future<void> _loadUserInfo() async {
+    String? userId = await getUserId(); // 사용자 ID
+    print('load user info -> userId : $userId');
+    if (userId != null) {
+      // 로그인된 경우
+      var user = await ApiService.getUserInfoById(userId);
+      final userInfoProvider =
+          Provider.of<UserInfoProvider>(context, listen: false);
+      userInfoProvider.setUser(user);
+
+      setState(() {
+        nickname = user.nickname;
+        days = userInfoProvider.getDaysFromSignUp();
+      });
+    }
   }
 
   Future<void> _loadArticleList() async {
@@ -49,130 +69,168 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _loadUserInfo() async {
-    String? userId = await getUserId(); // 사용자 ID
-    print('load user info -> userId : $userId');
-    if (userId != null) {
-      // 로그인된 경우
-
-      var user = await ApiService.getUserInfoById(userId);
-      final userInfoProvider =
-          Provider.of<UserInfoProvider>(context, listen: false);
-      userInfoProvider.setUser(user);
-
+  Future<void> _loadWordQuiz() async {
+    if (await isLoggedIn()) {
+      List<WordQuizModel> list = await ApiService.getWordQuiz();
       setState(() {
-        nickname = user.nickname;
-        days = userInfoProvider.getDaysFromSignUp();
+        quizDataList = list;
+        isQuizEnabled =
+            list.map((e) => (e.solved == "Y") ? false : true).toList();
+        isCorrect = list
+            .map((e) => (e.answer == e.solvedChoice) ? true : false)
+            .toList();
+        isClicked =
+            list.map((e) => (e.solved == "Y") ? e.solvedChoice : 0).toList();
       });
     }
   }
 
-  Future<List<Widget>> buildWordQuiz(BuildContext context) async {
-    if (await isLoggedIn()) {
-      // 로그인 된 경우에만 어휘 퀴즈 불러오기
-      List<WordQuizModel> quizDataList = await ApiService.getWordQuiz();
-
-      // WordQuizProvider wordQuizModelProvider1 =
-      //     Provider.of<WordQuizProvider>(context, listen: false);
-      // WordQuizProvider wordQuizModelProvider2 =
-      //     Provider.of<WordQuizProvider>(context, listen: false);
-      // WordQuizProvider wordQuizModelProvider3 = Provider.of<WordQuizProvider>(
-      //     context,
-      //     listen: false); // 이거 이렇게 쓰면 안 되네.. 프로바이더가 어휘퀴즈 모델을 관리하도록 해야 함.
-      //
-      // wordQuizModelProvider1.setWordQuizModel(quizDataList[0]);
-      // wordQuizModelProvider2.setWordQuizModel(quizDataList[1]);
-      // wordQuizModelProvider3.setWordQuizModel(quizDataList[2]);
-
-      List<Widget> quizList = [];
-
-      for (final data in quizDataList) {
-        // data는 WordQuizModel 각각
-        quizList.add(buildEachQuiz(data));
-      }
-
-      return quizList;
-    } else {
-      throw Exception('로그인이 필요합니다.');
+  List<Widget> buildWordQuiz() {
+    List<Widget> quizList = [];
+    for (int i = 0; i < quizDataList.length; i++) {
+      quizList.add(
+          buildEachQuiz(quizDataList[i], i)); // Enable 상태를 위한 인덱스 값도 매개변수로 넘겨줌.
     }
-  } // 3개 퀴즈 다 가져오기
+    return quizList;
+  } // 3개 퀴즈(Widget)을 불러오기
 
-  Widget buildEachQuiz(WordQuizModel model) {
+  Widget buildEachQuiz(WordQuizModel model, int quizIdx) {
     // 퀴즈 만드는 함수: 퀴즈제목, 보기1, 보기2
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Text(
-            model.quiz,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-                shadows: [
-                  Shadow(
-                      color: Colors.black.withOpacity(0.3),
-                      offset: const Offset(1, 1),
-                      blurRadius: 1)
-                ]),
+    return Stack(children: [
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Text(
+              model.quiz,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                        color: Colors.black.withOpacity(0.3),
+                        offset: const Offset(1, 1),
+                        blurRadius: 1)
+                  ]),
+            ),
           ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                shadowColor: myColor.shade800,
-                elevation: 5,
-                minimumSize: const Size(120, 40),
-                maximumSize: const Size(150, 40),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  disabledBackgroundColor: (isClicked[quizIdx] == 1)
+                      ? Colors.grey.shade400
+                      : Colors.white,
+                  disabledForegroundColor: Colors.black,
+                  shadowColor: myColor.shade800,
+                  elevation: 5,
+                  minimumSize: const Size(120, 40),
+                  maximumSize: const Size(150, 40),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-              ),
-              onPressed: () {
-                print('왼쪽 버튼 클릭!');
-              },
-              child: Text(
-                model.choices[0],
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
+                onPressed: isQuizEnabled[quizIdx]
+                    ? () => submitQuizResult(model, 1, quizIdx)
+                    : null, // isEnabled == false이면 onPressed disabled
+                child: Text(
+                  model.choices[0],
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-            ), // 왼쪽 보기
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                shadowColor: myColor.shade800,
-                elevation: 5,
-                minimumSize: const Size(120, 40),
-                maximumSize: const Size(150, 40),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+              ), // 왼쪽 보기
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  disabledBackgroundColor: (isClicked[quizIdx] == 2)
+                      ? Colors.grey.shade400
+                      : Colors.white,
+                  disabledForegroundColor: Colors.black,
+                  shadowColor: myColor.shade800,
+                  elevation: 5,
+                  minimumSize: const Size(120, 40),
+                  maximumSize: const Size(150, 40),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-              ),
-              onPressed: () {
-                print('오른쪽 버튼 클릭');
-              },
-              child: Text(
-                model.choices[1],
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
+                onPressed: isQuizEnabled[quizIdx]
+                    ? () => submitQuizResult(model, 2, quizIdx)
+                    : null, // isEnabled == false이면 onPressed disabled
+                child: Text(
+                  model.choices[1],
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-            ), // 오른쪽 보기
-          ],
-        ),
-      ],
-    );
+              ), // 오른쪽 보기
+            ],
+          ),
+        ],
+      ),
+      if (!isQuizEnabled[
+          quizIdx]) // disabled 된 상태 = 즉, 이미 푼 문제의 경우 아이콘으로 정답 여부를 보여줌.
+        isCorrect[quizIdx]
+            ? Positioned(
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: Icon(
+                  Icons.circle_outlined,
+                  size: 125,
+                  color: Colors.green.withOpacity(0.7),
+                ),
+              )
+            : Positioned(
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: Icon(
+                  Icons.close,
+                  size: 130,
+                  color: Colors.red.withOpacity(0.7),
+                ),
+              )
+    ]);
+  }
+
+  void submitQuizResult(WordQuizModel model, int choice, int quizIdx) async {
+    // 버튼 둘 중 하나가 클릭될 때마다
+    setState(() {
+      isQuizEnabled[quizIdx] =
+          !isQuizEnabled[quizIdx]; // 하나라도 눌렸으면 풀 수 없는 문제로 설정.
+      isClicked[quizIdx] = choice; // 지금 1번, 2번 버튼이 선택됨
+    });
+    String quizResult = '';
+    if (choice == model.answer) {
+      // 정답처리
+      quizResult = 'Y';
+      setState(() {
+        isCorrect[quizIdx] = true;
+      });
+    } else {
+      quizResult = 'N';
+      setState(() {
+        isCorrect[quizIdx] = false;
+      });
+    }
+    await ApiService.sendWordQuiz(
+        model.quizId, choice, quizResult); // 서버에 어휘 퀴즈 결과 전송
   }
 
   @override
@@ -190,14 +248,14 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 const Text(
                   '봐글봐글',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900),
                 ),
                 const SizedBox(
                   width: 15,
                 ),
                 Text(
                   '$nickname님은 봐글봐글과 함께\n$days일째 성장 중!',
-                  style: const TextStyle(fontSize: 14),
+                  style: const TextStyle(fontSize: 15),
                 ),
               ],
             ),
@@ -209,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: myColor.shade700,
             ),
             Container(
-              // 어휘 퀴즈
+              // 어휘 퀴즈!!!!!!!
               height: 140,
               alignment: Alignment.center,
               width: double.infinity,
@@ -225,30 +283,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ]),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: FutureBuilder<List<Widget>>(
-                  future: buildWordQuiz(context),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<Widget>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator(); // Show a loading indicator while waiting for the data
-                    } else if (snapshot.hasError) {
-                      print(snapshot.error);
-                      return Text(
-                        '${snapshot.error}',
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600),
-                      ); // Show an error message if an error occurs
-                    } else {
-                      // 데이터 전송 성공
-                      List<Widget> quizList = snapshot.data!;
-                      return PageView(
-                        controller: _quizController,
-                        children: quizList,
-                      );
-                    }
-                  },
+                child: PageView(
+                  controller: _quizController,
+                  children: buildWordQuiz(),
                 ),
               ),
             ),
