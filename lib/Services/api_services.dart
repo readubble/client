@@ -586,4 +586,6 @@ class ApiService {
       throw Exception("글 북마크 리스트 api 호출 실패");
     }
   } // 북마크된 단어 리스트 가져오기
+
+
 }

@@ -267,13 +267,16 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        SizedBox(
+                          height: 20,
+                        ),
                         Text(
                           "내용 정리하기",
                           style: TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 22),
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 30,
                         ),
                         Text(
                           "[문제 1]",
@@ -747,6 +750,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        SizedBox(
+                          height: 20,
+                        ),
                         Text(
                           "[문제 2]",
                           style: TextStyle(
@@ -916,6 +922,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        SizedBox(
+                          height: 20,
+                        ),
                         Text(
                           "[문제 3]",
                           style: TextStyle(

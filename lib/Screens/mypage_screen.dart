@@ -192,7 +192,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                 Colors.white,
                                 myColor.shade400,
                               ],
-                              stops: [0.0, 0.9],
+                              stops: [0.2, 0.9], // 그라데이션 빼려면 0.0 0.0 하면 됨
                             ),
                           ),
                           child: RichText(
@@ -229,7 +229,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                 Colors.white,
                                 myColor.shade200,
                               ],
-                              stops: [0.0, 0.9],
+                              stops: [0.2, 0.9], // 그라데이션 빼려면 0.0 0.0 하면 됨
                             ),
                           ),
                           child: RichText(
@@ -266,7 +266,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                 Colors.white,
                                 myColor.shade100,
                               ],
-                              stops: [0.0, 0.9],
+                              stops: [0.2, 0.9], // 그라데이션 빼려면 0.0 0.0 하면 됨
                             ),
                           ),
                           child: RichText(
@@ -308,7 +308,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                     children: [
                       CircularUsageIndicator(
                         elevation: 20.0,
-                        backgroundColor: myColor.shade600,
+                        backgroundColor: myColor.shade700,
                         borderColor: Colors.transparent,
                         progressValue: 0.66, // progress value from 0.0 to 1.0
 
