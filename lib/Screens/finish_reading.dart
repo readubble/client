@@ -430,6 +430,7 @@ class _FinishReadingState extends State<FinishReading> {
                             onPressed: () {
                               Navigator.popUntil(
                                   context, ModalRoute.withName('/'));
+                                  // context, ModalRoute.withName('/'));
                             },
                             child: Text(
                               "완료",

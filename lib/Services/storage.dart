@@ -50,3 +50,12 @@ Future<int?> getProblemId() async {
   final id = await storage.read(key: 'problem_id');
   return int.parse(id!);
 }
+
+Future<void> saveTargetCode(int id) async {
+  await storage.write(key: 'target_code', value: id.toString());
+}
+
+Future<int?> getTargetCode() async {
+  final id = await storage.read(key: 'target_code');
+    return int.parse(id!);
+}

@@ -28,7 +28,8 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
         // searchResults.addAll(result); // result가 단일 객체인 경우
         searchResults = result;
         print("searchResults: ${searchResults}"); // result 출력
-        likes = List.filled(searchResults.length, false);
+        likes = searchResults.map((e) => (e.saveFl=="Y")?true:false).toList();
+        //likes = List.filled(searchResults.length, false);
         for (int i = 0; i < searchResults.length; i++) {
           print('${searchResults[i].wordNm}  ${searchResults[i].wordMean}');
         }
@@ -79,11 +80,17 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() {
                       likes[i] = !likes[i];
-                      print(likes[i]);
+
                     });
+                    print(likes[i]);
+                    await ApiService.wordBookmark(
+                        searchResults[i].targetCode,
+                        searchResults[i].wordNm,
+                        searchResults[i].wordMean,
+                    );
                   },
                   icon: likes[i]
                       ? Icon(

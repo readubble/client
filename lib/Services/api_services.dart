@@ -4,6 +4,7 @@ import 'package:bwageul/Models/article_info_model.dart';
 import 'package:bwageul/Models/article_bookmark_model.dart';
 import 'package:bwageul/Models/reading_result.dart';
 import 'package:bwageul/Models/user_info_model.dart';
+import 'package:bwageul/Models/word_bookmark_model.dart';
 import 'package:bwageul/Models/word_info_model.dart';
 import 'package:bwageul/Models/word_quiz_model.dart';
 import 'package:bwageul/Services/storage.dart';
@@ -444,7 +445,7 @@ class ApiService {
         body: jsonEncode(input));
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print(body['data']);
+      // print(body['data']);
       return body['data']['ai_summarization'];
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
@@ -495,13 +496,66 @@ class ApiService {
           .map((item) =>
               ArticleBookmarkModel.fromJson(item as Map<String, dynamic>))
           .toList();
-      print('북마크된 글 리스트 호출 : ${body['data']}');
+      // print('북마크된 글 리스트 호출 : ${body['data']}');
       return bookmarkList;
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print('북마크된 글 리스트 호출 : $body');
+      // print('북마크된 글 리스트 호출 : $body');
       throw Exception("글 북마크 리스트 api 호출 실패");
     }
   } // 북마크된 글의 리스트 가져오기
+
+  static Future<void> wordBookmark(int wordId, String wordNm, String wordMean) async {
+    final accessToken = await getAccessToken();
+    final userId = await getUserId();
+    final url = Uri.parse('$baseUrl/word/$wordId/bookmark');
+    var input = {
+      'user_id': userId,
+      'word_nm': wordNm,
+      'word_mean': wordMean
+    };
+    var response = await http.post(url,
+        headers: {
+          'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json'
+        },
+        body: jsonEncode(input));
+    // body에 word_nm, word_mean
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      // print('단어 북마크 여부 보내기 wordBookmark() 호출: $body');
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      // print('단어 북마크 여부 보내기 wordBookmark() 호출: $body');
+      throw Exception("북마크 api 호출 실패");
+    }
+  } // 단어 북마크 여부 보내기
+
+  static Future<List<WordBookmarkModel>> getWordBookmarkList() async {
+    final accessToken = await getAccessToken();
+    final userId = await getUserId();
+    final url =
+    Uri.parse('$baseUrl/word/bookmark/users/$userId');
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    });
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      final data = body['data'] as List<dynamic>;
+      List<WordBookmarkModel> wordBookmarkList = data
+          .map((item) =>
+          WordBookmarkModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+      // print('북마크된 단어 리스트 호출 : ${body['data']}');
+      return wordBookmarkList;
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      // print('북마크된 단어 리스트 호출 : $body');
+      throw Exception("글 북마크 리스트 api 호출 실패");
+    }
+  } // 북마크된 단어 리스트 가져오기
 }
 

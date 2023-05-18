@@ -1,5 +1,6 @@
 import 'package:bwageul/Models/article_bookmark_model.dart';
 import 'package:bwageul/Models/reading_result.dart';
+import 'package:bwageul/Models/word_bookmark_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../Services/api_services.dart';
@@ -25,15 +26,19 @@ class _LikesScreenState extends State<LikesScreen>
     )
   ];
   int articleCount = 0;
+  int wordCount = 0;
   String category = '[인문]';
   List<ArticleBookmarkModel> resultDataList = [];
+  List<WordBookmarkModel> wordDataList = [];
   int catNo = 1;
+  List<bool> likes = []; // 단어장 추가 T/F
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     loadData(catNo);
+    loadWord();
   }
 
   @override
@@ -51,9 +56,110 @@ class _LikesScreenState extends State<LikesScreen>
     });
   }
 
+  Future<void> loadWord() async {
+    // 북마크된 단어 정보 불러오기
+    final data = await ApiService.getWordBookmarkList();
+    // print("data:${data}");
+    setState(() {
+      wordDataList = data;
+      wordCount = wordDataList.length;
+      likes = data.map((e) => true).toList();
+
+    });
+  }
+
+  List<Widget> getLikedWords() {
+    List<Widget> words = [];
+
+    for (int i = 0; i < wordDataList.length; i++) {
+      Container wordInfo = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          color: myColor.shade700,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: myColor.shade800,
+              blurRadius: 3,
+              offset: Offset(3, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "${wordDataList[i].wordNm}",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    setState(() {
+                      likes[i] = !likes[i];
+
+                    });
+                    // print(likes[i]);
+                    await ApiService.wordBookmark(
+                      wordDataList[i].targetCode,
+                      wordDataList[i].wordNm,
+                      wordDataList[i].wordMean,
+                    );
+                  },
+                  icon: likes[i]
+                      ? Icon(
+                    Icons.favorite,
+                    size: 25,
+                    color: myColor.shade100,
+                  )
+                      : Icon(
+                    Icons.favorite_outline_rounded,
+                    size: 25,
+                    color: myColor.shade100,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Text(
+                    wordDataList[i].wordMean, // 결과에서 뜻 가져오기
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+
+      words.add(wordInfo);
+    }
+
+    return words;
+  }
+
   @override
   Widget build(BuildContext context) {
     loadData(catNo);
+    loadWord();
 
     return DefaultTabController(
       length: 2,
@@ -247,33 +353,35 @@ class _LikesScreenState extends State<LikesScreen>
                       ],
                     ),
                   ), //저장한 글
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          ' 나의 단어장',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black),
-                        ), //'저장한 글' 텍스트
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Expanded(
-                          child: GridView.count(
-                            shrinkWrap: true,
-                            primary: false,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            crossAxisCount: 3,
-                            childAspectRatio: 2,
-                            children: getLikedWords(),
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            ' 나의 단어장',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ), //'저장한 글' 텍스트
+                          const SizedBox(
+                            height: 10,
                           ),
-                        ),
-                      ],
+                          // Expanded(
+                          //   child: GridView.count(
+                          //     shrinkWrap: true,
+                          //     primary: false,
+                          //     crossAxisSpacing: 10,
+                          //     mainAxisSpacing: 10,
+                          //     crossAxisCount: 2,
+                          //     children: getLikedArticles(context, resultDataList),
+                          //   ),
+                          // ),
+                          ...getLikedWords(),
+                        ],
+                      ),
                     ),
                   ), //저장한 단어
                 ]),
@@ -316,23 +424,3 @@ List<Widget> getLikedArticles(
   return articles;
 } // 저장한 글의 리스트를 타일 형태로 반환하는 메소드. 좋아요 표시 된 UnlockedArticleTile을 articles[]에 추가할 것.
 // 매개변수로 글의 카테고리를 받고, 그때 그때 카테고리에 따라 저장한 글을 가져오면 좋겠음
-
-List<Widget> getLikedWords() {
-  List<Widget> words = [];
-
-  for (int i = 0; i < 10; i++) {
-    words.add(Container(
-      alignment: Alignment.center,
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(color: myColor.shade800, offset: Offset(3, 3), blurRadius: 3)
-      ], borderRadius: BorderRadius.circular(20), color: Colors.grey[350]),
-      padding: const EdgeInsets.all(8),
-      child: const Text(
-        '금일',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-      ),
-    ));
-  }
-
-  return words;
-}
