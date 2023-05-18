@@ -237,6 +237,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                         )),
                                     Text("글자 크기",
                                         style: TextStyle(
+                                          fontFamily: 'lottedream',
                                             fontSize: 15,
                                             fontWeight: FontWeight.w600)),
                                     IconButton(
@@ -261,7 +262,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                           Text(
                             thisText,
                             style:
-                                TextStyle(fontSize: baseFontSize, height: 1.7),
+                                TextStyle(fontFamily: 'Jeju',fontSize: baseFontSize, height: 1.7),
                           ),
                           SizedBox(
                             height: 50,

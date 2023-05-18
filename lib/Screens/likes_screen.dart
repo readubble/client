@@ -19,10 +19,10 @@ class _LikesScreenState extends State<LikesScreen>
   late TabController _tabController;
   static const List<Tab> myTabs = <Tab>[
     Tab(
-      child: Text('저장한 글', style: TextStyle(fontSize: 18)),
+      child: Text('저장한 글', style: TextStyle(fontSize: 20)),
     ),
     Tab(
-      child: Text('저장한 단어', style: TextStyle(fontSize: 18)),
+      child: Text('저장한 단어', style: TextStyle(fontSize: 20)),
     )
   ];
   int articleCount = 0;
@@ -96,7 +96,7 @@ class _LikesScreenState extends State<LikesScreen>
                       TextSpan(
                         text: "${wordDataList[i].wordNm}",
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 21,
                           color: Colors.black,
                           fontWeight: FontWeight.w600,
                         ),
@@ -138,7 +138,7 @@ class _LikesScreenState extends State<LikesScreen>
                 Expanded(
                   child: Text(
                     wordDataList[i].wordMean, // 결과에서 뜻 가져오기
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 19),
                   ),
                 ),
               ],
@@ -207,9 +207,12 @@ class _LikesScreenState extends State<LikesScreen>
                                       )),
                                   // child: const Icon(Icons.book,
                                   //     size: 80, color: Colors.white)),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
                                   const Text(
                                     '인문',
-                                    style: TextStyle(fontSize: 20),
+                                    style: TextStyle(fontSize: 25),
                                   )
                                 ],
                               ),
@@ -248,10 +251,13 @@ class _LikesScreenState extends State<LikesScreen>
                                               //groups_outlined
                                               size: 70,
                                               color: Colors.white)),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
                                   const Text(
                                     '사회',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 25,
                                     ),
                                   )
                                 ],
@@ -287,9 +293,12 @@ class _LikesScreenState extends State<LikesScreen>
                                       )),
                                   // child: const Icon(Icons.science_outlined,
                                   //     size: 80, color: Colors.white)),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
                                   const Text(
                                     '과학',
-                                    style: TextStyle(fontSize: 20),
+                                    style: TextStyle(fontSize: 25),
                                   )
                                 ],
                               ),
@@ -307,14 +316,14 @@ class _LikesScreenState extends State<LikesScreen>
                               TextSpan(
                                 text: ' $category ',
                                 style: const TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 25,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.lightBlue),
                               ),
                               TextSpan(
                                 text: '저장한 글 (${resultDataList.length} 개)',
                                 style: const TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 25,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.black),
                               ),
@@ -359,12 +368,13 @@ class _LikesScreenState extends State<LikesScreen>
                           Text(
                             ' 나의 단어장',
                             style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 25,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black),
-                          ), //'저장한 글' 텍스트
+                          ),
+                          //'저장한 글' 텍스트
                           const SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
                           // Expanded(
                           //   child: GridView.count(

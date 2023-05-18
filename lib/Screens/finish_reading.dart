@@ -88,12 +88,12 @@ class _FinishReadingState extends State<FinishReading> {
                           ? Icon(
                               Icons.favorite_rounded,
                               size: 35,
-                              color: myColor.shade300,
+                              color: myColor.shade100,
                             )
                           : Icon(
                               Icons.favorite_border_rounded,
                               size: 35,
-                              color: myColor.shade300,
+                              color: myColor.shade100,
                             )),
                 ],
               ),

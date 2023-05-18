@@ -35,7 +35,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Readubble',
-      theme: ThemeData(primarySwatch: myColor),
+      theme: ThemeData(
+          primarySwatch: myColor,
+        fontFamily: 'lottedream'
+      ),
       debugShowCheckedModeBanner: false, //오른쪽 상단 DEBUG 배너 비활성화
       initialRoute: '/',
       routes: {
@@ -73,9 +76,9 @@ MaterialColor myColor = const MaterialColor(0xff84B7D9, {
   //메인은 하늘색
   50: Color(0xffccecfd), //옅은 하늘색
   100: Color(0xff84B7D9), //메인 색상
-  200: Color(0xFF00CC66), //짙은 민트
+  200: Color(0xFF00CC66), //짙은 민트 - 사회
   300: Color(0xffff8361), //짙은 산호색
-  400: Color(0xFFFF8C00), //옅은 산호색
+  400: Color(0xFFFF8C00), //옅은 산호색 - 인문
   // 400: Color(0xFFFFC0CB), //옅은 산호색
   500: Color(0xff0a4671), //네이비 - 과학
   600: Color(0xFFFCFFF9), //연두
