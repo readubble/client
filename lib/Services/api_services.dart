@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:bwageul/Models/article_info_model.dart';
+import 'package:bwageul/Models/article_bookmark_model.dart';
+import 'package:bwageul/Models/reading_result.dart';
 import 'package:bwageul/Models/user_info_model.dart';
 import 'package:bwageul/Models/word_quiz_model.dart';
 import 'package:bwageul/Services/storage.dart';
@@ -355,11 +357,12 @@ class ApiService {
     }
   } // 문제 내용 (글 본문 + 추가 문제)
 
-  static Future<void> articleReadingResult() async {
+  static Future<ReadingResultModel> articleReadingResult() async {
     final userId = await getUserId();
     final accessToken = await getAccessToken();
+    final problemId = await getProblemId();
 
-    final url = Uri.parse("$baseUrl/problem");
+    final url = Uri.parse("$baseUrl/problem/$problemId/users/$userId");
 
     var response = await http.get(url, headers: {
       'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
@@ -368,10 +371,12 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print(body);
+      print('문제 풀이 결과 호출 -> ${body['data']['sentence']}');
+      return ReadingResultModel.fromJson(body['data']);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       print(body);
+      throw Exception('문제 풀이 결과 리턴 실패');
     }
   } // 문제 풀이 결과
 
@@ -461,21 +466,30 @@ class ApiService {
     }
   } // 글의 북마크 여부 보내기
 
-  static Future<void> getProblemBookmarkList() async {
+  static Future<List<ArticleBookmarkModel>> getProblemBookmarkList(
+      int category) async {
+    // 1:인문, 2:사회, 3:과학
     final accessToken = await getAccessToken();
     final userId = await getUserId();
-    final url = Uri.parse('$baseUrl/problem/bookmark/users/$userId');
-    var response = await http.post(url, headers: {
+    final url =
+        Uri.parse('$baseUrl/problem/bookmark/users/$userId?category=$category');
+    var response = await http.get(url, headers: {
       'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
       'Content-Type': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print(body);
+      final data = body['data'] as List<dynamic>;
+      List<ArticleBookmarkModel> bookmarkList = data
+          .map((item) =>
+              ArticleBookmarkModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+      print('북마크된 글 리스트 호출 : ${body['data']}');
+      return bookmarkList;
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print(body);
+      print('북마크된 글 리스트 호출 : $body');
       throw Exception("글 북마크 리스트 api 호출 실패");
     }
   } // 북마크된 글의 리스트 가져오기

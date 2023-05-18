@@ -13,8 +13,8 @@ class FinishReading extends StatefulWidget {
 
 class _FinishReadingState extends State<FinishReading> {
   String nickname = '';
-  List<String> keywordList = [];
-  List<String> sentenceList = [];
+  List<dynamic> keywordList = [];
+  List<dynamic> sentenceList = [];
   String summarization = '';
   String aiSummarization = "";
   bool isLiked = false;
@@ -42,6 +42,7 @@ class _FinishReadingState extends State<FinishReading> {
         level = arguments['level'];
         keywordList = arguments['keyword_list'];
         sentenceList = arguments['key_sentences'];
+        isLiked = (arguments['save_fl'] == "Y") ? true : false;
       });
     }
   }
@@ -49,6 +50,7 @@ class _FinishReadingState extends State<FinishReading> {
   @override
   Widget build(BuildContext context) {
     loadData();
+
     return SafeArea(
       child: Scaffold(
           body: SingleChildScrollView(
@@ -69,8 +71,14 @@ class _FinishReadingState extends State<FinishReading> {
                   ),
                   IconButton(
                       onPressed: () async {
+                        final arguments = ModalRoute.of(context)
+                            ?.settings
+                            .arguments as Map<String, dynamic>;
                         setState(() {
                           isLiked = !isLiked;
+                          (arguments['save_fl'] == 'Y')
+                              ? arguments['save_fl'] = 'N'
+                              : arguments['save_fl'] = 'Y';
                         });
                         await ApiService.problemBookmark();
                       },
@@ -278,7 +286,8 @@ class _FinishReadingState extends State<FinishReading> {
                                   style: TextStyle(fontSize: 16),
                                 );
                               },
-                              itemCount: keywordList.length,
+                              itemCount:
+                                  keywordList != null ? keywordList.length : 0,
                             )), //키워드
                         SizedBox(
                           height: 15,
@@ -323,7 +332,8 @@ class _FinishReadingState extends State<FinishReading> {
                                 style: TextStyle(fontSize: 16),
                               );
                             },
-                            itemCount: sentenceList.length,
+                            itemCount:
+                                sentenceList != null ? sentenceList.length : 0,
                           ),
                         ), //주제문
                         SizedBox(

@@ -1,5 +1,9 @@
+import 'package:bwageul/Models/article_bookmark_model.dart';
+import 'package:bwageul/Models/reading_result.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../Services/api_services.dart';
+import '../Widgets/unlocked_article_tile.dart';
 import '../main.dart';
 
 class LikesScreen extends StatefulWidget {
@@ -21,12 +25,15 @@ class _LikesScreenState extends State<LikesScreen>
     )
   ];
   int articleCount = 0;
-  String category = '';
+  String category = '[인문]';
+  List<ArticleBookmarkModel> resultDataList = [];
+  int catNo = 1;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    loadData(catNo);
   }
 
   @override
@@ -35,8 +42,19 @@ class _LikesScreenState extends State<LikesScreen>
     super.dispose();
   }
 
+  Future<void> loadData(int no) async {
+    // 북마크된 글 정보 불러오기
+    final data = await ApiService.getProblemBookmarkList(no);
+    setState(() {
+      resultDataList = data;
+      articleCount = resultDataList.length;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    loadData(catNo);
+
     return DefaultTabController(
       length: 2,
       child: SafeArea(
@@ -58,6 +76,7 @@ class _LikesScreenState extends State<LikesScreen>
                               onTap: () {
                                 setState(() {
                                   category = '[인문]';
+                                  catNo = 1;
                                 });
                               },
                               child: Column(
@@ -97,6 +116,7 @@ class _LikesScreenState extends State<LikesScreen>
                               onTap: () {
                                 setState(() {
                                   category = '[사회]';
+                                  catNo = 2;
                                 });
                               },
                               child: Column(
@@ -138,6 +158,7 @@ class _LikesScreenState extends State<LikesScreen>
                               onTap: () {
                                 setState(() {
                                   category = '[과학]';
+                                  catNo = 3;
                                 });
                               },
                               child: Column(
@@ -188,26 +209,26 @@ class _LikesScreenState extends State<LikesScreen>
                                     color: Colors.lightBlue),
                               ),
                               TextSpan(
-                                text: '저장한 글 ($articleCount 개)',
+                                text: '저장한 글 (${resultDataList.length} 개)',
                                 style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.black),
                               ),
                             ])),
-                            TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    category = '';
-                                  });
-                                },
-                                child: const Text(
-                                  '모두 보기',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ))
+                            // TextButton(
+                            //     onPressed: () {
+                            //       setState(() {
+                            //         category = '';
+                            //       });
+                            //     },
+                            //     child: const Text(
+                            //       '모두 보기',
+                            //       style: TextStyle(
+                            //         fontSize: 16,
+                            //         fontWeight: FontWeight.w600,
+                            //       ),
+                            //     ))
                           ],
                         ), //'저장한 글' 텍스트
                         const SizedBox(
@@ -220,7 +241,7 @@ class _LikesScreenState extends State<LikesScreen>
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
                             crossAxisCount: 2,
-                            children: getLikedArticles(),
+                            children: getLikedArticles(context, resultDataList),
                           ),
                         ),
                       ],
@@ -265,17 +286,33 @@ class _LikesScreenState extends State<LikesScreen>
   }
 }
 
-List<Widget> getLikedArticles() {
+List<Widget> getLikedArticles(
+    BuildContext context, List<ArticleBookmarkModel> resultDataList) {
   List<Widget> articles = [];
 
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < resultDataList.length; i++) {
     articles.add(Container(
-      padding: const EdgeInsets.all(8),
-      color: Colors.teal[200],
-      child: const Text('Heed not the rabble'),
+      child: GestureDetector(
+        onTap: () async {
+          ReadingResultModel model = await ApiService.articleReadingResult();
+          Navigator.of(context).pushNamed('/finish', arguments: {
+            'ai_summarization': model.aiSummarization,
+            'title': resultDataList[i].atcTitle,
+            'level': resultDataList[i].difficulty,
+            'keyword_list': model.keywords,
+            'key_sentences': model.sentence,
+            'my_summarization': model.summarization,
+            'save_fl': model.saveFl,
+          }); // 문제 풀이 결과 정보를 넘겨줘야 finishReading 스크린에 그릴 수 있음.
+        },
+        child: unlockedArticleTile(
+            resultDataList[i].atcPhotoIn,
+            resultDataList[i].genre,
+            resultDataList[i].difficulty,
+            resultDataList[i].atcTitle),
+      ),
     ));
   }
-
   return articles;
 } // 저장한 글의 리스트를 타일 형태로 반환하는 메소드. 좋아요 표시 된 UnlockedArticleTile을 articles[]에 추가할 것.
 // 매개변수로 글의 카테고리를 받고, 그때 그때 카테고리에 따라 저장한 글을 가져오면 좋겠음

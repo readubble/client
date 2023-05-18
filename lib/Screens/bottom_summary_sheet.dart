@@ -1,5 +1,6 @@
 import 'package:bwageul/Models/problem_info_provider.dart';
 import 'package:bwageul/Models/quiz_list_provider.dart';
+import 'package:bwageul/Models/reading_result.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -902,9 +903,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                         keySentences.add(_articleSentences[i]);
                                       }
                                     }
+
                                     Navigator.of(context)
                                         .pushNamed('/finish', arguments: {
-                                      'title': problemTitle,
                                       'ai_summarization': aiSummarization,
                                       'title': problemTitle,
                                       'level': level,
@@ -913,7 +914,8 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                           .toList(),
                                       'key_sentences': keySentences,
                                       'my_summarization':
-                                          _summaryTextEditingController.text
+                                          _summaryTextEditingController.text,
+                                      'save_fl': "N",
                                     });
                                   }
                                 },
