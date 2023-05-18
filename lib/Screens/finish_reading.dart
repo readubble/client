@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:bwageul/Services/api_services.dart';
+import '../Models/user_info_provider.dart';
 import '../main.dart';
 
 class FinishReading extends StatefulWidget {
@@ -10,25 +12,45 @@ class FinishReading extends StatefulWidget {
 }
 
 class _FinishReadingState extends State<FinishReading> {
-  final String nickname = '홍길동';
-
-  final List<String> keywordList = ['키워드1', '키워드2', '키워드3'];
-
-  final List<String> sentenceList = [
-    '주제문1입니다.주제문1입니다.주제문1입니다.주제문1입니다.주제문1입니다.주제문1입니다.주제문1입니다.',
-    '주제문2입니다.',
-    '주제문3입니다.',
-    '주제문4입니다.'
-  ];
-
-  final String summarization =
-      '나는 글을 이렇게 요약하였다. 나는 글을 이렇게 요약하였다. 나는 글을 이렇게 요약하였다. 나는 글을 이렇게 요약하였다. 나는 글을 이렇게 요약하였다. ';
-  final String aiSummarization =
-      'AI는 글을 이렇게 요약하였다. AI는 글을 이렇게 요약하였다. AI는 글을 이렇게 요약하였다. AI는 글을 이렇게 요약하였다. AI는 글을 이렇게 요약하였다.';
+  String nickname = '';
+  List<dynamic> keywordList = [];
+  List<dynamic> sentenceList = [];
+  String summarization = '';
+  String aiSummarization = "";
   bool isLiked = false;
+  String level = '';
+  String title = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void loadData() {
+    final userInfoProvider =
+        Provider.of<UserInfoProvider>(context, listen: false);
+    nickname = userInfoProvider.user!.nickname;
+    final arguments = ModalRoute.of(context)
+        ?.settings
+        .arguments; // pushNamed 인자로 받아온 aiSummarization
+    if (arguments is Map<String, dynamic>) {
+      setState(() {
+        title = arguments['title'];
+        aiSummarization = arguments['ai_summarization'];
+        summarization = arguments['my_summarization'];
+        level = arguments['level'];
+        keywordList = arguments['keyword_list'];
+        sentenceList = arguments['key_sentences'];
+        isLiked = (arguments['save_fl'] == "Y") ? true : false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    loadData();
+
     return SafeArea(
       child: Scaffold(
           body: SingleChildScrollView(
@@ -48,10 +70,17 @@ class _FinishReadingState extends State<FinishReading> {
                     onPressed: () => Navigator.pop(context),
                   ),
                   IconButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        final arguments = ModalRoute.of(context)
+                            ?.settings
+                            .arguments as Map<String, dynamic>;
                         setState(() {
                           isLiked = !isLiked;
+                          (arguments['save_fl'] == 'Y')
+                              ? arguments['save_fl'] = 'N'
+                              : arguments['save_fl'] = 'Y';
                         });
+                        await ApiService.problemBookmark();
                       },
                       icon: isLiked
                           ? Icon(
@@ -74,7 +103,7 @@ class _FinishReadingState extends State<FinishReading> {
                 child: Column(
                   children: [
                     Text(
-                      "브람스 교향곡 4번",
+                      title,
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                     ),
@@ -91,7 +120,7 @@ class _FinishReadingState extends State<FinishReading> {
                           ),
                         ),
                         Text(
-                          "중",
+                          level,
                           style: TextStyle(
                               fontSize: 16,
                               color: myColor.shade300,
@@ -188,24 +217,24 @@ class _FinishReadingState extends State<FinishReading> {
                     SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      children: [
-                        Icon(Icons.timer_outlined),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "소요 시간: 몇 분 몇 초",
-                          style: TextStyle(
-                              fontSize: 18,
-                              height: 1.7,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    // Row(
+                    //   children: [
+                    //     Icon(Icons.timer_outlined),
+                    //     SizedBox(
+                    //       width: 10,
+                    //     ),
+                    //     Text(
+                    //       "소요 시간: 몇 분 몇 초",
+                    //       style: TextStyle(
+                    //           fontSize: 18,
+                    //           height: 1.7,
+                    //           fontWeight: FontWeight.w600),
+                    //     ),
+                    //   ],
+                    // ),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
                     Text(
                       "[ $nickname님이 정리한 결과 ]",
                       style:
@@ -257,7 +286,8 @@ class _FinishReadingState extends State<FinishReading> {
                                   style: TextStyle(fontSize: 16),
                                 );
                               },
-                              itemCount: keywordList.length,
+                              itemCount:
+                                  keywordList != null ? keywordList.length : 0,
                             )), //키워드
                         SizedBox(
                           height: 15,
@@ -302,7 +332,8 @@ class _FinishReadingState extends State<FinishReading> {
                                 style: TextStyle(fontSize: 16),
                               );
                             },
-                            itemCount: sentenceList.length,
+                            itemCount:
+                                sentenceList != null ? sentenceList.length : 0,
                           ),
                         ), //주제문
                         SizedBox(
@@ -327,6 +358,7 @@ class _FinishReadingState extends State<FinishReading> {
                         ),
                         Container(
                           height: 200,
+                          alignment: Alignment.topLeft,
                           padding: EdgeInsets.symmetric(
                               horizontal: 25, vertical: 10),
                           width: MediaQuery.of(context).size.width,
@@ -334,9 +366,15 @@ class _FinishReadingState extends State<FinishReading> {
                             color: myColor.shade700,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Text(
-                            summarization,
-                            style: TextStyle(fontSize: 16),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Text(
+                                  summarization,
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
                           ),
                         ), //요약문
                         SizedBox(
@@ -360,7 +398,8 @@ class _FinishReadingState extends State<FinishReading> {
                           height: 10,
                         ),
                         Container(
-                          height: 200,
+                          height: 250,
+                          alignment: Alignment.topLeft,
                           padding: EdgeInsets.symmetric(
                               horizontal: 25, vertical: 10),
                           width: MediaQuery.of(context).size.width,
@@ -368,9 +407,15 @@ class _FinishReadingState extends State<FinishReading> {
                             color: myColor.shade700,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Text(
-                            aiSummarization,
-                            style: TextStyle(fontSize: 16),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Text(
+                                  aiSummarization,
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
                           ),
                         ), //AI 요약문 비교
                       ],

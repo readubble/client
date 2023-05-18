@@ -1,15 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:bwageul/Models/article_info_model.dart';
+import 'package:bwageul/Models/article_bookmark_model.dart';
+import 'package:bwageul/Models/reading_result.dart';
 import 'package:bwageul/Models/user_info_model.dart';
 import 'package:bwageul/Models/word_info_model.dart';
 import 'package:bwageul/Models/word_quiz_model.dart';
 import 'package:bwageul/Services/storage.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
+import 'package:bwageul/Models/article_and_quiz.dart';
 
 class ApiService {
   static const String baseUrl = // API 요청에 필요한 기본 URL 및 헤더 정보
@@ -47,7 +49,8 @@ class ApiService {
     }
     // 회원가입 실패
     else {
-      if (response.body.isNotEmpty) { // 응답의 본문이 비어 있지 않은 경우 해당 본문을 해석하고 에러 코드와 메시지를 출력
+      if (response.body.isNotEmpty) {
+        // 응답의 본문이 비어 있지 않은 경우 해당 본문을 해석하고 에러 코드와 메시지를 출력
         var body = jsonDecode(utf8.decode(response.bodyBytes));
         print(
             'Error Code: ${body['code']} / Error Message: ${body['message']}');
@@ -66,14 +69,17 @@ class ApiService {
       'id': id,
       'password': password,
     };
-    var response =
-        await http.post(url, headers: headers, body: jsonEncode(userInfo)); // url, headers, body 매개변수를 설정하여 POST 요청을 보냅니다
+    var response = await http.post(url,
+        headers: headers,
+        body: jsonEncode(
+            userInfo)); // url, headers, body 매개변수를 설정하여 POST 요청을 보냅니다
 
     if (response.statusCode == 200) {
       // 로그인 성공
       print('${userInfo['id']!} 로그인 성공');
       var body = jsonDecode(response.body);
-      saveAccessToken(body['data']['access_token']); // 'data' 키 값의 value 중, 'access_token' 키 값을 저장
+      saveAccessToken(body['data']
+          ['access_token']); // 'data' 키 값의 value 중, 'access_token' 키 값을 저장
       saveRefreshToken(body['data']['refresh_token']);
       saveUserId(userInfo['id']!);
 
@@ -113,18 +119,6 @@ class ApiService {
     } else
       throw Exception("로그인 정보 없음");
 
-    // user ID, token 잘 들어갔는지 테스트
-    // print("NOW User ID: " + userInfo['user_id']);
-    // print("NOW Access Token: " + accessToken);
-
-    // 토큰 삭제 테스트
-    // print('After delete token and ID');
-    // await deleteTokenAndId();
-    // if (await isLoggedIn())
-    //   print('아직 로그인 상태');
-    // else
-    //   print('토큰 삭제 완료');
-    // getAccessToken().then((value) => print(value));
     var response = await http.post(url,
         headers: {
           'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
@@ -330,7 +324,7 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print("articleList() 글 -> ${body['data']}");
+      //print("articleList() 글 -> ${body['data']}");
       if (body['data'] != null) {
         for (int i = 0; i < body['data'].length; i++) {
           articleList.add(ArticleInfoModel.fromJson(body['data'][i]));
@@ -345,7 +339,7 @@ class ApiService {
     }
   } // 글 목록 가져오기. 1: 인문, 2: 사회, 3: 과학
 
-  static Future<void> fetchArticleContents(int problemId) async {
+  static Future<ArticleAndQuiz> fetchArticleContents(int problemId) async {
     final accessToken = await getAccessToken();
     final url = Uri.parse("$baseUrl/problem/$problemId");
     var response = await http.get(url, headers: {
@@ -355,7 +349,8 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print('articleContents(problemId 1) = 브람스 글 -> $body');
+      print('articleContents(problemId) -> ${body['data']['quiz']}');
+      return ArticleAndQuiz.fromJson(body['data']);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       print('articleContents(problemId 1) = 브람스 글 -> $body');
@@ -363,11 +358,12 @@ class ApiService {
     }
   } // 문제 내용 (글 본문 + 추가 문제)
 
-  static Future<void> articleReadingResult() async {
+  static Future<ReadingResultModel> articleReadingResult() async {
     final userId = await getUserId();
     final accessToken = await getAccessToken();
+    final problemId = await getProblemId();
 
-    final url = Uri.parse("$baseUrl/problem");
+    final url = Uri.parse("$baseUrl/problem/$problemId/users/$userId");
 
     var response = await http.get(url, headers: {
       'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
@@ -376,12 +372,14 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      // print(body);
+      print('문제 풀이 결과 호출 -> ${body['data']['sentence']}');
+      return ReadingResultModel.fromJson(body['data']);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      // print(body);
+      print(body);
+      throw Exception('문제 풀이 결과 리턴 실패');
     }
-  } //문제 풀이 결과
+  } // 문제 풀이 결과
 
   static Future<List<WordInfoModel>> dictionaryResult(String word) async {
     List<WordInfoModel> wordList = [];
@@ -414,5 +412,96 @@ class ApiService {
       throw Exception('사전 검색 결과 가져오기 실패');
     }
   } // 사전에 "word"에 대한 검색 결과 리턴
+
+  static Future<String> sendProblemSolved(
+      List<String> keywordList,
+      String topicSentences,
+      String summarization,
+      List<int> choiceList,
+      List<String> resultList) async {
+    final problemId = await getProblemId();
+    final accessToken = await getAccessToken();
+    final userId = await getUserId();
+    var input = {
+      "user_id": userId,
+      "keyword": keywordList,
+      "sentence": topicSentences,
+      "summarization": summarization,
+      "quiz_id": [1, 2, 3],
+      "quiz_choice": choiceList,
+      "quiz_result": resultList,
+      "start_time": "00:00:00",
+      "finish_time": "00:00:00",
+      "total_time": "00:00:00"
+    };
+    final url = Uri.parse("$baseUrl/problem/$problemId");
+    var response = await http.post(url,
+        headers: {
+          'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json'
+        },
+        body: jsonEncode(input));
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print(body['data']);
+      return body['data']['ai_summarization'];
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print(body);
+      throw Exception("문제 풀이 결과 보내기 실패");
+    }
+  } // 글 읽고, 문제 푼 결과 서버에 보내기
+
+  static Future<void> problemBookmark() async {
+    final problemId = await getProblemId();
+    final accessToken = await getAccessToken();
+    final userId = await getUserId();
+    final url = Uri.parse('$baseUrl/problem/$problemId/bookmark');
+    var input = {'user_id': userId};
+    var response = await http.post(url,
+        headers: {
+          'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json'
+        },
+        body: jsonEncode(input));
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('북마크 여부 보내기 problemBookmark() 호출: $body');
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('북마크 여부 보내기 problemBookmark() 호출: $body');
+      throw Exception("북마크 api 호출 실패");
+    }
+  } // 글의 북마크 여부 보내기
+
+  static Future<List<ArticleBookmarkModel>> getProblemBookmarkList(
+      int category) async {
+    // 1:인문, 2:사회, 3:과학
+    final accessToken = await getAccessToken();
+    final userId = await getUserId();
+    final url =
+        Uri.parse('$baseUrl/problem/bookmark/users/$userId?category=$category');
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    });
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      final data = body['data'] as List<dynamic>;
+      List<ArticleBookmarkModel> bookmarkList = data
+          .map((item) =>
+              ArticleBookmarkModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+      print('북마크된 글 리스트 호출 : ${body['data']}');
+      return bookmarkList;
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('북마크된 글 리스트 호출 : $body');
+      throw Exception("글 북마크 리스트 api 호출 실패");
+    }
+  } // 북마크된 글의 리스트 가져오기
 }
 
