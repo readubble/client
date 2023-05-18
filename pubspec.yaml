@@ -81,7 +81,25 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
      - assets/images/
-
+  fonts:
+    - family: Jeju
+      fonts:
+        - asset: font/Jeju-MyeongjoOTF.otf
+          weight: 400
+    - family: Gmarket
+      fonts:
+        - asset: font/Gmarket-Bold.otf
+        - asset: font/Gmarket-Light.otf
+        - asset: font/Gmarket-Medium.otf
+    - family: Godo
+      fonts:
+        - asset: font/Godo-Bold.otf
+        - asset: font/Godo-Medium.otf
+    - family: lottedream
+      fonts:
+        - asset: font/lottedream-Bold.ttf
+          weight: 600
+        - asset: font/lottedream-Medium.ttf
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
