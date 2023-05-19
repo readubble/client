@@ -190,9 +190,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
                               radius: 1,
                               colors: [
                                 Colors.white,
-                                myColor.shade400,
+                                Color(0xffF5CEC7), //통계 - 상
                               ],
-                              stops: [0.2, 0.9], // 그라데이션 빼려면 0.0 0.0 하면 됨
+                              stops: [0, 0], // 그라데이션 빼려면 0.0 0.0 하면 됨
                             ),
                           ),
                           child: RichText(
@@ -227,9 +227,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
                               radius: 1,
                               colors: [
                                 Colors.white,
-                                myColor.shade200,
+                                Color(0xFFE5F4D5), //통계 - 중
                               ],
-                              stops: [0.2, 0.9], // 그라데이션 빼려면 0.0 0.0 하면 됨
+                              stops: [0, 0], // 그라데이션 빼려면 0.0 0.0 하면 됨
                             ),
                           ),
                           child: RichText(
@@ -264,9 +264,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
                               radius: 1,
                               colors: [
                                 Colors.white,
-                                myColor.shade100,
+                                Color(0xFFE7E0EC), //통계 - 하
                               ],
-                              stops: [0.2, 0.9], // 그라데이션 빼려면 0.0 0.0 하면 됨
+                              stops: [0, 0], // 그라데이션 빼려면 0.0 0.0 하면 됨
                             ),
                           ),
                           child: RichText(
@@ -310,7 +310,8 @@ class _MyPageScreenState extends State<MyPageScreen> {
                         elevation: 20.0,
                         backgroundColor: myColor.shade700,
                         borderColor: Colors.transparent,
-                        progressValue: 0.66, // progress value from 0.0 to 1.0
+                        progressValue: 0.66,
+                        // progress value from 0.0 to 1.0
 
                         progressColor: myColor.shade50,
                         size: 150,
