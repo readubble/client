@@ -198,7 +198,8 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-            child: Text(_articleSentences[i], style: TextStyle(fontSize: 16)),
+            child: Text(_articleSentences[i],
+                style: TextStyle(fontSize: 16, height: 1.5)),
           ));
 
       buttonList.add(button);
@@ -224,7 +225,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
             child: Container(
               child: Text(
                 _articleSentences[i],
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16, height: 1.5),
               ),
             ),
           ),
@@ -315,8 +316,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                               quizInfoList.isNotEmpty
                                   ? quizInfoList[0].choices[0]
                                   : ' ',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 16, height: 1.5),
                             ),
                             value: 1,
                             groupValue: chosenAnswer[0],
@@ -348,8 +348,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                 quizInfoList.isNotEmpty
                                     ? quizInfoList[0].choices[1]
                                     : ' ',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 16, height: 1.5),
                               ),
                               value: 2,
                               groupValue: chosenAnswer[0],
@@ -381,8 +380,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                         quizInfoList[0].choices.length == 3
                                     ? quizInfoList[0].choices[2]
                                     : ' ',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 16, height: 1.5),
                               ),
                               value: 3,
                               groupValue: chosenAnswer[0],
@@ -446,6 +444,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                       '이 글에서 키워드라고 생각하는 단어를 적어주세요! (최대 3개)',
                                       style: TextStyle(
                                         fontSize: 17,
+                                        height: 1.5,
                                         fontWeight: FontWeight.w600,
                                       ),
                                       textAlign: TextAlign.center,
@@ -790,8 +789,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                 quizInfoList.isNotEmpty
                                     ? quizInfoList[1].choices[0]
                                     : ' ',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 16, height: 1.5),
                               ),
                               value: 1,
                               groupValue: chosenAnswer[1],
@@ -822,8 +820,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                 quizInfoList.isNotEmpty
                                     ? quizInfoList[1].choices[1]
                                     : ' ',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 16, height: 1.5),
                               ),
                               value: 2,
                               groupValue: chosenAnswer[1],
@@ -855,8 +852,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                         quizInfoList[1].choices.length == 3
                                     ? quizInfoList[1].choices[2]
                                     : ' ',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 16, height: 1.5),
                               ),
                               value: 3,
                               groupValue: chosenAnswer[1],
@@ -962,8 +958,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                 quizInfoList.isNotEmpty
                                     ? quizInfoList[2].choices[0]
                                     : ' ',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 16, height: 1.5),
                               ),
                               value: 1,
                               groupValue: chosenAnswer[2],
@@ -994,8 +989,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                 quizInfoList.isNotEmpty
                                     ? quizInfoList[2].choices[1]
                                     : ' ',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 16, height: 1.5),
                               ),
                               value: 2,
                               groupValue: chosenAnswer[2],
@@ -1027,8 +1021,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                         quizInfoList[2].choices.length == 3
                                     ? quizInfoList[2].choices[2]
                                     : ' ',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 16, height: 1.5),
                               ),
                               value: 3,
                               groupValue: chosenAnswer[2],

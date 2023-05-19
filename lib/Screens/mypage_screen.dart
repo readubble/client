@@ -17,6 +17,8 @@ class MyPageScreen extends StatefulWidget {
 }
 
 class _MyPageScreenState extends State<MyPageScreen> {
+  int correctCount = 0;
+  List<dynamic> countByDifficulty = [];
   Future<void> _getImageFromGallery() async {
     final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
@@ -29,6 +31,24 @@ class _MyPageScreenState extends State<MyPageScreen> {
         print('now imageUrl:${provider.getProfileUrl()}');
       });
     }
+  }
+
+  Future<void> readArticleCount() async {
+    countByDifficulty = await ApiService.getSolvedProblemCount();
+    setState(() {});
+  } // 읽은 글 개수
+
+  Future<void> getCorrectWordCount() async {
+    correctCount = await ApiService.getWordQuizResult();
+    setState(() {});
+  } // 어휘 퀴즈 개수
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCorrectWordCount();
+    readArticleCount();
   }
 
   @override
@@ -105,7 +125,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                       "일"
                                   : '0일',
                               style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 24,
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600,
                                   shadows: [
@@ -200,14 +220,16 @@ class _MyPageScreenState extends State<MyPageScreen> {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: '상\n',
+                                  text:
+                                      '${countByDifficulty.length > 0 ? countByDifficulty[2]['level'] : " "}\n',
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.black),
                                 ),
                                 TextSpan(
-                                  text: '30',
+                                  text:
+                                      '${countByDifficulty.length > 0 ? countByDifficulty[2]['num'] : " "}',
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
@@ -237,14 +259,16 @@ class _MyPageScreenState extends State<MyPageScreen> {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: '중\n',
+                                  text:
+                                      '${countByDifficulty.length > 0 ? countByDifficulty[1]['level'] : " "}\n',
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.black),
                                 ),
                                 TextSpan(
-                                  text: '3',
+                                  text:
+                                      '${countByDifficulty.length > 0 ? countByDifficulty[1]['num'] : ''}',
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
@@ -274,14 +298,16 @@ class _MyPageScreenState extends State<MyPageScreen> {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: '하\n',
+                                  text:
+                                      '${countByDifficulty.length > 0 ? countByDifficulty[0]['level'] : " "}\n',
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.black),
                                 ),
                                 TextSpan(
-                                  text: '2',
+                                  text:
+                                      '${countByDifficulty.length > 0 ? countByDifficulty[0]['num'] : ''}',
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
@@ -310,24 +336,26 @@ class _MyPageScreenState extends State<MyPageScreen> {
                         elevation: 20.0,
                         backgroundColor: myColor.shade700,
                         borderColor: Colors.transparent,
-                        progressValue: 0.66, // progress value from 0.0 to 1.0
+                        progressValue: (correctCount /
+                            3), // progress value from 0.0 to 1.0
 
                         progressColor: myColor.shade50,
                         size: 150,
                         children: [
                           Text(
-                            '맞춘 개수',
+                            '맞힌 개수',
                             style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20.0,
-                            ),
+                                color: Colors.black,
+                                fontSize: 20.0,
+                                height: 1.5),
                           ),
                           Text(
-                            '2 / 3',
+                            '$correctCount / 3',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 30.0,
-                                fontWeight: FontWeight.w600),
+                                fontWeight: FontWeight.w600,
+                                height: 1.5),
                           ),
                         ],
                       ),
