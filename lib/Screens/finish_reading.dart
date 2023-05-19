@@ -106,8 +106,10 @@ class _FinishReadingState extends State<FinishReading> {
                   children: [
                     Text(
                       title,
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w600,
+                          height: 1.5),
                     ),
                     SizedBox(
                       height: 20,

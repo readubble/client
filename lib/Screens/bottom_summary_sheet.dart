@@ -292,7 +292,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                               ? quizInfoList[0].problem
                               : ' ',
                           style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              height: 1.5),
                         ),
                         SizedBox(
                           height: 10,
@@ -765,7 +767,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                               ? quizInfoList[1].problem
                               : ' ',
                           style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              height: 1.5),
                         ),
                         SizedBox(
                           height: 10,
@@ -934,7 +938,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                               ? quizInfoList[2].problem
                               : ' ',
                           style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              height: 1.5),
                         ),
                         SizedBox(
                           height: 10,

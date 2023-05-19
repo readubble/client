@@ -356,7 +356,7 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print('getWordQuizResult 호출 -> ${body['data']}');
+      //print('getWordQuizResult 호출 -> ${body['data']}');
       RegExp regex = RegExp('T');
       count = regex.allMatches(body['data']['result']).length;
       return count;
@@ -380,7 +380,7 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print("fetchArticleList() 글 -> ${body['data']}");
+      //print("fetchArticleList() 글 -> ${body['data']}");
       if (body['data'] != null) {
         for (int i = 0; i < body['data'].length; i++) {
           articleList.add(ArticleInfoModel.fromJson(body['data'][i]));
@@ -405,11 +405,11 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print('fetchArticleContents(problemId) -> ${body['data']}');
+      //print('fetchArticleContents(problemId) -> ${body['data']}');
       return ArticleAndQuiz.fromJson(body['data']);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print('articleContents(problemId 1) = 브람스 글 -> $body');
+      //print('articleContents(problemId 1) = 브람스 글 -> $body');
       throw Exception('글+문제 내용 가져오기 실패');
     }
   } // 문제 내용 (글 본문 + 추가 문제)
@@ -427,7 +427,7 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print('문제 풀이 결과 호출 -> ${body['data']}');
+      //print('문제 풀이 결과 호출 -> ${body['data']}');
       return ReadingResultModel.fromJson(body['data']);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
@@ -499,9 +499,9 @@ class ApiService {
         body: jsonEncode(input));
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print('sendProblemSolved -> ${body['data']}');
-      print('sendProblemSolved -> ${body['data'].runtimeType}');
-      print('sendProblemSolved -> ${body['data']['problem_id']}');
+      // print('sendProblemSolved -> ${body['data']}');
+      // print('sendProblemSolved -> ${body['data'].runtimeType}');
+      // print('sendProblemSolved -> ${body['data']['problem_id']}');
 
       return body['data'];
     } else {
@@ -523,11 +523,11 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print('getSolvedProblemCount 호출: ${body['data']}');
+      //print('getSolvedProblemCount 호출: ${body['data']}');
       return body['data']; // [{'level':상, 'num':2}, ...]
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print('getSolvedProblemCount 호출: ${body}');
+      //print('getSolvedProblemCount 호출: ${body}');
       throw Exception('난이도 별 읽은 글 개수 가져오기 실패');
     }
   } // 난이도 별 읽은 글 개수
