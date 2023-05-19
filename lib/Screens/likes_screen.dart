@@ -193,7 +193,7 @@ class _LikesScreenState extends State<LikesScreen>
                                         // color: Color(0xFF4B0082),
                                         boxShadow: [
                                           BoxShadow(
-                                              color: myColor.shade800,
+                                              color: myColor.shade400,
                                               blurRadius: 3,
                                               offset: const Offset(2, 2))
                                         ],
@@ -277,7 +277,7 @@ class _LikesScreenState extends State<LikesScreen>
                                       height: 100,
                                       width: 100,
                                       decoration: BoxDecoration(
-                                        color: myColor.shade500,
+                                        color: myColor.shade600,
                                         boxShadow: [
                                           BoxShadow(
                                               color: myColor.shade800,

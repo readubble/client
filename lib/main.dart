@@ -77,15 +77,16 @@ MaterialColor myColor = const MaterialColor(0xff84B7D9, {
   50: Color(0xffccecfd), //옅은 하늘색
   100: Color(0xff84B7D9), //메인 색상
   200: Color(0xffBAEDCE), //짙은 민트 - 사회
-  300: Color(0xffff8361), //짙은 산호색
-  400: Color(0xffF5CEC7), //옅은 산호색 - 인문
+  300: Color(0xffff8361), //짙은 산호색 - 난이도 상, 중, 하
+  // 400: Color(0xffF5CEC7), //옅은 산호색 - 인문
+  400: Color(0xFFF3D5CF), //옅은 산호색 - 인문
   // 400: Color(0xFFFFC0CB), //옅은 산호색
-  500: Color(0xffE5E7FB), //네이비 - 과학
-  // 500: Color(0xffE5E7FB), //네이비 - 과학
-  600: Color(0xffC2F2F6), //연두
-  700: Color(0xfff1f1f1), //옅은 회색
-  800: Color(0xffa2a2a2), //짙은 회색
+  500: Color(0xff00008B), //네이비 - 버튼 칼라
+  600: Color(0xffE7DDEA), //연두 - 과학
+  700: Color(0xfff1f1f1), //옅은 회색 - 마이페이지 프로필 블록, 맞춘 개수 물채우기 뒷배경
+  800: Color(0xffa2a2a2), //짙은 회색 - 하단 바
+  801: Color(0xFFE7DDEA), //통계 - 상
+  802: Color(0xFFF6E8D0), //통계 - 중
+  803: Color(0xFFDBEFE4), //통계 - 하
   // //인문
-  // 810: Color(0xFF4B0082), //진한 보라색
-  // 812: Color(0xFFFFC0CB), //연한 핑크색
 });
