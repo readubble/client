@@ -343,6 +343,30 @@ class ApiService {
     }
   } // 어휘 퀴즈 결과 제출
 
+  static Future<int> getWordQuizResult() async {
+    final userId = await getUserId();
+    final accessToken = await getAccessToken();
+    final url = Uri.parse("$baseUrl/users/$userId/quiz");
+    int count = 0;
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    });
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('getWordQuizResult 호출 -> ${body['data']}');
+      RegExp regex = RegExp('T');
+      count = regex.allMatches(body['data']['result']).length;
+      return count;
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('$body');
+      throw Exception('어휘 퀴즈 맞춘 개수 가져오기 실패');
+    }
+  } // 어휘 퀴즈 결과(맞춘 개수) 받아오기 -> 마이페이지에서 보여줄 예정
+
   static Future<List<ArticleInfoModel>> fetchArticleList(int category) async {
     List<ArticleInfoModel> articleList = [];
     final userId = await getUserId();
@@ -487,8 +511,28 @@ class ApiService {
     }
   } // 문제 풀이: 글 읽고, 문제 푼 결과 서버에 보내기. problem_id & ai_summarization 리턴
 
+  static Future<List<dynamic>> getSolvedProblemCount() async {
+    final accessToken = await getAccessToken();
+    final userId = await getUserId();
+    final url = Uri.parse('$baseUrl/users/$userId/statistics');
+    var response = await http.get(url, headers: {
+      'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    });
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('getSolvedProblemCount 호출: ${body['data']}');
+      return body['data']; // [{'level':상, 'num':2}, ...]
+    } else {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      print('getSolvedProblemCount 호출: ${body}');
+      throw Exception('난이도 별 읽은 글 개수 가져오기 실패');
+    }
+  } // 난이도 별 읽은 글 개수
+
   static Future<void> problemBookmark(int problemId) async {
-    //final problemId = await getProblemId();
     final accessToken = await getAccessToken();
     final userId = await getUserId();
     final url = Uri.parse('$baseUrl/problem/$problemId/bookmark');
@@ -586,6 +630,4 @@ class ApiService {
       throw Exception("글 북마크 리스트 api 호출 실패");
     }
   } // 북마크된 단어 리스트 가져오기
-
-
 }

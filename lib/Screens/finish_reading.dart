@@ -343,7 +343,7 @@ class _FinishReadingState extends State<FinishReading> {
                             itemBuilder: (context, index) {
                               return Text(
                                 "${index + 1}. ${sentenceList[index]}",
-                                style: TextStyle(fontSize: 16),
+                                style: TextStyle(fontSize: 16, height: 1.5),
                               );
                             },
                             itemCount:
@@ -363,7 +363,9 @@ class _FinishReadingState extends State<FinishReading> {
                             Text(
                               "요약문",
                               style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w600),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.5),
                             ),
                           ],
                         ),
@@ -385,7 +387,7 @@ class _FinishReadingState extends State<FinishReading> {
                               children: [
                                 Text(
                                   summarization,
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextStyle(fontSize: 16, height: 1.5),
                                 ),
                               ],
                             ),
@@ -426,7 +428,7 @@ class _FinishReadingState extends State<FinishReading> {
                               children: [
                                 Text(
                                   aiSummarization,
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextStyle(fontSize: 16, height: 1.5),
                                 ),
                               ],
                             ),
