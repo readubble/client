@@ -50,20 +50,24 @@ class _LikesScreenState extends State<LikesScreen>
   Future<void> loadData(int no) async {
     // 북마크된 글 정보 불러오기
     final data = await ApiService.getProblemBookmarkList(no);
-    setState(() {
-      resultDataList = data;
-      articleCount = resultDataList.length;
-    });
+    if (mounted) {
+      setState(() {
+        resultDataList = data;
+        articleCount = resultDataList.length;
+      });
+    }
   }
 
   Future<void> loadWord() async {
     // 북마크된 단어 정보 불러오기
     final data = await ApiService.getWordBookmarkList();
-    setState(() {
-      wordDataList = data;
-      wordCount = wordDataList.length;
-      likes = data.map((e) => true).toList();
-    });
+    if (mounted) {
+      setState(() {
+        wordDataList = data;
+        wordCount = wordDataList.length;
+        likes = data.map((e) => true).toList();
+      });
+    }
   }
 
   List<Widget> getLikedWords() {

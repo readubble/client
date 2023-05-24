@@ -36,12 +36,15 @@ class _LoginFormState extends State<LoginForm> {
       child: Scaffold(
         body: ModalProgressHUD(
           inAsyncCall: showSpinner,
-          child: Container(// 뺄까?
-            decoration: const BoxDecoration(// 뺄까?
-              image: DecorationImage(// 뺄까?
-                fit: BoxFit.cover,// 뺄까?
-                image: AssetImage('assets/images/bubble1.gif'),// 뺄까?
-              ),// 뺄까?
+          child: Container(
+            // 뺄까?
+            decoration: const BoxDecoration(
+              // 뺄까?
+              image: DecorationImage(
+                // 뺄까?
+                fit: BoxFit.cover, // 뺄까?
+                image: AssetImage('assets/images/bubble1.gif'), // 뺄까?
+              ), // 뺄까?
             ), // 뺄까?
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -171,7 +174,8 @@ class _LoginFormState extends State<LoginForm> {
                         minimumSize: const Size(double.infinity, 50),
                       ),
                       onPressed: () async {
-                        if (idController.text == '' || pwController.text == '') {
+                        if (idController.text == '' ||
+                            pwController.text == '') {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('입력하지 않은 값이 있습니다.'),
@@ -179,12 +183,31 @@ class _LoginFormState extends State<LoginForm> {
                             ),
                           );
                         } else {
-                          ApiService.login(
+                          bool loginComplete = await ApiService.login(
                               idController.text, pwController.text, _autoLogin);
-
-                          idController.clear();
-                          pwController.clear();
-                          Navigator.pop(context);
+                          if (loginComplete) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('로그인 성공!'),
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                            idController.clear();
+                            pwController.clear();
+                            //Navigator.pop(context);
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/', // 첫 페이지로 설정할 경로
+                              (route) => false, // 모든 이전 페이지를 제거
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('아이디 또는 비밀번호가 올바르지 않습니다.'),
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                          }
                         }
                       },
                       child: const Text(

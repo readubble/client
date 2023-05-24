@@ -16,7 +16,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-
   bool hasNotch = IphoneHasNotch.hasNotch;
 
   static final List<Widget> _widgetOptions = <Widget>[
@@ -25,13 +24,24 @@ class _MainScreenState extends State<MainScreen> {
     const MyPageScreen(),
   ];
 
-  void _onItemTapped(int index) async {
-    bool _isLoggedIn = await isLoggedIn(); // 로그인 여부를 저장하는 변수.
-    if (!_isLoggedIn) Navigator.pushNamed(context, '/login'); // 로그인 페이지로 이동
+  Future<void> loadStartScreen() async {
+    // 로그인 여부 확인하여 시작 스크린 설정
+    bool loginState = await isLoggedIn();
+    if (!loginState)
+      Navigator.pushNamed(context, '/login'); // 로그인 안 되어 있으면 로그인 페이지로 이동
+  }
 
+  void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadStartScreen();
   }
 
   @override

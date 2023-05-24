@@ -64,7 +64,7 @@ class ApiService {
   // 로그인 요청을 처리합니다. 지정된 아이디, 비밀번호 및 자동 로그인 여부에 따라 서버에 POST 요청을 전송하여 로그인을 시도합니다.
   // 응답 상태 코드에 따라 성공, 토큰 만료, 실패 등의 작업을 수행합니다.
   // 로그인 요청을 처리합니다. 함수에는 아이디, 비밀번호 및 자동 로그인 여부(isAutoLogin)를 전달해야 함
-  static Future<void> login(
+  static Future<bool> login(
       String id, String password, bool isAutoLogin) async {
     final url = Uri.parse('$baseUrl/users/authorize');
     var userInfo = {
@@ -85,15 +85,13 @@ class ApiService {
       saveRefreshToken(body['data']['refresh_token']);
       saveUserId(userInfo['id']!);
 
-      // getRefreshToken().then((value) => print('refresh token: $value'));
-      // getAccessToken().then((value) => print('access token: $value'));
-      // getUserId().then((value) => print(value));
-
       if (isAutoLogin)
         await ApiService.autoLogin(); // 자동 로그인이 체크되어 있으므로 자동 로그인 함수 호출
+      return true;
     } else if (response.statusCode == 401) {
       // 토큰 만료 에러
-      updateToken();
+      await updateToken();
+      return await login(id, password, isAutoLogin);
     } else {
       // 로그인 실패
       if (response.body.isEmpty) {
@@ -102,10 +100,8 @@ class ApiService {
         var body = jsonDecode(response.body);
         print(
             'Error Code: ${body['code']} / Error Message: ${body['message']}');
-        // print(
-        //     'Access token: ${body['data']['access_token']} / Refresh token: ${body['data']['refresh_token']}');
       }
-      throw Exception('로그인 실패');
+      return false; // 로그인 실패!
     }
   } //로그인 함수
 
@@ -294,7 +290,6 @@ class ApiService {
     if (response.statusCode == 200) {
       // 성공
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print(body);
       for (int i = 0; i < body['data'].length; i++) {
         modelList.add(WordQuizModel.fromJson(body['data'][i]));
       }
@@ -302,7 +297,7 @@ class ApiService {
     } else if (response.statusCode == 401) {
       // 토큰 만료
       await updateToken();
-      return getWordQuiz();
+      return await getWordQuiz();
     } else {
       // 이외의 에러
       if (response.body != null) {
@@ -335,7 +330,6 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print(body);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       print(body);

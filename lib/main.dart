@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bwageul/Models/problem_id_provider.dart';
 import 'package:bwageul/Models/user_info_provider.dart';
 import 'package:bwageul/Screens/dictionary.dart';
@@ -14,6 +16,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'Models/problem_info_provider.dart';
 import 'Models/profile_image_provider.dart';
 import 'Models/quiz_list_provider.dart';
+import 'Services/storage.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -35,10 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Readubble',
-      theme: ThemeData(
-          primarySwatch: myColor,
-        fontFamily: 'lottedream'
-      ),
+      theme: ThemeData(primarySwatch: myColor, fontFamily: 'lottedream'),
       debugShowCheckedModeBanner: false, //오른쪽 상단 DEBUG 배너 비활성화
       initialRoute: '/',
       routes: {
@@ -51,6 +51,7 @@ class MyApp extends StatelessWidget {
         '/dictionary': (context) => const KoreanDictionary(),
         '/settings': (context) => const Settings(),
       },
+
       // home: AnimatedSplashScreen(
       //   duration: 3000,
       //   splash: SizedBox(

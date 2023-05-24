@@ -85,7 +85,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                         padding: EdgeInsets.only(top: 130),
                         margin: EdgeInsets.only(top: 30),
                         width: MediaQuery.of(context).size.width,
-                        height: 200,
+                        height: 210,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: myColor.shade700,
@@ -155,8 +155,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                 ],
                                 shape: BoxShape.circle,
                                 color: Colors.white,
-                                image: userInfoProvider.user?.profile.length !=
-                                        0
+                                image: userInfoProvider.user?.profile != ""
                                     ? DecorationImage(
                                         image: NetworkImage(
                                             userInfoProvider.getProfileUrl()!),
