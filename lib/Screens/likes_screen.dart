@@ -142,7 +142,7 @@ class _LikesScreenState extends State<LikesScreen>
                 Expanded(
                   child: Text(
                     wordDataList[i].wordMean, // 결과에서 뜻 가져오기
-                    style: TextStyle(fontSize: 19),
+                    style: TextStyle(fontSize: 17, height: 1.5),
                   ),
                 ),
               ],
@@ -436,4 +436,3 @@ List<Widget> getLikedArticles(
   }
   return articles;
 } // 저장한 글의 리스트를 타일 형태로 반환하는 메소드. 좋아요 표시 된 UnlockedArticleTile을 articles[]에 추가할 것.
-// 매개변수로 글의 카테고리를 받고, 그때 그때 카테고리에 따라 저장한 글을 가져오면 좋겠음

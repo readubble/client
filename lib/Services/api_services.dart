@@ -179,11 +179,6 @@ class ApiService {
     final accessToken = await getAccessToken(); // 토큰 만료 => 이미 토큰이 있다
     var refreshToken = {"refresh_token": await getRefreshToken()};
 
-    // 테스트용
-    // getUserId().then((value) => print('update token - userID: $value'));
-    // print('update token - Access Token: $accessToken');
-    // print('update token - Refresh Token: ${refreshToken['refresh_token']}');
-
     var response = await http.post(url,
         headers: {
           'Authorization': 'Bearer $accessToken', // access token을 헤더에 추가
@@ -197,8 +192,6 @@ class ApiService {
       var body = jsonDecode(response.body);
       final newAccessToken = body['data']['access_token'];
       saveAccessToken(newAccessToken); // storage에 새로운 access token 다시 저장
-      getAccessToken()
-          .then((value) => print('newly updated access token: $value'));
     } else {
       print('토큰 갱신 실패');
       if (response.body.isNotEmpty) {
@@ -382,6 +375,9 @@ class ApiService {
         return articleList;
       }
       throw Exception('body[\'data\'] 가져오는데 에러 발생..');
+    } else if (response.statusCode == 401) {
+      await updateToken();
+      return await fetchArticleList(category);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       print("articleList() 글 -> ${body['data']}");
@@ -569,6 +565,9 @@ class ApiService {
           .toList();
       // print('북마크된 글 리스트 호출 : ${body['data']}');
       return bookmarkList;
+    } else if (response.statusCode == 401) {
+      await updateToken();
+      return await getProblemBookmarkList(category);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       // print('북마크된 글 리스트 호출 : $body');
@@ -618,9 +617,12 @@ class ApiService {
           .toList();
       // print('북마크된 단어 리스트 호출 : ${body['data']}');
       return wordBookmarkList;
+    } else if (response.statusCode == 401) {
+      await updateToken();
+      return await getWordBookmarkList();
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      // print('북마크된 단어 리스트 호출 : $body');
+      //print('북마크된 단어 리스트 호출 : $body');
       throw Exception("글 북마크 리스트 api 호출 실패");
     }
   } // 북마크된 단어 리스트 가져오기

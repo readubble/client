@@ -89,7 +89,8 @@ Widget unlockedArticleTile(
                 style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
-                    fontSize: 16),
+                    fontSize: 16,
+                    height: 1.4),
               ),
             ),
           ],

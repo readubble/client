@@ -255,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Text(
                   '$nickname님은 봐글봐글과 함께\n$days일째 성장 중!',
-                  style: const TextStyle(fontSize: 15),
+                  style: const TextStyle(fontSize: 15, height: 1.4),
                 ),
               ],
             ),
