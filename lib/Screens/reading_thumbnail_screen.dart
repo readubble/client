@@ -80,7 +80,8 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
                       Text(arguments['writer'],
                           style: TextStyle(
                               color: Colors.white.withOpacity(0.5),
-                              fontSize: 15)),
+                              fontSize: 15,
+                              height: 1.5)),
                     ],
                   ),
                 ),

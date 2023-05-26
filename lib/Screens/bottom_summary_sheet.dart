@@ -30,7 +30,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
   List<QuizInfo> quizInfoList = [];
   String aiSummarization = "";
   String level = "";
-  List<bool> isAnswer = List.generate(9, (index) => false);
+  List<bool> isAnswerPressed = List.generate(9, (index) => false);
 
   @override
   void initState() {
@@ -153,6 +153,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
   List<TextEditingController> _textEditingControllers = []; // 키워드 작성 텍스트 컨트롤러
   TextEditingController _summaryTextEditingController =
       TextEditingController(); // 요약문 작성 텍스트 컨트롤러
+
   void _addRow() {
     setState(() {
       if (_rowsCount < 3) {
@@ -168,10 +169,6 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
       _rowsCount--;
     });
   } // 키워드 칸 삭제
-
-  void _copyText() {
-    //_summaryTextEditingController.text += "THIS TEXT";
-  } // 복사되게 하고 싶음.
 
   void updateSelection(int index) {
     setState(() {
@@ -221,7 +218,12 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-            onPressed: _copyText,
+            onPressed: () {
+              setState(() {
+                _summaryTextEditingController.text +=
+                    _articleSentences[i] + " ";
+              });
+            },
             child: Container(
               child: Text(
                 _articleSentences[i],
@@ -236,6 +238,106 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
     }
     return sentencesTile;
   } // 주제문 선택용 본문 텍스트 타일
+
+  Widget problemOptionTiles(int pIdx) {
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: const [
+                BoxShadow(
+                    color: Colors.grey, blurRadius: 3, offset: Offset(1, 1))
+              ],
+              color: isAnswerPressed[3 * pIdx]
+                  ? myColor.shade100
+                  : Colors.grey.shade200),
+          child: RadioListTile(
+              title: Text(
+                quizInfoList.isNotEmpty ? quizInfoList[pIdx].choices[0] : ' ',
+                style: const TextStyle(fontSize: 16, height: 1.5),
+              ),
+              value: 1,
+              groupValue: chosenAnswer[pIdx],
+              onChanged: (value) {
+                setState(() {
+                  chosenAnswer[pIdx] = value!;
+                  if (chosenAnswer[pIdx] == quizInfoList[pIdx].answer) {
+                    isAnswerPressed[3 * pIdx] = true;
+                  } else {
+                    isAnswerPressed[3 * pIdx] = false;
+                    isAnswerPressed[3 * pIdx + 1] = false;
+                    isAnswerPressed[3 * pIdx + 2] = false;
+                  }
+                });
+              }),
+        ), // 첫번째 보기
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: const [
+                BoxShadow(
+                    color: Colors.grey, blurRadius: 3, offset: Offset(1, 1))
+              ],
+              color: isAnswerPressed[3 * pIdx + 1]
+                  ? myColor.shade100
+                  : Colors.grey.shade200),
+          child: RadioListTile(
+              title: Text(
+                quizInfoList.isNotEmpty ? quizInfoList[pIdx].choices[1] : ' ',
+                style: const TextStyle(fontSize: 16, height: 1.5),
+              ),
+              value: 2,
+              groupValue: chosenAnswer[pIdx],
+              onChanged: (value) {
+                setState(() {
+                  chosenAnswer[pIdx] = value!;
+                  if (chosenAnswer[pIdx] == quizInfoList[pIdx].answer) {
+                    isAnswerPressed[3 * pIdx + 1] = true;
+                  } else {
+                    isAnswerPressed[3 * pIdx] = false;
+                    isAnswerPressed[3 * pIdx + 1] = false;
+                    isAnswerPressed[3 * pIdx + 2] = false;
+                  }
+                });
+              }),
+        ), // 두번째 보기
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: const [
+                BoxShadow(
+                    color: Colors.grey, blurRadius: 3, offset: Offset(1, 1))
+              ],
+              color: isAnswerPressed[3 * pIdx + 2]
+                  ? myColor.shade100
+                  : Colors.grey.shade200),
+          child: RadioListTile(
+              title: Text(
+                quizInfoList.isNotEmpty ? quizInfoList[pIdx].choices[2] : ' ',
+                style: const TextStyle(fontSize: 16, height: 1.5),
+              ),
+              value: 3,
+              groupValue: chosenAnswer[pIdx],
+              onChanged: (value) {
+                setState(() {
+                  chosenAnswer[pIdx] = value!;
+                  if (chosenAnswer[pIdx] == quizInfoList[pIdx].answer) {
+                    isAnswerPressed[3 * pIdx + 2] = true;
+                  } else {
+                    isAnswerPressed[3 * pIdx] = false;
+                    isAnswerPressed[3 * pIdx + 1] = false;
+                    isAnswerPressed[3 * pIdx + 2] = false;
+                  }
+                });
+              }),
+        ), // 세번째 보기
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -296,105 +398,11 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                               fontSize: 18,
                               height: 1.5),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 3,
-                                    offset: Offset(1, 1))
-                              ],
-                              color: isAnswer[0]
-                                  ? myColor.shade100
-                                  : Colors.grey.shade200),
-                          child: RadioListTile(
-                            title: Text(
-                              quizInfoList.isNotEmpty
-                                  ? quizInfoList[0].choices[0]
-                                  : ' ',
-                              style: TextStyle(fontSize: 16, height: 1.5),
-                            ),
-                            value: 1,
-                            groupValue: chosenAnswer[0],
-                            onChanged: (value) {
-                              setState(() {
-                                chosenAnswer[0] = value!;
-                                if (value == quizInfoList[0].answer)
-                                  isAnswer[0] = true;
-                              });
-                            },
-                          ),
-                        ),
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 3,
-                                    offset: Offset(1, 1))
-                              ],
-                              color: isAnswer[1]
-                                  ? myColor.shade100
-                                  : Colors.grey.shade200),
-                          child: RadioListTile(
-                              title: Text(
-                                quizInfoList.isNotEmpty
-                                    ? quizInfoList[0].choices[1]
-                                    : ' ',
-                                style: TextStyle(fontSize: 16, height: 1.5),
-                              ),
-                              value: 2,
-                              groupValue: chosenAnswer[0],
-                              onChanged: (value) {
-                                setState(() {
-                                  chosenAnswer[0] = value!;
-                                  if (value == quizInfoList[0].answer)
-                                    isAnswer[1] = true;
-                                });
-                              }),
-                        ),
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 3,
-                                    offset: Offset(1, 1))
-                              ],
-                              color: isAnswer[2]
-                                  ? myColor.shade100
-                                  : Colors.grey.shade200),
-                          child: RadioListTile(
-                              title: Text(
-                                quizInfoList.isNotEmpty &&
-                                        quizInfoList[0].choices.length == 3
-                                    ? quizInfoList[0].choices[2]
-                                    : ' ',
-                                style: TextStyle(fontSize: 16, height: 1.5),
-                              ),
-                              value: 3,
-                              groupValue: chosenAnswer[0],
-                              onChanged: (value) {
-                                setState(() {
-                                  chosenAnswer[0] = value!;
-                                  if (value == quizInfoList[0].answer)
-                                    isAnswer[2] = true;
-                                });
-                              }),
-                        ),
-                        SizedBox(
+                        problemOptionTiles(0), // 문제 1
+                        const SizedBox(
                           height: 20,
                         ),
                         Row(
@@ -774,100 +782,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 3,
-                                    offset: Offset(1, 1))
-                              ],
-                              color: isAnswer[3]
-                                  ? myColor.shade100
-                                  : Colors.grey.shade200),
-                          child: RadioListTile(
-                              title: Text(
-                                quizInfoList.isNotEmpty
-                                    ? quizInfoList[1].choices[0]
-                                    : ' ',
-                                style: TextStyle(fontSize: 16, height: 1.5),
-                              ),
-                              value: 1,
-                              groupValue: chosenAnswer[1],
-                              onChanged: (value) {
-                                setState(() {
-                                  chosenAnswer[1] = value!;
-                                  if (value == quizInfoList[1].answer)
-                                    isAnswer[3] = true;
-                                });
-                              }),
-                        ),
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 3,
-                                    offset: Offset(1, 1))
-                              ],
-                              color: isAnswer[4]
-                                  ? myColor.shade100
-                                  : Colors.grey.shade200),
-                          child: RadioListTile(
-                              title: Text(
-                                quizInfoList.isNotEmpty
-                                    ? quizInfoList[1].choices[1]
-                                    : ' ',
-                                style: TextStyle(fontSize: 16, height: 1.5),
-                              ),
-                              value: 2,
-                              groupValue: chosenAnswer[1],
-                              onChanged: (value) {
-                                setState(() {
-                                  chosenAnswer[1] = value!;
-                                  if (value == quizInfoList[1].answer)
-                                    isAnswer[4] = true;
-                                });
-                              }),
-                        ),
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 3,
-                                    offset: Offset(1, 1))
-                              ],
-                              color: isAnswer[5]
-                                  ? myColor.shade100
-                                  : Colors.grey.shade200),
-                          child: RadioListTile(
-                              title: Text(
-                                quizInfoList.isNotEmpty &&
-                                        quizInfoList[1].choices.length == 3
-                                    ? quizInfoList[1].choices[2]
-                                    : ' ',
-                                style: TextStyle(fontSize: 16, height: 1.5),
-                              ),
-                              value: 3,
-                              groupValue: chosenAnswer[1],
-                              onChanged: (value) {
-                                setState(() {
-                                  chosenAnswer[1] = value!;
-                                  if (value == quizInfoList[1].answer)
-                                    isAnswer[5] = true;
-                                });
-                              }),
-                        ),
+                        problemOptionTiles(1), // 문제 2
                         SizedBox(
                           height: 20,
                         ),
@@ -945,100 +860,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 3,
-                                    offset: Offset(1, 1))
-                              ],
-                              color: isAnswer[6]
-                                  ? myColor.shade100
-                                  : Colors.grey.shade200),
-                          child: RadioListTile(
-                              title: Text(
-                                quizInfoList.isNotEmpty
-                                    ? quizInfoList[2].choices[0]
-                                    : ' ',
-                                style: TextStyle(fontSize: 16, height: 1.5),
-                              ),
-                              value: 1,
-                              groupValue: chosenAnswer[2],
-                              onChanged: (value) {
-                                setState(() {
-                                  chosenAnswer[2] = value!;
-                                  if (value == quizInfoList[2].answer)
-                                    isAnswer[6] = true;
-                                });
-                              }),
-                        ),
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 3,
-                                    offset: Offset(1, 1))
-                              ],
-                              color: isAnswer[7]
-                                  ? myColor.shade100
-                                  : Colors.grey.shade200),
-                          child: RadioListTile(
-                              title: Text(
-                                quizInfoList.isNotEmpty
-                                    ? quizInfoList[2].choices[1]
-                                    : ' ',
-                                style: TextStyle(fontSize: 16, height: 1.5),
-                              ),
-                              value: 2,
-                              groupValue: chosenAnswer[2],
-                              onChanged: (value) {
-                                setState(() {
-                                  chosenAnswer[2] = value!;
-                                  if (value == quizInfoList[2].answer)
-                                    isAnswer[7] = true;
-                                });
-                              }),
-                        ),
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 3,
-                                    offset: Offset(1, 1))
-                              ],
-                              color: isAnswer[8]
-                                  ? myColor.shade100
-                                  : Colors.grey.shade200),
-                          child: RadioListTile(
-                              title: Text(
-                                quizInfoList.isNotEmpty &&
-                                        quizInfoList[2].choices.length == 3
-                                    ? quizInfoList[2].choices[2]
-                                    : ' ',
-                                style: TextStyle(fontSize: 16, height: 1.5),
-                              ),
-                              value: 3,
-                              groupValue: chosenAnswer[2],
-                              onChanged: (value) {
-                                setState(() {
-                                  chosenAnswer[2] = value!;
-                                  if (value == quizInfoList[2].answer)
-                                    isAnswer[8] = true;
-                                });
-                              }),
-                        ),
+                        problemOptionTiles(2), // 문제 3
                         SizedBox(
                           height: 20,
                         ),

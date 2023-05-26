@@ -21,8 +21,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
   double baseFontSize = 18;
   String thisText = '';
   ArticleAndQuiz info = ArticleAndQuiz(
-      problem:
-          ProblemInfo(title: '', content: [], level: 'level', author: 'author'),
+      problem: ProblemInfo(title: '', content: [], level: '', author: ''),
       quizList: [
         QuizInfo(
           problem: '문제',
@@ -68,7 +67,6 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
     if (await isLoggedIn()) {
       final problemId = ModalRoute.of(context)?.settings.arguments
           as int; // 썸네일 화면으로부터 problemId를 인자로 받음
-      //await saveProblemId(problemId);
       final problemIdProvider =
           Provider.of<ProblemIdProvider>(context, listen: false);
       problemIdProvider.setProblemId(problemId); // 프로바이더에 pid 등록
@@ -101,7 +99,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
     }
 
     return txt;
-  }
+  } // 2차원 배열로 들어오는 글을 잘라서 보여주기
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +133,9 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                           Text(
                             info.problem.title,
                             style: TextStyle(
-                                fontSize: 28, fontWeight: FontWeight.w600),
+                                fontSize: 28,
+                                fontWeight: FontWeight.w600,
+                                height: 1.4),
                           ), //글 제목
                           SizedBox(
                             height: 20,
@@ -237,7 +237,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                         )),
                                     Text("글자 크기",
                                         style: TextStyle(
-                                          fontFamily: 'lottedream',
+                                            fontFamily: 'lottedream',
                                             fontSize: 15,
                                             fontWeight: FontWeight.w600)),
                                     IconButton(
@@ -261,8 +261,10 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                           ),
                           Text(
                             thisText,
-                            style:
-                                TextStyle(fontFamily: 'Jeju',fontSize: baseFontSize, height: 1.7),
+                            style: TextStyle(
+                                fontFamily: 'Jeju',
+                                fontSize: baseFontSize,
+                                height: 1.7),
                           ),
                           SizedBox(
                             height: 50,
