@@ -197,7 +197,7 @@ class _LoginFormState extends State<LoginForm> {
                             //Navigator.pop(context);
                             Navigator.pushNamedAndRemoveUntil(
                               context,
-                              '/', // 첫 페이지로 설정할 경로
+                              '/main', // 첫 페이지로 설정할 경로
                               (route) => false, // 모든 이전 페이지를 제거
                             );
                           } else {

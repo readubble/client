@@ -16,7 +16,6 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'Models/problem_info_provider.dart';
 import 'Models/profile_image_provider.dart';
 import 'Models/quiz_list_provider.dart';
-import 'Services/storage.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -40,9 +39,8 @@ class MyApp extends StatelessWidget {
       title: 'Readubble',
       theme: ThemeData(primarySwatch: myColor, fontFamily: 'lottedream'),
       debugShowCheckedModeBanner: false, //오른쪽 상단 DEBUG 배너 비활성화
-      initialRoute: '/',
       routes: {
-        '/': (context) => const MainScreen(),
+        '/main': (context) => const MainScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/startReading': (context) => const ReadingThumbnailScreen(),
@@ -52,23 +50,18 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => const Settings(),
       },
 
-      // home: AnimatedSplashScreen(
-      //   duration: 3000,
-      //   splash: SizedBox(
-      //     width: 1500,
-      //     height: 1500,
-      //     child: Image.asset(
-      //       'assets/images/loading.jpeg',
-      //       // fit: BoxFit.scaleDown,
-      //       // fit: BoxFit.fill,
-      //       // fit: BoxFit.contain,
-      //       fit: BoxFit.cover,
-      //     ),
-      //   ),
-      //   nextScreen: MainScreen(),
-      //   splashTransition: SplashTransition.fadeTransition,
-      //   backgroundColor: myColor.shade100,
-      // ),
+      home: AnimatedSplashScreen(
+        duration: 3000,
+        splash: Image.asset(
+          'assets/images/loading4.jpg',
+          fit: BoxFit.contain,
+        ),
+        splashIconSize: double.infinity,
+        centered: true,
+        nextScreen: MainScreen(),
+        splashTransition: SplashTransition.fadeTransition,
+        backgroundColor: myColor.shade100,
+      ),
     );
   }
 }
