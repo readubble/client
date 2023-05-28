@@ -5,7 +5,7 @@ import '../Services/storage.dart';
 import 'home_screen.dart';
 import 'likes_screen.dart';
 import 'mypage_screen.dart';
-import 'package:http/http.dart' as http;
+import 'package:iphone_has_notch/iphone_has_notch.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,7 +16,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  bool hasNotch = IphoneHasNotch.hasNotch;
 
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
@@ -46,43 +45,43 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Container(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-                size: 35,
-              ),
-              label: '홈',
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+              size: 35,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.favorite,
-                size: 35,
-              ),
-              label: '북마크',
+            label: '홈',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.favorite,
+              size: 35,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person,
-                size: 35,
-              ),
-              label: '마이페이지',
+            label: '북마크',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person,
+              size: 35,
             ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: myColor.shade100,
-          unselectedItemColor: myColor.shade800,
-          onTap: _onItemTapped,
-        ),
+            label: '마이페이지',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: myColor.shade100,
+        unselectedItemColor: myColor.shade800,
+        onTap: _onItemTapped,
       ),
     );
   }

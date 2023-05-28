@@ -19,10 +19,18 @@ class _LikesScreenState extends State<LikesScreen>
   late TabController _tabController;
   static const List<Tab> myTabs = <Tab>[
     Tab(
-      child: Text('저장한 글', style: TextStyle(fontSize: 20)),
+      child: Text('저장한 글',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          )),
     ),
     Tab(
-      child: Text('저장한 단어', style: TextStyle(fontSize: 20)),
+      child: Text('저장한 단어',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          )),
     )
   ];
   int articleCount = 0;
@@ -164,241 +172,240 @@ class _LikesScreenState extends State<LikesScreen>
 
     return DefaultTabController(
       length: 2,
-      child: SafeArea(
-        child: Scaffold(
-          body: Column(
-            children: [
-              TabBar(controller: _tabController, tabs: myTabs),
-              Expanded(
-                child: TabBarView(controller: _tabController, children: [
-                  Padding(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
+          children: [
+            TabBar(controller: _tabController, tabs: myTabs),
+            Expanded(
+              child: TabBarView(controller: _tabController, children: [
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                category = '[인문]';
+                                catNo = 1;
+                              });
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                    alignment: Alignment.center,
+                                    height: 100,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: myColor.shade400,
+                                      // color: Color(0xFF4B0082),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: myColor.shade400,
+                                            blurRadius: 3,
+                                            offset: const Offset(2, 2))
+                                      ],
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const FaIcon(
+                                      // FontAwesomeIcons.userPen,
+                                      FontAwesomeIcons.bookOpen,
+                                      size: 50,
+                                      color: Colors.white,
+                                    )),
+                                // child: const Icon(Icons.book,
+                                //     size: 80, color: Colors.white)),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Text(
+                                  '인문',
+                                  style: TextStyle(fontSize: 25),
+                                )
+                              ],
+                            ),
+                          ), // 인문 버튼
+                          // psychology_rounded
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                category = '[사회]';
+                                catNo = 2;
+                              });
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                    alignment: Alignment.center,
+                                    height: 100,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: myColor.shade200,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: myColor.shade800,
+                                            blurRadius: 3,
+                                            offset: const Offset(2, 2))
+                                      ],
+                                      shape: BoxShape.circle,
+                                    ),
+                                    // child: const FaIcon(
+                                    //   FontAwesomeIcons.users,
+                                    //   size: 50,
+                                    //   color: Colors.white,
+                                    // )),
+                                    child:
+                                        const Icon(Icons.diversity_3_outlined,
+                                            //groups_outlined
+                                            size: 70,
+                                            color: Colors.white)),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Text(
+                                  '사회',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ), //사회 버튼
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                category = '[과학]';
+                                catNo = 3;
+                              });
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                    alignment: Alignment.center,
+                                    height: 100,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: myColor.shade600,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: myColor.shade800,
+                                            blurRadius: 3,
+                                            offset: const Offset(2, 2))
+                                      ],
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const FaIcon(
+                                      FontAwesomeIcons.flask,
+                                      size: 50,
+                                      color: Colors.white,
+                                    )),
+                                // child: const Icon(Icons.science_outlined,
+                                //     size: 80, color: Colors.white)),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Text(
+                                  '과학',
+                                  style: TextStyle(fontSize: 25),
+                                )
+                              ],
+                            ),
+                          ), //과학 버튼
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RichText(
+                              text: TextSpan(children: [
+                            TextSpan(
+                              text: ' $category ',
+                              style: const TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.lightBlue),
+                            ),
+                            TextSpan(
+                              text: '저장한 글 (${resultDataList.length} 개)',
+                              style: const TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black),
+                            ),
+                          ])),
+                          // TextButton(
+                          //     onPressed: () {
+                          //       setState(() {
+                          //         category = '';
+                          //       });
+                          //     },
+                          //     child: const Text(
+                          //       '모두 보기',
+                          //       style: TextStyle(
+                          //         fontSize: 16,
+                          //         fontWeight: FontWeight.w600,
+                          //       ),
+                          //     ))
+                        ],
+                      ), //'저장한 글' 텍스트
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Expanded(
+                        child: GridView.count(
+                          shrinkWrap: true,
+                          primary: false,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          crossAxisCount: 2,
+                          children: getLikedArticles(context, resultDataList),
+                        ),
+                      ),
+                    ],
+                  ),
+                ), //저장한 글
+                SingleChildScrollView(
+                  child: Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  category = '[인문]';
-                                  catNo = 1;
-                                });
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                      alignment: Alignment.center,
-                                      height: 100,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                        color: myColor.shade400,
-                                        // color: Color(0xFF4B0082),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: myColor.shade400,
-                                              blurRadius: 3,
-                                              offset: const Offset(2, 2))
-                                        ],
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: const FaIcon(
-                                        // FontAwesomeIcons.userPen,
-                                        FontAwesomeIcons.bookOpen,
-                                        size: 50,
-                                        color: Colors.white,
-                                      )),
-                                  // child: const Icon(Icons.book,
-                                  //     size: 80, color: Colors.white)),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  const Text(
-                                    '인문',
-                                    style: TextStyle(fontSize: 25),
-                                  )
-                                ],
-                              ),
-                            ), // 인문 버튼
-                            // psychology_rounded
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  category = '[사회]';
-                                  catNo = 2;
-                                });
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                      alignment: Alignment.center,
-                                      height: 100,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                        color: myColor.shade200,
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: myColor.shade800,
-                                              blurRadius: 3,
-                                              offset: const Offset(2, 2))
-                                        ],
-                                        shape: BoxShape.circle,
-                                      ),
-                                      // child: const FaIcon(
-                                      //   FontAwesomeIcons.users,
-                                      //   size: 50,
-                                      //   color: Colors.white,
-                                      // )),
-                                      child:
-                                          const Icon(Icons.diversity_3_outlined,
-                                              //groups_outlined
-                                              size: 70,
-                                              color: Colors.white)),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  const Text(
-                                    '사회',
-                                    style: TextStyle(
-                                      fontSize: 25,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ), //사회 버튼
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  category = '[과학]';
-                                  catNo = 3;
-                                });
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                      alignment: Alignment.center,
-                                      height: 100,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                        color: myColor.shade600,
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: myColor.shade800,
-                                              blurRadius: 3,
-                                              offset: const Offset(2, 2))
-                                        ],
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: const FaIcon(
-                                        FontAwesomeIcons.flask,
-                                        size: 50,
-                                        color: Colors.white,
-                                      )),
-                                  // child: const Icon(Icons.science_outlined,
-                                  //     size: 80, color: Colors.white)),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  const Text(
-                                    '과학',
-                                    style: TextStyle(fontSize: 25),
-                                  )
-                                ],
-                              ),
-                            ), //과학 버튼
-                          ],
+                        Text(
+                          ' 나의 단어장',
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black),
                         ),
+                        //'저장한 글' 텍스트
                         const SizedBox(
                           height: 20,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            RichText(
-                                text: TextSpan(children: [
-                              TextSpan(
-                                text: ' $category ',
-                                style: const TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.lightBlue),
-                              ),
-                              TextSpan(
-                                text: '저장한 글 (${resultDataList.length} 개)',
-                                style: const TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black),
-                              ),
-                            ])),
-                            // TextButton(
-                            //     onPressed: () {
-                            //       setState(() {
-                            //         category = '';
-                            //       });
-                            //     },
-                            //     child: const Text(
-                            //       '모두 보기',
-                            //       style: TextStyle(
-                            //         fontSize: 16,
-                            //         fontWeight: FontWeight.w600,
-                            //       ),
-                            //     ))
-                          ],
-                        ), //'저장한 글' 텍스트
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Expanded(
-                          child: GridView.count(
-                            shrinkWrap: true,
-                            primary: false,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            crossAxisCount: 2,
-                            children: getLikedArticles(context, resultDataList),
-                          ),
-                        ),
+                        // Expanded(
+                        //   child: GridView.count(
+                        //     shrinkWrap: true,
+                        //     primary: false,
+                        //     crossAxisSpacing: 10,
+                        //     mainAxisSpacing: 10,
+                        //     crossAxisCount: 2,
+                        //     children: getLikedArticles(context, resultDataList),
+                        //   ),
+                        // ),
+                        ...getLikedWords(),
                       ],
                     ),
-                  ), //저장한 글
-                  SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            ' 나의 단어장',
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black),
-                          ),
-                          //'저장한 글' 텍스트
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          // Expanded(
-                          //   child: GridView.count(
-                          //     shrinkWrap: true,
-                          //     primary: false,
-                          //     crossAxisSpacing: 10,
-                          //     mainAxisSpacing: 10,
-                          //     crossAxisCount: 2,
-                          //     children: getLikedArticles(context, resultDataList),
-                          //   ),
-                          // ),
-                          ...getLikedWords(),
-                        ],
-                      ),
-                    ),
-                  ), //저장한 단어
-                ]),
-              ),
-            ],
-          ),
+                  ),
+                ), //저장한 단어
+              ]),
+            ),
+          ],
         ),
       ),
     );

@@ -171,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     : null, // isEnabled == false이면 onPressed disabled
                 child: Text(
                   model.choices[1],
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                   ),
