@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'article_and_quiz.dart';
+import '../Models/article_and_quiz.dart';
 
 class ProblemInfoProvider with ChangeNotifier {
   ProblemInfo? _problemInfo;

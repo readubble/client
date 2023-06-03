@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:bwageul/Models/problem_id_provider.dart';
-import 'package:bwageul/Models/user_info_provider.dart';
+import 'package:bwageul/Providers/problem_id_provider.dart';
+import 'package:bwageul/Providers/user_info_provider.dart';
 import 'package:bwageul/Screens/dictionary.dart';
 import 'package:bwageul/Screens/finish_reading.dart';
 import 'package:bwageul/Screens/login_screen.dart';
@@ -13,9 +13,9 @@ import 'package:bwageul/Screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'Models/problem_info_provider.dart';
-import 'Models/profile_image_provider.dart';
-import 'Models/quiz_list_provider.dart';
+import 'Providers/problem_info_provider.dart';
+import 'Providers/profile_image_provider.dart';
+import 'Providers/quiz_list_provider.dart';
 
 void main() {
   runApp(MultiProvider(

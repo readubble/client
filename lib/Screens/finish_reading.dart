@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bwageul/Services/api_services.dart';
-import '../Models/user_info_provider.dart';
+import '../Providers/user_info_provider.dart';
 import '../main.dart';
 
 class FinishReading extends StatefulWidget {

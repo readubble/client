@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'package:bwageul/Models/article_info_model.dart';
 import 'package:bwageul/Models/article_bookmark_model.dart';
 import 'package:bwageul/Models/reading_result_model.dart';
@@ -397,6 +396,9 @@ class ApiService {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       //print('fetchArticleContents(problemId) -> ${body['data']}');
       return ArticleAndQuiz.fromJson(body['data']);
+    } else if (response.statusCode == 401) {
+      await updateToken();
+      return fetchArticleContents(problemId);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       //print('articleContents(problemId 1) = 브람스 글 -> $body');

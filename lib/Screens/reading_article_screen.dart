@@ -1,10 +1,9 @@
 import 'package:bwageul/Models/article_and_quiz.dart';
-import 'package:bwageul/Models/problem_info_provider.dart';
-import 'package:bwageul/Models/quiz_list_provider.dart';
+import 'package:bwageul/Providers/problem_info_provider.dart';
+import 'package:bwageul/Providers/quiz_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../Models/problem_id_provider.dart';
+import '../Providers/problem_id_provider.dart';
 import '../Services/api_services.dart';
 import '../Services/storage.dart';
 import '../main.dart';
@@ -29,10 +28,15 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
           answer: 1,
         )
       ]); // 디폴트 객체
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(() {
+      print(
+          'offset = ${_scrollController.offset}'); // Sliding distance. 스크롤바의 위치
+    });
     // WidgetsBinding.instance!.addPostFrameCallback((_) {
     //   // 페이지가 로드된 후 즉시 alertDialog를 표시합니다.
     //   showDialog(
@@ -60,7 +64,12 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
     // });
     _loadArticleContents();
     thisText = makeText(info.problem.content);
-    print(thisText);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadArticleContents() async {
@@ -103,13 +112,14 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Stack(children: [
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Stack(children: [
             SingleChildScrollView(
+              controller: _scrollController,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(15, 20, 15, 70),
+                padding: const EdgeInsets.fromLTRB(15, 10, 15, 70),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -277,7 +287,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
               ),
             ),
             BottomSummarySheet(), // 하단 퀴즈, 글 요약하는 창
-          ])),
-    );
+          ]),
+        ));
   }
 }

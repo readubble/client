@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../Models/article_info_model.dart';
-import '../Models/user_info_provider.dart';
+import '../Providers/user_info_provider.dart';
 import '../Models/word_quiz_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -241,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             const SizedBox(
-              height: 15,
+              height: 5,
             ),
             Row(
               // 앱명 + 000님은 000일째 성장 중!

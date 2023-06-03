@@ -1,11 +1,11 @@
-import 'package:bwageul/Models/problem_info_provider.dart';
-import 'package:bwageul/Models/quiz_list_provider.dart';
+import 'package:bwageul/Providers/problem_info_provider.dart';
+import 'package:bwageul/Providers/quiz_list_provider.dart';
 import 'package:bwageul/Models/reading_result_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Models/problem_id_provider.dart';
-import '../Models/user_info_provider.dart';
+import '../Providers/problem_id_provider.dart';
+import '../Providers/user_info_provider.dart';
 import '../main.dart';
 import 'package:bwageul/Models/article_and_quiz.dart';
 import 'package:bwageul/Services/api_services.dart';
@@ -356,10 +356,10 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                   boxShadow: [
                     BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        offset: Offset(0, 5),
-                        blurRadius: 10,
-                        spreadRadius: 10)
+                      color: Colors.black.withOpacity(0.5),
+                      offset: Offset(0, -15),
+                      blurRadius: 10,
+                    )
                   ] // 둥근 모서리
                   ),
               child: PageView(

@@ -6,8 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:circular_usage_indicator/circular_usage_indicator.dart';
 import 'package:bwageul/Services/api_services.dart';
 import 'package:provider/provider.dart';
-import '../Models/profile_image_provider.dart';
-import '../Models/user_info_provider.dart';
+import '../Providers/profile_image_provider.dart';
+import '../Providers/user_info_provider.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({Key? key}) : super(key: key);
