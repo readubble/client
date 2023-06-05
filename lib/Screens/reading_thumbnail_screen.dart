@@ -1,6 +1,8 @@
 import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../Providers/problem_id_provider.dart';
 import '../Widgets/swipe_guide.dart';
 
 class ReadingThumbnailScreen extends StatefulWidget {
@@ -15,13 +17,16 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
   Widget build(BuildContext context) {
     final arguments =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    final problemIdProvider =
+        Provider.of<ProblemIdProvider>(context, listen: false);
+    problemIdProvider.setProblemId(arguments[
+        'problemId']); // buildArticleList에서 받아온 problemId 프로바이더에 최초 등록
 
     return GestureDetector(
       onHorizontalDragUpdate: (details) {
         if (details.delta.direction > 0) {
           // <- 방향 스와이프 시 다음 단계로 넘어감
-          Navigator.of(context)
-              .pushNamed('/article', arguments: arguments['problemId']);
+          Navigator.of(context).pushNamed('/eyetracking');
         }
       },
       child: Scaffold(

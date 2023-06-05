@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:bwageul/Providers/problem_id_provider.dart';
 import 'package:bwageul/Providers/user_info_provider.dart';
 import 'package:bwageul/Screens/dictionary.dart';
+import 'package:bwageul/Screens/eyetracking_setting.dart';
 import 'package:bwageul/Screens/finish_reading.dart';
 import 'package:bwageul/Screens/login_screen.dart';
 import 'package:bwageul/Screens/reading_article_screen.dart';
@@ -13,9 +12,11 @@ import 'package:bwageul/Screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'Providers/gaze_tracker_provider.dart';
 import 'Providers/problem_info_provider.dart';
 import 'Providers/profile_image_provider.dart';
 import 'Providers/quiz_list_provider.dart';
+import 'Providers/user_extand_provider.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -25,6 +26,10 @@ void main() {
       ChangeNotifierProvider(create: (_) => ProblemInfoProvider()),
       ChangeNotifierProvider(create: (_) => QuizListProvider()),
       ChangeNotifierProvider(create: (_) => ProblemIdProvider()),
+      ChangeNotifierProvider(
+          create: (BuildContext context) => GazeTrackerProvider()),
+      ChangeNotifierProvider(
+          create: (BuildContext context) => UserExtandProvider())
     ],
     child: MyApp(),
   ));
@@ -48,6 +53,7 @@ class MyApp extends StatelessWidget {
         '/finish': (context) => const FinishReading(),
         '/dictionary': (context) => const KoreanDictionary(),
         '/settings': (context) => const Settings(),
+        '/eyetracking': (context) => const Eyetracking(),
       },
 
       home: AnimatedSplashScreen(

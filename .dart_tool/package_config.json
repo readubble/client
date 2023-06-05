@@ -176,6 +176,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_spinkit",
+      "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/flutter_spinkit-5.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_test",
       "rootUri": "file:///Users/kim-yumi/development/flutter/packages/flutter_test",
       "packageUri": "lib/",
@@ -326,6 +332,42 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "percent_indicator",
+      "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/percent_indicator-4.2.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "permission_handler",
+      "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/permission_handler-10.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_android",
+      "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/permission_handler_android-10.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_apple",
+      "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/permission_handler_apple-9.0.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_platform_interface",
+      "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/permission_handler_platform_interface-3.9.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "permission_handler_windows",
+      "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/permission_handler_windows-0.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "petitparser",
       "rootUri": "file:///Users/kim-yumi/.pub-cache/hosted/pub.dev/petitparser-5.1.0",
       "packageUri": "lib/",
@@ -449,10 +491,10 @@
       "name": "bwageul",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "2.17"
     }
   ],
-  "generated": "2023-05-26T07:41:05.423798Z",
+  "generated": "2023-06-05T10:14:17.545669Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }
