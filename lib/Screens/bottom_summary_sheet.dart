@@ -105,8 +105,6 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
         problemId!); // 문제 다 풀고 '완료' 버튼 누르면 서버로 결과 전송 & ai 요약 결과 가져옴.
     // Map<String, dynamic>으로, result['problem_id], result['ai_summarization']으로 받음
     aiSummarization = result['ai_summarization'];
-    problemIdProvider.setProblemId(
-        result['problem_id']); // 글을 읽자마자 가져온 거라 어차피 같은 pid이지만 한번 더 업데이트해줌.
   } // this bottom sheet에서 작성한 결과를 정리해서 서버에 보내는 작업.
 
   static List<Tab> myTabs = <Tab>[
@@ -262,7 +260,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
               groupValue: chosenAnswer[pIdx],
               onChanged: (value) {
                 setState(() {
-                  chosenAnswer[pIdx] = value!;
+                  chosenAnswer[pIdx] = value! as int;
                   if (chosenAnswer[pIdx] == quizInfoList[pIdx].answer) {
                     isAnswerPressed[3 * pIdx] = true;
                   } else {
@@ -293,7 +291,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
               groupValue: chosenAnswer[pIdx],
               onChanged: (value) {
                 setState(() {
-                  chosenAnswer[pIdx] = value!;
+                  chosenAnswer[pIdx] = value! as int;
                   if (chosenAnswer[pIdx] == quizInfoList[pIdx].answer) {
                     isAnswerPressed[3 * pIdx + 1] = true;
                   } else {
@@ -324,7 +322,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
               groupValue: chosenAnswer[pIdx],
               onChanged: (value) {
                 setState(() {
-                  chosenAnswer[pIdx] = value!;
+                  chosenAnswer[pIdx] = value! as int;
                   if (chosenAnswer[pIdx] == quizInfoList[pIdx].answer) {
                     isAnswerPressed[3 * pIdx + 2] = true;
                   } else {

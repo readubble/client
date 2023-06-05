@@ -3,6 +3,7 @@ import 'package:bwageul/Providers/problem_info_provider.dart';
 import 'package:bwageul/Providers/quiz_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../Providers/gaze_tracker_provider.dart';
 import '../Providers/problem_id_provider.dart';
 import '../Services/api_services.dart';
 import '../Services/storage.dart';
@@ -74,13 +75,11 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
 
   Future<void> _loadArticleContents() async {
     if (await isLoggedIn()) {
-      final problemId = ModalRoute.of(context)?.settings.arguments
-          as int; // 썸네일 화면으로부터 problemId를 인자로 받음
       final problemIdProvider =
           Provider.of<ProblemIdProvider>(context, listen: false);
-      problemIdProvider.setProblemId(problemId); // 프로바이더에 pid 등록
+      final problemId = problemIdProvider.problemId;
 
-      ArticleAndQuiz model = await ApiService.fetchArticleContents(problemId);
+      ArticleAndQuiz model = await ApiService.fetchArticleContents(problemId!);
       final problemProvider =
           Provider.of<ProblemInfoProvider>(context, listen: false);
       problemProvider.setProblemInfo(model.problem);
@@ -112,6 +111,8 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final consumer = Provider.of<GazeTrackerProvider>(context);
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(

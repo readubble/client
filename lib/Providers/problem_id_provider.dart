@@ -7,7 +7,9 @@ class ProblemIdProvider with ChangeNotifier {
   int? get problemId => _problemId;
 
   void setProblemId(int problemId) {
-    _problemId = problemId;
-    notifyListeners();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _problemId = problemId;
+      notifyListeners();
+    });
   }
 }
