@@ -686,6 +686,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                     TextFormField(
                                       controller: _summaryTextEditingController,
                                       maxLines: 10,
+                                      style: TextStyle(height: 1.5),
                                       decoration: InputDecoration(
                                         hintText: '요약문을 작성해주세요.',
                                         border: OutlineInputBorder(

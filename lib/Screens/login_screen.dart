@@ -236,20 +236,23 @@ class _LoginFormState extends State<LoginForm> {
                         Container(
                           //수평선
                           height: 1.0,
-                          width: 150.0,
+                          width: (MediaQuery.of(context).size.width - 80) / 2,
                           color: Colors.black,
                         ),
-                        const Text(
-                          '  또는  ',
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black),
+                        Container(
+                          width: 45,
+                          child: const Text(
+                            '  또는  ',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black),
+                          ),
                         ),
                         Container(
                           //수평선
                           height: 1.0,
-                          width: 150.0,
+                          width: (MediaQuery.of(context).size.width - 80) / 2,
                           color: Colors.black,
                         ),
                       ],

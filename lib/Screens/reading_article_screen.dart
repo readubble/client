@@ -3,6 +3,11 @@ import 'package:bwageul/Providers/problem_info_provider.dart';
 import 'package:bwageul/Providers/quiz_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../EyetrackingUI/calibration_widget.dart';
+import '../EyetrackingUI/gaze_point_widget.dart';
+import '../EyetrackingUI/initialized_fail_dialog_widget.dart';
+import '../EyetrackingUI/loading_circle_widget.dart';
+import '../Models/app_stage.dart';
 import '../Providers/gaze_tracker_provider.dart';
 import '../Providers/problem_id_provider.dart';
 import '../Services/api_services.dart';
@@ -288,6 +293,13 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
               ),
             ),
             BottomSummarySheet(), // 하단 퀴즈, 글 요약하는 창
+            if (consumer.state == GazeTrackerState.start)
+              const GazePointWidget(),
+            if (consumer.state == GazeTrackerState.initializing)
+              const LoadingCircleWidget(),
+            if (consumer.state == GazeTrackerState.calibrating)
+              const CalibrationWidget(),
+            if (consumer.failedReason != null) const InitializedFailDialog()
           ]),
         ));
   }

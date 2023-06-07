@@ -74,7 +74,6 @@ class ApiService {
         headers: headers,
         body: jsonEncode(
             userInfo)); // url, headers, body 매개변수를 설정하여 POST 요청을 보냅니다
-
     if (response.statusCode == 200) {
       // 로그인 성공
       print('${userInfo['id']!} 로그인 성공');
@@ -127,7 +126,6 @@ class ApiService {
       // 로그아웃 성공
       print('$userInfo 로그아웃 성공');
       await deleteTokenAndId();
-      //getUserId().then((value) => print(value)); // 로그아웃 됐으니까 null
       return true;
     } else if (response.statusCode == 401) {
       // 토큰 만료 에러
@@ -224,7 +222,6 @@ class ApiService {
       return getUserInfoById(id);
     } else {
       var body = jsonDecode(utf8.decode(response.bodyBytes));
-      print(body);
       throw Exception("회원 정보 불러오기 실패");
     }
   } // 회원 정보 가져오기
@@ -342,7 +339,6 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      //print('getWordQuizResult 호출 -> ${body['data']}');
       RegExp regex = RegExp('T');
       count = regex.allMatches(body['data']['result']).length;
       return count;
@@ -366,7 +362,6 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      //print("fetchArticleList() 글 -> ${body['data']}");
       if (body['data'] != null) {
         for (int i = 0; i < body['data'].length; i++) {
           articleList.add(ArticleInfoModel.fromJson(body['data'][i]));
@@ -394,14 +389,12 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      //print('fetchArticleContents(problemId) -> ${body['data']}');
       return ArticleAndQuiz.fromJson(body['data']);
     } else if (response.statusCode == 401) {
       await updateToken();
       return fetchArticleContents(problemId);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      //print('articleContents(problemId 1) = 브람스 글 -> $body');
       throw Exception('글+문제 내용 가져오기 실패');
     }
   } // 문제 내용 (글 본문 + 추가 문제)
@@ -409,7 +402,6 @@ class ApiService {
   static Future<ReadingResultModel> articleReadingResult(int problemId) async {
     final userId = await getUserId();
     final accessToken = await getAccessToken();
-    //final problemId = await getProblemId();
     final url = Uri.parse("$baseUrl/problem/$problemId/users/$userId");
 
     var response = await http.get(url, headers: {
@@ -419,7 +411,6 @@ class ApiService {
     });
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      //print('문제 풀이 결과 호출 -> ${body['data']}');
       return ReadingResultModel.fromJson(body['data']);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
@@ -444,11 +435,9 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print('사전 -> $body');
       if (body['data'] != null) {
         for (int i = 0; i < body['data'].length; i++) {
           wordList.add(WordInfoModel.fromJson(body['data'][i]));
-          // print(body['data'][0]);
         }
         return wordList;
       }
@@ -491,9 +480,6 @@ class ApiService {
         body: jsonEncode(input));
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      // print('sendProblemSolved -> ${body['data']}');
-      // print('sendProblemSolved -> ${body['data'].runtimeType}');
-      // print('sendProblemSolved -> ${body['data']['problem_id']}');
 
       return body['data'];
     } else {
@@ -515,7 +501,6 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      //print('getSolvedProblemCount 호출: ${body['data']}');
       return body['data']; // [{'level':상, 'num':2}, ...]
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
@@ -538,7 +523,6 @@ class ApiService {
         body: jsonEncode(input));
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      print('북마크 여부 보내기 problemBookmark() 호출: $body');
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       print('북마크 여부 보내기 problemBookmark() 호출: $body');
@@ -565,7 +549,6 @@ class ApiService {
           .map((item) =>
               ArticleBookmarkModel.fromJson(item as Map<String, dynamic>))
           .toList();
-      // print('북마크된 글 리스트 호출 : ${body['data']}');
       return bookmarkList;
     } else if (response.statusCode == 401) {
       await updateToken();
@@ -593,7 +576,6 @@ class ApiService {
     // body에 word_nm, word_mean
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      // print('단어 북마크 여부 보내기 wordBookmark() 호출: $body');
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       // print('단어 북마크 여부 보내기 wordBookmark() 호출: $body');
@@ -617,14 +599,11 @@ class ApiService {
           .map((item) =>
               WordBookmarkModel.fromJson(item as Map<String, dynamic>))
           .toList();
-      // print('북마크된 단어 리스트 호출 : ${body['data']}');
       return wordBookmarkList;
     } else if (response.statusCode == 401) {
       await updateToken();
       return await getWordBookmarkList();
     } else {
-      final body = jsonDecode(utf8.decode(response.bodyBytes));
-      //print('북마크된 단어 리스트 호출 : $body');
       throw Exception("글 북마크 리스트 api 호출 실패");
     }
   } // 북마크된 단어 리스트 가져오기

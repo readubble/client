@@ -148,7 +148,7 @@ class TrackingModeWidget extends StatelessWidget {
         //         )),
         //   ),
         const Text(
-            '(Calibration only can be done while gae tracking is activated)',
+            '(Calibration only can be done while gaze tracking is activated)',
             style: TextStyle(
                 color: Colors.white24,
                 fontSize: 10,

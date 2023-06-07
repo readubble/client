@@ -202,23 +202,19 @@ class _LikesScreenState extends State<LikesScreen>
                                     width: 100,
                                     decoration: BoxDecoration(
                                       color: myColor.shade400,
-                                      // color: Color(0xFF4B0082),
                                       boxShadow: [
                                         BoxShadow(
-                                            color: myColor.shade400,
+                                            color: myColor.shade800,
                                             blurRadius: 3,
                                             offset: const Offset(2, 2))
                                       ],
                                       shape: BoxShape.circle,
                                     ),
                                     child: const FaIcon(
-                                      // FontAwesomeIcons.userPen,
                                       FontAwesomeIcons.bookOpen,
                                       size: 50,
                                       color: Colors.white,
                                     )),
-                                // child: const Icon(Icons.book,
-                                //     size: 80, color: Colors.white)),
                                 const SizedBox(
                                   height: 10,
                                 ),
