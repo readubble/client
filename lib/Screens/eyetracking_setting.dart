@@ -42,8 +42,10 @@ class _EyetrackingState extends State<Eyetracking> {
                           switch (gazetracker.state) {
                             case GazeTrackerState.first:
                               return const CameraHandleWidget();
+                              // handleCamera() 호출 후 GazeTrackerState가 idle 상태로 변함
                             case GazeTrackerState.idle:
                               return const InitializingWidget();
+                              // initGazeTracker() 호출 후 initialzied 상태가 된다는데 어떻게 되는지 모르겠음
                             case GazeTrackerState.initialized:
                               return const InitializedWidget();
                             case GazeTrackerState.start:

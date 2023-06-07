@@ -14,7 +14,7 @@ class InitializingWidget extends StatelessWidget {
     final consumer = Provider.of<GazeTrackerProvider>(context);
     return Column(
       children: <Widget>[
-        const Text('You need to init GazeTracker first',
+        const Text('먼저 GazeTracker를 시작해야 합니다',
             style: TextStyle(
                 color: Colors.white24,
                 fontSize: 10,

@@ -38,7 +38,7 @@ class TrackingModeWidget extends StatelessWidget {
             width: double.maxFinite,
             height: 20,
             color: const Color.fromARGB(0, 0, 0, 0)),
-        const Text('Tracking is On!!',
+        const Text('추적 중입니다!!',
             style: TextStyle(
                 color: Colors.white24,
                 fontSize: 10,
@@ -59,7 +59,7 @@ class TrackingModeWidget extends StatelessWidget {
             width: double.maxFinite,
             height: 20,
             color: const Color.fromARGB(0, 0, 0, 0)),
-        const Text('And also you can improve accuaracy through calibration',
+        const Text('또한 보정을 통해 정확도를 향상시킬 수 있습니다',
             style: TextStyle(
                 color: Colors.white24,
                 fontSize: 10,
@@ -148,7 +148,7 @@ class TrackingModeWidget extends StatelessWidget {
         //         )),
         //   ),
         const Text(
-            '(Calibration only can be done while gaze tracking is activated)',
+            '(시선 추적이 활성화된 경우에만 보정을 수행할 수 있습니다.)',
             style: TextStyle(
                 color: Colors.white24,
                 fontSize: 10,

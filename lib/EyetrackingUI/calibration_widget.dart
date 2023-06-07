@@ -25,7 +25,7 @@ class CalibrationWidget extends StatelessWidget {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const <Widget>[
-                Text('Look at the circle!',
+                Text('원을 보세요!',
                     style: TextStyle(
                         fontSize: 16,
                         color: Colors.white,

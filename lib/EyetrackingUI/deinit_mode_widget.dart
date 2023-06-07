@@ -11,7 +11,7 @@ class DeinitModeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Column(children: <Widget>[
-      const Text('GazeTracker is activated.',
+      const Text('Gaze Tracker가 활성화되었습니다.',
           style: TextStyle(
               color: Colors.white24,
               fontSize: 10,
@@ -39,7 +39,7 @@ class DeinitModeWidget extends StatelessWidget {
         color: Colors.white24,
       ),
       const Text(
-          'You can init GazeTracker With UserOption! \n (need to restart GazeTracker)',
+          '사용자 옵션으로 GazeTracker를 시작할 수 있습니다! \n (GazeTracker를 다시 시작해야 함)',
           style: TextStyle(
               color: Colors.white24,
               fontSize: 10,

@@ -23,7 +23,7 @@ class InitializedWidget extends StatelessWidget {
             width: double.maxFinite,
             height: 20,
             color: const Color.fromARGB(0, 0, 0, 0)),
-        const Text('Now You can track you gaze!',
+        const Text('이제 시선을 추적할 수 있습니다!',
             style: TextStyle(
                 color: Colors.white24,
                 fontSize: 10,

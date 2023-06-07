@@ -10,7 +10,7 @@ class SaveDataDialogWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoAlertDialog(
       title: const Text('Save'),
-      content: const Text('Calibration Data Save Done'),
+      content: const Text('보정 데이터 저장 완료'),
       actions: <CupertinoDialogAction>[
         CupertinoDialogAction(
           isDefaultAction: true,

@@ -30,6 +30,6 @@ class GazePointWidget extends StatelessWidget {
             width: circleSize,
             height: circleSize,
             decoration: const BoxDecoration(
-                color: Colors.red, shape: BoxShape.circle)));
+                color: Colors.blue, shape: BoxShape.circle)));
   }
 }
