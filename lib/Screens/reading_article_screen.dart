@@ -283,7 +283,18 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                 height: 1.7),
                           ),
                           SizedBox(
-                            height: 50,
+                            height: 30,
+                          ),
+                          ElevatedButton(
+                              onPressed: () {
+                                consumer.stopTracking();
+                                Provider.of<GazeTrackerProvider>(context,
+                                        listen: false)
+                                    .deinitGazeTracker();
+                              },
+                              child: Text("트래킹 종료")),
+                          SizedBox(
+                            height: 40,
                           ),
                         ],
                       ),
@@ -295,11 +306,6 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
             BottomSummarySheet(), // 하단 퀴즈, 글 요약하는 창
             if (consumer.state == GazeTrackerState.start)
               const GazePointWidget(),
-            if (consumer.state == GazeTrackerState.initializing)
-              const LoadingCircleWidget(),
-            if (consumer.state == GazeTrackerState.calibrating)
-              const CalibrationWidget(),
-            if (consumer.failedReason != null) const InitializedFailDialog()
           ]),
         ));
   }
