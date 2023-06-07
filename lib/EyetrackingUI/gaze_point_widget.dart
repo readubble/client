@@ -29,7 +29,7 @@ class GazePointWidget extends StatelessWidget {
         child: Container(
             width: circleSize,
             height: circleSize,
-            decoration: const BoxDecoration(
-                color: Colors.blue, shape: BoxShape.circle)));
+            decoration: BoxDecoration(
+                color: Colors.blue.withOpacity(0.4), shape: BoxShape.circle)));
   }
 }

@@ -18,26 +18,14 @@ class TitleWidget extends StatelessWidget {
               Title(
                   color: const Color(0xFF000000),
                   child: const Text(
-                    '아이트래킹 테스트',
+                    '시선 추적 기능',
                     style: TextStyle(
-                        color: Colors.white,
-                        decoration: TextDecoration.none,
-                        fontSize: 24),
+                        decoration: TextDecoration.none, fontSize: 24),
                   )),
-              Divider( // Divider: 수평 구분선을 나타내는 위젯입니다. 회색 계통의 색상을 사용합니다.
+              Divider(
+                // Divider: 수평 구분선을 나타내는 위젯입니다. 회색 계통의 색상을 사용합니다.
                 color: Colors.grey[800],
               ),
-              // const Padding(
-              //   padding: EdgeInsets.all(20),
-              //   child: Text(
-              //     "시선 추적을 경험하려면 아래 단계를 따르십시오",
-              //     style: TextStyle(
-              //         color: Colors.white,
-              //         decoration: TextDecoration.none,
-              //         fontWeight: FontWeight.w300,
-              //         fontSize: 16),
-              //   ),
-              // ),
             ]));
   }
 }
