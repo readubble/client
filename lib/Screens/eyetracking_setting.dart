@@ -27,10 +27,14 @@ class _EyetrackingState extends State<Eyetracking> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<GazeTrackerProvider>(context, listen: false).handleCamera();
     Provider.of<GazeTrackerProvider>(context, listen: false)
-        .initGazeTracker(); // 초기화. state를 initializing으로 바꿈
-    Future.delayed(Duration(seconds: 3), () {
+        .handleCamera()
+        .then((_) {
+      Provider.of<GazeTrackerProvider>(context, listen: false)
+          .initGazeTracker(); // 초기화. state를 initializing으로 바꿈
+    });
+
+    Future.delayed(Duration(seconds: 4), () {
       setState(() {
         trackingStart = true;
       });
