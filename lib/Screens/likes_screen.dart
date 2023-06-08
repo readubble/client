@@ -249,11 +249,6 @@ class _LikesScreenState extends State<LikesScreen>
                                       ],
                                       shape: BoxShape.circle,
                                     ),
-                                    // child: const FaIcon(
-                                    //   FontAwesomeIcons.users,
-                                    //   size: 50,
-                                    //   color: Colors.white,
-                                    // )),
                                     child:
                                         const Icon(Icons.diversity_3_outlined,
                                             //groups_outlined
@@ -299,8 +294,6 @@ class _LikesScreenState extends State<LikesScreen>
                                       size: 50,
                                       color: Colors.white,
                                     )),
-                                // child: const Icon(Icons.science_outlined,
-                                //     size: 80, color: Colors.white)),
                                 const SizedBox(
                                   height: 10,
                                 ),
@@ -336,19 +329,6 @@ class _LikesScreenState extends State<LikesScreen>
                                   color: Colors.black),
                             ),
                           ])),
-                          // TextButton(
-                          //     onPressed: () {
-                          //       setState(() {
-                          //         category = '';
-                          //       });
-                          //     },
-                          //     child: const Text(
-                          //       '모두 보기',
-                          //       style: TextStyle(
-                          //         fontSize: 16,
-                          //         fontWeight: FontWeight.w600,
-                          //       ),
-                          //     ))
                         ],
                       ), //'저장한 글' 텍스트
                       const SizedBox(
@@ -384,16 +364,6 @@ class _LikesScreenState extends State<LikesScreen>
                         const SizedBox(
                           height: 20,
                         ),
-                        // Expanded(
-                        //   child: GridView.count(
-                        //     shrinkWrap: true,
-                        //     primary: false,
-                        //     crossAxisSpacing: 10,
-                        //     mainAxisSpacing: 10,
-                        //     crossAxisCount: 2,
-                        //     children: getLikedArticles(context, resultDataList),
-                        //   ),
-                        // ),
                         ...getLikedWords(),
                       ],
                     ),

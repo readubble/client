@@ -48,10 +48,12 @@ class _HomeScreenState extends State<HomeScreen> {
           Provider.of<UserInfoProvider>(context, listen: false);
       userInfoProvider.setUser(user);
 
-      setState(() {
-        nickname = user.nickname;
-        days = userInfoProvider.getDaysFromSignUp();
-      });
+      if (mounted) {
+        setState(() {
+          nickname = user.nickname;
+          days = userInfoProvider.getDaysFromSignUp();
+        });
+      }
     }
   }
 
@@ -61,27 +63,31 @@ class _HomeScreenState extends State<HomeScreen> {
           await ApiService.fetchArticleList(1); // 1: 인문, 2: 사회, 3: 과학
       List<ArticleInfoModel> list2 = await ApiService.fetchArticleList(2);
       List<ArticleInfoModel> list3 = await ApiService.fetchArticleList(3);
-      setState(() {
-        humArticleList = list1;
-        socArticleList = list2;
-        sciArticleList = list3;
-      });
+      if (mounted) {
+        setState(() {
+          humArticleList = list1;
+          socArticleList = list2;
+          sciArticleList = list3;
+        });
+      }
     }
   }
 
   Future<void> _loadWordQuiz() async {
     if (await isLoggedIn()) {
       List<WordQuizModel> list = await ApiService.getWordQuiz();
-      setState(() {
-        quizDataList = list;
-        isQuizEnabled =
-            list.map((e) => (e.solved == "Y") ? false : true).toList();
-        isCorrect = list
-            .map((e) => (e.answer == e.solvedChoice) ? true : false)
-            .toList();
-        isClicked =
-            list.map((e) => (e.solved == "Y") ? e.solvedChoice : 0).toList();
-      });
+      if (mounted) {
+        setState(() {
+          quizDataList = list;
+          isQuizEnabled =
+              list.map((e) => (e.solved == "Y") ? false : true).toList();
+          isCorrect = list
+              .map((e) => (e.answer == e.solvedChoice) ? true : false)
+              .toList();
+          isClicked =
+              list.map((e) => (e.solved == "Y") ? e.solvedChoice : 0).toList();
+        });
+      }
     }
   }
 

@@ -149,13 +149,9 @@ class _FinishReadingState extends State<FinishReading> {
                       children: [
                         ElevatedButton(
                             onPressed: () {
-                              // Navigator.popUntil(
-                              //     context,
-                              //     ModalRoute.withName(
-                              //         '/article')); // 글 읽기 시작하는 화면으로 돌아감
                               Navigator.popUntil(
                                 context,
-                                ModalRoute.withName('/'),
+                                ModalRoute.withName('/main'),
                               ); // 앞에 쌓인 페이지 다 치우고 글 읽는 화면으로 이동
                               Navigator.pushNamed(
                                 context,
@@ -447,8 +443,7 @@ class _FinishReadingState extends State<FinishReading> {
                         ElevatedButton(
                             onPressed: () {
                               Navigator.popUntil(
-                                  context, ModalRoute.withName('/'));
-                              // context, ModalRoute.withName('/'));
+                                  context, ModalRoute.withName('/main'));
                             },
                             child: Text(
                               "완료",

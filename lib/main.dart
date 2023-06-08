@@ -16,7 +16,6 @@ import 'Providers/gaze_tracker_provider.dart';
 import 'Providers/problem_info_provider.dart';
 import 'Providers/profile_image_provider.dart';
 import 'Providers/quiz_list_provider.dart';
-import 'Providers/user_extand_provider.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -27,7 +26,6 @@ void main() {
       ChangeNotifierProvider(create: (_) => QuizListProvider()),
       ChangeNotifierProvider(create: (_) => ProblemIdProvider()),
       ChangeNotifierProvider(create: (_) => GazeTrackerProvider()),
-      ChangeNotifierProvider(create: (_) => UserExtandProvider())
     ],
     child: MyApp(),
   ));
@@ -62,7 +60,14 @@ class MyApp extends StatelessWidget {
         ),
         splashIconSize: double.infinity,
         centered: true,
-        nextScreen: MainScreen(),
+        nextScreen: Builder(
+          builder: (context) {
+            Future.delayed(Duration.zero, () {
+              Navigator.pushNamed(context, '/main');
+            });
+            return CircularProgressIndicator(); // Return an empty container while navigating to '/main'
+          },
+        ),
         splashTransition: SplashTransition.fadeTransition,
         backgroundColor: myColor.shade100,
       ),
