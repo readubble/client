@@ -1,15 +1,7 @@
 import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../EyetrackingUI/calibration_widget.dart';
-import '../EyetrackingUI/camera_handle_widget.dart';
-import '../EyetrackingUI/gaze_point_widget.dart';
-import '../EyetrackingUI/initialized_fail_dialog_widget.dart';
-import '../EyetrackingUI/initialized_widget.dart';
-import '../EyetrackingUI/initializing_widget.dart';
-import '../EyetrackingUI/loading_circle_widget.dart';
-import '../EyetrackingUI/title_widget.dart';
-import '../EyetrackingUI/tracking_mode_widget.dart';
+import '../Widgets/calibration_widget.dart';
 import '../Models/app_stage.dart';
 import '../Providers/gaze_tracker_provider.dart';
 
@@ -102,6 +94,7 @@ class _EyetrackingState extends State<Eyetracking> {
                           ElevatedButton(
                             onPressed: () {
                               Navigator.pushNamed(context, '/article');
+                              consumer.setStartReading();
                             },
                             child: Text(
                               '다음 페이지로 이동',
@@ -123,11 +116,8 @@ class _EyetrackingState extends State<Eyetracking> {
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
-          if (consumer.state == GazeTrackerState.initializing)
-            const LoadingCircleWidget(),
           if (consumer.state == GazeTrackerState.calibrating)
             const CalibrationWidget(),
-          if (consumer.failedReason != null) const InitializedFailDialog()
         ],
       ),
     );

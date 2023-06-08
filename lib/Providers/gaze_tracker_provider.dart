@@ -1,20 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-// ignore: depend_on_referenced_packages
 import 'package:permission_handler/permission_handler.dart';
 import 'package:bwageul/Models/app_stage.dart';
 import 'package:bwageul/Models/gazetracker_method_string.dart';
 
-//이 클래스는 Gaze Tracker SDK와의 통신 및 상태 관리를 담당하는 Provider입니다.
-// 이 클래스는 Gaze Tracker SDK의 이벤트 및 메소드 호출을 처리하기 위한 _channel.setMethodCallHandler() 메소드를 사용합니다.
-// 각 이벤트 및 메소드 호출은 해당 메소드 내에서 처리되며,
-// 이를 통해 시선 좌표, 초기화 결과, 트래킹 상태, 캘리브레이션 진행 상태 등의 정보를 받아 처리합니다.
-// 또한, GazeTrackerProvider 클래스는 애플리케이션의 다른 부분에서 상태 변경을 알기 위해 notifyListeners()를 호출하고,
-// 해당 상태를 소비하는 위젯들에게 변경 사항을 알립니다.
-// 상태 변경 메소드들은 notifyListeners()를 호출하여 변경 사항을 알리고,
-// 상태에 따라 애플리케이션의 다른 부분에 필요한 작업을 수행합니다.
-// 이 클래스는 Gaze Tracker SDK와의 통신과 애플리케이션의 상태 관리를 담당하며, Gaze Tracker의 초기화, 트래킹 시작/중지, 캘리브레이션 등의 기능을 제공합니다.
 class GazeTrackerProvider with ChangeNotifier {
   dynamic state; // state 변수: 현재 Gaze Tracker 상태를 나타내는 변수입니다.
   static const licenseKey =
@@ -22,7 +12,6 @@ class GazeTrackerProvider with ChangeNotifier {
   final _channel = const MethodChannel(
       'samples.flutter.dev/tracker'); // _channel 변수: Gaze Tracker SDK와의 통신을 위한 MethodChannel입니다.
   String? failedReason; //failedReason 변수: 초기화 또는 실행 실패 시 실패 이유를 저장하는 변수입니다.
-  // gaze X,Y
   // pointX, pointY 변수: Gaze Tracker로부터 받은 시선 좌표를 저장하는 변수입니다.
   var pointX = 0.0;
   var pointY = 0.0;
@@ -41,6 +30,29 @@ class GazeTrackerProvider with ChangeNotifier {
   bool isBlink = false; //isBlink 변수: 사용자의 눈깜빡임 여부를 나타내는 변수입니다.
   bool savedCalibrationData =
       false; //savedCalibrationData 변수: 캘리브레이션 데이터가 저장되었는지 여부를 나타내는 변수입니다.
+
+  double _scrollOffset = 0.0;
+  double get scrollOffset => _scrollOffset;
+  void setScrollOffset(double value) {
+    if (_scrollOffset != value) {
+      _scrollOffset = value;
+      notifyListeners();
+    }
+  }
+
+  bool _startReading = false; // '다음으로 넘어가기' 버튼을 누른 이후에만 gazeCount가 세어지도록 하는 변수
+  bool get startReading => _startReading;
+  void setStartReading() {
+    _startReading = true;
+    notifyListeners();
+  }
+
+  List<List<int>> gazeCount = List.generate(
+      200,
+      (index) =>
+          List<int>.filled(15, 0)); // 15 * 30 2차원 배열. 시선이 머물렀던 횟수를 세서 저장.
+  List<List<int>> topItems = [];
+
   GazeTrackerProvider() {
     state = GazeTrackerState.first;
     setMessageHandler();
@@ -78,11 +90,6 @@ class GazeTrackerProvider with ChangeNotifier {
     isUserOption = isOption;
     notifyListeners();
   }
-
-  // void changeCalibrationType(int cType) {
-  //   calibrationType = cType;
-  //   notifyListeners();
-  // }
 
   void _onAttentions(dynamic result) {
     if (state != GazeTrackerState.calibrating) {
@@ -134,10 +141,24 @@ class GazeTrackerProvider with ChangeNotifier {
   }
 
   void _onGaze(double x, double y) {
-    debugPrint(
-        "gaze x : $x, y: $y, ${DateFormat('HH:mm:ss.SSS').format(DateTime.now())}");
+    if (x < 0) {
+      x = 0;
+    } else if (x >= 450) {
+      x = 449;
+    }
+    if (y < 0) {
+      y = 0;
+    } else if (y >= 6000) {
+      y = 5999;
+    }
     pointX = x;
     pointY = y;
+    pointY += _scrollOffset;
+    debugPrint(
+        "gaze x : $pointX, y: $pointY, timestamp: ${DateFormat('HH:mm:ss.SSS').format(DateTime.now())}");
+    if (_startReading) {
+      gazeCount[(pointY ~/ 30).toInt()][(pointX ~/ 30).toInt()] += 1;
+    }
     notifyListeners();
   }
 
@@ -189,6 +210,31 @@ class GazeTrackerProvider with ChangeNotifier {
 
   void stopTracking() {
     _channel.invokeMethod(MethodString.stopTracking.convertedText);
+
+    List<MapEntry<int, int>> flattenedArray =
+        gazeCount.asMap().entries.expand((entry) {
+      int rowIndex = entry.key; // (x,y)
+      List<int> row = entry.value;
+      return row.asMap().entries.map(
+          (entry) => MapEntry(entry.value, rowIndex * row.length + entry.key));
+    }).toList();
+
+    flattenedArray.sort((a, b) => b.key.compareTo(a.key)); // 내림차순으로 정렬
+
+    List<int> topIndices = flattenedArray
+        .take(20)
+        .map((entry) => entry.value)
+        .toList(); // 최빈값 상위 10개의 인덱스 선택.
+
+    topItems = topIndices.map((index) {
+      int row = index ~/ gazeCount[0].length;
+      int col = index % gazeCount[0].length;
+      return [row, col]; // 선택된 인덱스 반환
+    }).toList();
+
+    for (int i = 0; i < 20; i++) {
+      debugPrint('행 ${topItems[i][0]}, 열 ${topItems[i][1]}');
+    }
   }
 
   void _setTrackerState(GazeTrackerState state) {
