@@ -26,10 +26,8 @@ void main() {
       ChangeNotifierProvider(create: (_) => ProblemInfoProvider()),
       ChangeNotifierProvider(create: (_) => QuizListProvider()),
       ChangeNotifierProvider(create: (_) => ProblemIdProvider()),
-      ChangeNotifierProvider(
-          create: (BuildContext context) => GazeTrackerProvider()),
-      ChangeNotifierProvider(
-          create: (BuildContext context) => UserExtandProvider())
+      ChangeNotifierProvider(create: (_) => GazeTrackerProvider()),
+      ChangeNotifierProvider(create: (_) => UserExtandProvider())
     ],
     child: MyApp(),
   ));
@@ -78,9 +76,7 @@ MaterialColor myColor = const MaterialColor(0xff84B7D9, {
   100: Color(0xff84B7D9), //메인 색상
   200: Color(0xffBAEDCE), //짙은 민트 - 사회
   300: Color(0xffff8361), //짙은 산호색 - 난이도 상, 중, 하
-  // 400: Color(0xffF5CEC7), //옅은 산호색 - 인문
   400: Color(0xFFF3D5CF), //옅은 산호색 - 인문
-  // 400: Color(0xFFFFC0CB), //옅은 산호색
   500: Color(0xff00008B), //네이비 - 버튼 칼라
   600: Color(0xffE7DDEA), //연두 - 과학
   700: Color(0xfff1f1f1), //옅은 회색 - 마이페이지 프로필 블록, 맞춘 개수 물채우기 뒷배경
