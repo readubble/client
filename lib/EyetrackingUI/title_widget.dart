@@ -15,13 +15,10 @@ class TitleWidget extends StatelessWidget {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Title(
-                  color: const Color(0xFF000000),
-                  child: const Text(
-                    '시선 추적 기능',
-                    style: TextStyle(
-                        decoration: TextDecoration.none, fontSize: 24),
-                  )),
+              Text(
+                '시선 추적 기능',
+                style: TextStyle(decoration: TextDecoration.none, fontSize: 24),
+              ),
               Divider(
                 // Divider: 수평 구분선을 나타내는 위젯입니다. 회색 계통의 색상을 사용합니다.
                 color: Colors.grey[800],

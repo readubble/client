@@ -1,3 +1,4 @@
+import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../EyetrackingUI/calibration_widget.dart';
@@ -20,6 +21,8 @@ class Eyetracking extends StatefulWidget {
 }
 
 class _EyetrackingState extends State<Eyetracking> {
+  bool trackingStart = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -27,11 +30,17 @@ class _EyetrackingState extends State<Eyetracking> {
     Provider.of<GazeTrackerProvider>(context, listen: false).handleCamera();
     Provider.of<GazeTrackerProvider>(context, listen: false)
         .initGazeTracker(); // 초기화. state를 initializing으로 바꿈
+    Future.delayed(Duration(seconds: 3), () {
+      setState(() {
+        trackingStart = true;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final consumer = Provider.of<GazeTrackerProvider>(context);
+    consumer.startTracking();
 
     return Scaffold(
       body: Stack(
@@ -42,28 +51,21 @@ class _EyetrackingState extends State<Eyetracking> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          const TitleWidget(),
                           Text(
-                            '다음 페이지로 이동하여 글을 다 읽은 후 하단의 "트래킹 종료" 버튼을 눌러 트래킹을 종료해주세요!',
-                            style: TextStyle(height: 1.5, fontSize: 18),
-                            textAlign: TextAlign.center,
+                            '시선 추적 기능',
+                            style: TextStyle(
+                                decoration: TextDecoration.none, fontSize: 24),
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
-                          TextButton(
-                            onPressed: () {
-                              consumer.startTracking(); // 트래킹 시작
-                              consumer.startCalibration(); // Calibration 시작
-                            },
-                            child: Text(
-                              '보정을 시작합니다.',
-                              style: TextStyle(fontSize: 20),
-                            ),
+                          Divider(
+                            // Divider: 수평 구분선을 나타내는 위젯입니다. 회색 계통의 색상을 사용합니다.
+                            color: Colors.grey[800],
                           ),
                           SizedBox(
                             height: 20,
@@ -76,30 +78,47 @@ class _EyetrackingState extends State<Eyetracking> {
                           SizedBox(
                             height: 20,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ElevatedButton(
+                          !trackingStart
+                              ? Text("시선 추적 준비 중..",
+                                  style: TextStyle(
+                                      fontSize: 20, color: myColor.shade100))
+                              : TextButton(
                                   onPressed: () {
-                                    Navigator.pop(context);
+                                    consumer.startCalibration(); // 트래킹 시작
+                                    // Calibration 시작
                                   },
-                                  child: Container(
-                                    child: Text('이전 화면으로 이동'),
-                                  )),
-                              ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, '/article');
-                                  },
-                                  child: Container(
-                                    child: Text('글 읽기 화면으로 이동'),
-                                  )),
-                            ],
-                          )
+                                  child: Text(
+                                    "클릭하여 보정 시작",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/article');
+                            },
+                            child: Text(
+                              '다음 페이지로 이동',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ]),
                   ),
                 )),
           ),
-          //if (consumer.state == GazeTrackerState.start) const GazePointWidget(),
+          Positioned(
+            top: 30,
+            left: 15,
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_rounded,
+                size: 35,
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
           if (consumer.state == GazeTrackerState.initializing)
             const LoadingCircleWidget(),
           if (consumer.state == GazeTrackerState.calibrating)

@@ -261,7 +261,6 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
               value: 1,
               groupValue: chosenAnswer[pIdx],
               onChanged: (value) {
-                consumer.stopTracking(); // 다음 버튼 누르면 트래킹 멈춤
                 setState(() {
                   chosenAnswer[pIdx] = value! as int;
                   if (chosenAnswer[pIdx] == quizInfoList[pIdx].answer) {
@@ -293,7 +292,6 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
               value: 2,
               groupValue: chosenAnswer[pIdx],
               onChanged: (value) {
-                consumer.stopTracking(); // 다음 버튼 누르면 트래킹 멈춤
                 setState(() {
                   chosenAnswer[pIdx] = value! as int;
                   if (chosenAnswer[pIdx] == quizInfoList[pIdx].answer) {
@@ -325,7 +323,6 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
               value: 3,
               groupValue: chosenAnswer[pIdx],
               onChanged: (value) {
-                consumer.stopTracking(); // 다음 버튼 누르면 트래킹 멈춤
                 setState(() {
                   chosenAnswer[pIdx] = value! as int;
                   if (chosenAnswer[pIdx] == quizInfoList[pIdx].answer) {
@@ -345,637 +342,630 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
   @override
   Widget build(BuildContext context) {
     load_problem_quiz_info();
-    final consumer = Provider.of<GazeTrackerProvider>(context);
-    return GestureDetector(
-      onTap: () {
-        consumer.stopTracking();
-      },
-      child: DraggableScrollableSheet(
-        initialChildSize: 0.1,
-        minChildSize: 0.1,
-        maxChildSize: 0.9,
-        builder: (BuildContext context, ScrollController scrollController) {
-          return Stack(
-            children: [
-              Container(
-                padding: EdgeInsets.fromLTRB(20, 25, 20, 0),
-                decoration: BoxDecoration(
-                    color: Colors.white, // 배경 색상
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        offset: Offset(0, -15),
-                        blurRadius: 10,
-                      )
-                    ] // 둥근 모서리
-                    ),
-                child: PageView(
-                  controller: _pageController,
-                  children: [
-                    SingleChildScrollView(
-                      controller: scrollController,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            "내용 정리하기",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 22),
-                          ),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          Text(
-                            "[문제 1]",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w900, fontSize: 20),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            quizInfoList.isNotEmpty
-                                ? quizInfoList[0].problem
-                                : ' ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                                height: 1.5),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          problemOptionTiles(0), // 문제 1
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  consumer.stopTracking(); // 다음 버튼 누르면 트래킹 멈춤
-                                  _pageController.nextPage(
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: myColor.shade100,
-                                    foregroundColor: Colors.white,
-                                    shadowColor: myColor.shade800,
-                                    elevation: 4),
-                                child: Icon(
-                                  Icons.arrow_forward_rounded,
-                                  size: 25,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ), // 1번 문제
-                    Column(
+    return DraggableScrollableSheet(
+      initialChildSize: 0.1,
+      minChildSize: 0.1,
+      maxChildSize: 0.9,
+      builder: (BuildContext context, ScrollController scrollController) {
+        return Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 25, 20, 0),
+              decoration: BoxDecoration(
+                  color: Colors.white, // 배경 색상
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.5),
+                      offset: Offset(0, -15),
+                      blurRadius: 10,
+                    )
+                  ] // 둥근 모서리
+                  ),
+              child: PageView(
+                controller: _pageController,
+                children: [
+                  SingleChildScrollView(
+                    controller: scrollController,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        SingleChildScrollView(
-                          controller: scrollController,
-                          child: TabBar(
-                            tabs: myTabs,
-                            controller: _tabController,
-                          ),
+                        SizedBox(
+                          height: 20,
                         ),
-                        Expanded(
-                          child:
-                              TabBarView(controller: _tabController, children: [
-                            SingleChildScrollView(
-                              controller: scrollController,
-                              child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '이 글에서 키워드라고 생각하는 단어를 적어주세요! (최대 3개)',
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          height: 1.5,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        textAlign: TextAlign.center,
+                        Text(
+                          "내용 정리하기",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 22),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                          "[문제 1]",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900, fontSize: 20),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          quizInfoList.isNotEmpty
+                              ? quizInfoList[0].problem
+                              : ' ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              height: 1.5),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        problemOptionTiles(0), // 문제 1
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                _pageController.nextPage(
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: myColor.shade100,
+                                  foregroundColor: Colors.white,
+                                  shadowColor: myColor.shade800,
+                                  elevation: 4),
+                              child: Icon(
+                                Icons.arrow_forward_rounded,
+                                size: 25,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ), // 1번 문제
+                  Column(
+                    children: [
+                      SingleChildScrollView(
+                        controller: scrollController,
+                        child: TabBar(
+                          tabs: myTabs,
+                          controller: _tabController,
+                        ),
+                      ),
+                      Expanded(
+                        child:
+                            TabBarView(controller: _tabController, children: [
+                          SingleChildScrollView(
+                            controller: scrollController,
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '이 글에서 키워드라고 생각하는 단어를 적어주세요! (최대 3개)',
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        height: 1.5,
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                      SizedBox(
-                                        height: 20,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
+                                      child: Column(
+                                        children:
+                                            List.generate(_rowsCount, (index) {
+                                          final isLastRow =
+                                              (index == _rowsCount - 1);
+                                          return Row(
+                                            children: [
+                                              Text(
+                                                (index + 1).toString(),
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w900,
+                                                    fontSize: 25),
+                                              ),
+                                              SizedBox(
+                                                width: 25,
+                                              ),
+                                              Expanded(
+                                                child: TextFormField(
+                                                  textAlign: TextAlign.center,
+                                                  controller:
+                                                      _textEditingControllers[
+                                                          index],
+                                                  decoration: InputDecoration(
+                                                    hintText: '키워드 입력',
+                                                    border:
+                                                        UnderlineInputBorder(),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              if (isLastRow)
+                                                IconButton(
+                                                  onPressed: _addRow,
+                                                  icon: Icon(
+                                                    Icons.add,
+                                                    size: 25,
+                                                  ),
+                                                ),
+                                              if (!isLastRow)
+                                                IconButton(
+                                                  onPressed: () =>
+                                                      _removeRow(index),
+                                                  icon: Icon(
+                                                    Icons.remove,
+                                                    size: 25,
+                                                  ),
+                                                ),
+                                            ],
+                                          );
+                                        }).toList().cast<Widget>(),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0),
-                                        child: Column(
-                                          children:
-                                              List.generate(_rowsCount, (index) {
-                                            final isLastRow =
-                                                (index == _rowsCount - 1);
-                                            return Row(
-                                              children: [
-                                                Text(
-                                                  (index + 1).toString(),
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.w900,
-                                                      fontSize: 25),
-                                                ),
-                                                SizedBox(
-                                                  width: 25,
-                                                ),
-                                                Expanded(
-                                                  child: TextFormField(
-                                                    textAlign: TextAlign.center,
-                                                    controller:
-                                                        _textEditingControllers[
-                                                            index],
-                                                    decoration: InputDecoration(
-                                                      hintText: '키워드 입력',
-                                                      border:
-                                                          UnderlineInputBorder(),
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                if (isLastRow)
-                                                  IconButton(
-                                                    onPressed: _addRow,
-                                                    icon: Icon(
-                                                      Icons.add,
-                                                      size: 25,
-                                                    ),
-                                                  ),
-                                                if (!isLastRow)
-                                                  IconButton(
-                                                    onPressed: () =>
-                                                        _removeRow(index),
-                                                    icon: Icon(
-                                                      Icons.remove,
-                                                      size: 25,
-                                                    ),
-                                                  ),
-                                              ],
+                                    ),
+                                    SizedBox(
+                                      height: 50,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            _pageController.previousPage(
+                                              duration:
+                                                  Duration(milliseconds: 300),
+                                              curve: Curves.easeInOut,
                                             );
-                                          }).toList().cast<Widget>(),
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: myColor.shade800,
+                                              foregroundColor: Colors.white,
+                                              shadowColor: myColor.shade800,
+                                              elevation: 4),
+                                          child: Icon(
+                                            Icons.arrow_back_rounded,
+                                            size: 25,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: 50,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              _pageController.previousPage(
-                                                duration:
-                                                    Duration(milliseconds: 300),
-                                                curve: Curves.easeInOut,
-                                              );
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor: myColor.shade800,
-                                                foregroundColor: Colors.white,
-                                                shadowColor: myColor.shade800,
-                                                elevation: 4),
-                                            child: Icon(
-                                              Icons.arrow_back_rounded,
-                                              size: 25,
-                                            ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            final nextIndex =
+                                                _tabController.index + 1;
+                                            if (nextIndex <
+                                                _tabController.length) {
+                                              _tabController
+                                                  .animateTo(nextIndex);
+                                            }
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: myColor.shade100,
+                                              foregroundColor: Colors.white,
+                                              shadowColor: myColor.shade800,
+                                              elevation: 4),
+                                          child: Icon(
+                                            Icons.arrow_forward_rounded,
+                                            size: 25,
                                           ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              final nextIndex =
-                                                  _tabController.index + 1;
-                                              if (nextIndex <
-                                                  _tabController.length) {
-                                                _tabController
-                                                    .animateTo(nextIndex);
-                                              }
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor: myColor.shade100,
-                                                foregroundColor: Colors.white,
-                                                shadowColor: myColor.shade800,
-                                                elevation: 4),
-                                            child: Icon(
-                                              Icons.arrow_forward_rounded,
-                                              size: 25,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ), // 키워드 탭
-                            SingleChildScrollView(
-                              controller: scrollController,
-                              child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '주제문이라고 생각하는 문장들을 선택해주세요.',
+                            ),
+                          ), // 키워드 탭
+                          SingleChildScrollView(
+                            controller: scrollController,
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '주제문이라고 생각하는 문장들을 선택해주세요.',
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Column(children: getElevatedButtonList()),
+                                    SizedBox(
+                                      height: 50,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            final previousIndex =
+                                                _tabController.index - 1;
+                                            if (previousIndex >= 0) {
+                                              _tabController
+                                                  .animateTo(previousIndex);
+                                            }
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: myColor.shade800,
+                                              foregroundColor: Colors.white,
+                                              shadowColor: myColor.shade800,
+                                              elevation: 4),
+                                          child: Icon(
+                                            Icons.arrow_back_rounded,
+                                            size: 25,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            final nextIndex =
+                                                _tabController.index + 1;
+                                            if (nextIndex <
+                                                _tabController.length) {
+                                              _tabController
+                                                  .animateTo(nextIndex);
+                                            }
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: myColor.shade100,
+                                              foregroundColor: Colors.white,
+                                              shadowColor: myColor.shade800,
+                                              elevation: 4),
+                                          child: Icon(
+                                            Icons.arrow_forward_rounded,
+                                            size: 25,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ), // 주제문 탭
+
+                          SingleChildScrollView(
+                            controller: scrollController,
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    ExpansionTile(
+                                      initiallyExpanded: true,
+                                      title: Text(
+                                        '$nickname님이 선택한 주제문',
                                         style: TextStyle(
                                           fontSize: 17,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Column(children: getElevatedButtonList()),
-                                      SizedBox(
-                                        height: 50,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              final previousIndex =
-                                                  _tabController.index - 1;
-                                              if (previousIndex >= 0) {
-                                                _tabController
-                                                    .animateTo(previousIndex);
-                                              }
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor: myColor.shade800,
-                                                foregroundColor: Colors.white,
-                                                shadowColor: myColor.shade800,
-                                                elevation: 4),
-                                            child: Icon(
-                                              Icons.arrow_back_rounded,
-                                              size: 25,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              final nextIndex =
-                                                  _tabController.index + 1;
-                                              if (nextIndex <
-                                                  _tabController.length) {
-                                                _tabController
-                                                    .animateTo(nextIndex);
-                                              }
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor: myColor.shade100,
-                                                foregroundColor: Colors.white,
-                                                shadowColor: myColor.shade800,
-                                                elevation: 4),
-                                            child: Icon(
-                                              Icons.arrow_forward_rounded,
-                                              size: 25,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ), // 주제문 탭
-
-                            SingleChildScrollView(
-                              controller: scrollController,
-                              child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      ExpansionTile(
-                                        initiallyExpanded: true,
-                                        title: Text(
-                                          '$nickname님이 선택한 주제문',
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.black,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        children: getTopicSentences(),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        '위 주제문을 참고해보세요!',
-                                        style: TextStyle(
-                                          fontSize: 16,
                                           fontWeight: FontWeight.w600,
                                           color: Colors.black,
                                         ),
                                         textAlign: TextAlign.center,
                                       ),
-                                      SizedBox(
-                                        height: 15,
+                                      children: getTopicSentences(),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      '위 주제문을 참고해보세요!',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black,
                                       ),
-                                      TextFormField(
-                                        controller: _summaryTextEditingController,
-                                        maxLines: 10,
-                                        style: TextStyle(height: 1.5),
-                                        decoration: InputDecoration(
-                                          hintText: '요약문을 작성해주세요.',
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
-                                          ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    TextFormField(
+                                      controller: _summaryTextEditingController,
+                                      maxLines: 10,
+                                      style: TextStyle(height: 1.5),
+                                      decoration: InputDecoration(
+                                        hintText: '요약문을 작성해주세요.',
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 50,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              final previousIndex =
-                                                  _tabController.index - 1;
-                                              if (previousIndex >= 0) {
-                                                _tabController
-                                                    .animateTo(previousIndex);
-                                              }
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor: myColor.shade800,
-                                                foregroundColor: Colors.white,
-                                                shadowColor: myColor.shade800,
-                                                elevation: 4),
-                                            child: Icon(
-                                              Icons.arrow_back_rounded,
-                                              size: 25,
-                                            ),
+                                    ),
+                                    SizedBox(
+                                      height: 50,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            final previousIndex =
+                                                _tabController.index - 1;
+                                            if (previousIndex >= 0) {
+                                              _tabController
+                                                  .animateTo(previousIndex);
+                                            }
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: myColor.shade800,
+                                              foregroundColor: Colors.white,
+                                              shadowColor: myColor.shade800,
+                                              elevation: 4),
+                                          child: Icon(
+                                            Icons.arrow_back_rounded,
+                                            size: 25,
                                           ),
-                                          SizedBox(
-                                            width: 10,
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            _pageController.nextPage(
+                                              duration:
+                                                  Duration(milliseconds: 300),
+                                              curve: Curves.easeInOut,
+                                            );
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: myColor.shade100,
+                                              foregroundColor: Colors.white,
+                                              shadowColor: myColor.shade800,
+                                              elevation: 4),
+                                          child: Icon(
+                                            Icons.arrow_forward_rounded,
+                                            size: 25,
                                           ),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              _pageController.nextPage(
-                                                duration:
-                                                    Duration(milliseconds: 300),
-                                                curve: Curves.easeInOut,
-                                              );
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor: myColor.shade100,
-                                                foregroundColor: Colors.white,
-                                                shadowColor: myColor.shade800,
-                                                elevation: 4),
-                                            child: Icon(
-                                              Icons.arrow_forward_rounded,
-                                              size: 25,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ), // 요약문 탭
-                          ]),
+                            ),
+                          ), // 요약문 탭
+                        ]),
+                      )
+                    ],
+                  ), // 두번째 페이지(키워드,주제문,요약문)
+                  SingleChildScrollView(
+                    //2번 문제
+                    controller: scrollController,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "[문제 2]",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900, fontSize: 20),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          quizInfoList.isNotEmpty
+                              ? quizInfoList[1].problem
+                              : ' ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              height: 1.5),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        problemOptionTiles(1), // 문제 2
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                _pageController.previousPage(
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: myColor.shade800,
+                                  foregroundColor: Colors.white,
+                                  shadowColor: myColor.shade800,
+                                  elevation: 4),
+                              child: Icon(
+                                Icons.arrow_back_rounded,
+                                size: 25,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                _pageController.nextPage(
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: myColor.shade100,
+                                  foregroundColor: Colors.white,
+                                  shadowColor: myColor.shade800,
+                                  elevation: 4),
+                              child: Icon(
+                                Icons.arrow_forward_rounded,
+                                size: 25,
+                              ),
+                            ),
+                          ],
                         )
                       ],
-                    ), // 두번째 페이지(키워드,주제문,요약문)
-                    SingleChildScrollView(
-                      //2번 문제
-                      controller: scrollController,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            "[문제 2]",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w900, fontSize: 20),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            quizInfoList.isNotEmpty
-                                ? quizInfoList[1].problem
-                                : ' ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                                height: 1.5),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          problemOptionTiles(1), // 문제 2
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  _pageController.previousPage(
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: myColor.shade800,
-                                    foregroundColor: Colors.white,
-                                    shadowColor: myColor.shade800,
-                                    elevation: 4),
-                                child: Icon(
-                                  Icons.arrow_back_rounded,
-                                  size: 25,
-                                ),
+                    ),
+                  ), // 2번 문제
+                  SingleChildScrollView(
+                    //3번 문제
+                    controller: scrollController,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "[문제 3]",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900, fontSize: 20),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          quizInfoList.isNotEmpty
+                              ? quizInfoList[2].problem
+                              : ' ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              height: 1.5),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        problemOptionTiles(2), // 문제 3
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                _pageController.previousPage(
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: myColor.shade800,
+                                  foregroundColor: Colors.white,
+                                  shadowColor: myColor.shade800,
+                                  elevation: 4),
+                              child: Icon(
+                                Icons.arrow_back_rounded,
+                                size: 25,
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  _pageController.nextPage(
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: myColor.shade100,
-                                    foregroundColor: Colors.white,
-                                    shadowColor: myColor.shade800,
-                                    elevation: 4),
-                                child: Icon(
-                                  Icons.arrow_forward_rounded,
-                                  size: 25,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ), // 2번 문제
-                    SingleChildScrollView(
-                      //3번 문제
-                      controller: scrollController,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            "[문제 3]",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w900, fontSize: 20),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            quizInfoList.isNotEmpty
-                                ? quizInfoList[2].problem
-                                : ' ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                                height: 1.5),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          problemOptionTiles(2), // 문제 3
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  _pageController.previousPage(
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: myColor.shade800,
-                                    foregroundColor: Colors.white,
-                                    shadowColor: myColor.shade800,
-                                    elevation: 4),
-                                child: Icon(
-                                  Icons.arrow_back_rounded,
-                                  size: 25,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              ElevatedButton(
-                                  onPressed: () async {
-                                    if (_textEditingControllers.isEmpty ||
-                                        _summaryTextEditingController.text ==
-                                            "" ||
-                                        isSelected.indexOf(true) == -1 ||
-                                        chosenAnswer.indexOf(0) != -1) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text("입력하지 않은 값이 있습니다."),
-                                        duration: Duration(seconds: 2),
-                                      ));
-                                    } else {
-                                      await fetchResult(); // 이 시트에서 쓴 내용 정리해서 서버에 전송.
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            ElevatedButton(
+                                onPressed: () async {
+                                  if (_textEditingControllers.isEmpty ||
+                                      _summaryTextEditingController.text ==
+                                          "" ||
+                                      isSelected.indexOf(true) == -1 ||
+                                      chosenAnswer.indexOf(0) != -1) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text("입력하지 않은 값이 있습니다."),
+                                      duration: Duration(seconds: 2),
+                                    ));
+                                  } else {
+                                    await fetchResult(); // 이 시트에서 쓴 내용 정리해서 서버에 전송.
 
-                                      List<String> keySentences = [];
-                                      for (int i = 0;
-                                          i < isSelected.length;
-                                          i++) {
-                                        if (isSelected[i] == true) {
-                                          keySentences.add(_articleSentences[i]);
-                                        }
+                                    List<String> keySentences = [];
+                                    for (int i = 0;
+                                        i < isSelected.length;
+                                        i++) {
+                                      if (isSelected[i] == true) {
+                                        keySentences.add(_articleSentences[i]);
                                       }
-                                      final problemIdProvider =
-                                          Provider.of<ProblemIdProvider>(context,
-                                              listen: false);
-                                      final problemId = problemIdProvider
-                                          .problemId; // 프로바이더로 pid 받아옴. 현재 읽고 있는 글의 pid를 다시 풀기 버튼에 대비하여 결과 화면에 보내줌.
-                                      Navigator.of(context)
-                                          .pushNamed('/finish', arguments: {
-                                        'ai_summarization': aiSummarization,
-                                        'title': problemTitle,
-                                        'level': level,
-                                        'keyword_list': _textEditingControllers
-                                            .map((e) => e.text)
-                                            .toList(),
-                                        'key_sentences': keySentences,
-                                        'my_summarization':
-                                            _summaryTextEditingController.text,
-                                        'save_fl': "N",
-                                        'problem_id': problemId,
-                                      }); // 바로 다음 페이지니까 서버 거치지 않고 바로 인자로 넘기기
                                     }
-                                  },
-                                  child: Text(
-                                    "완료",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600),
-                                  )),
-                            ],
-                          )
-                        ],
-                      ),
-                    ), // 3번 문제
-                  ],
-                ),
+                                    final problemIdProvider =
+                                        Provider.of<ProblemIdProvider>(context,
+                                            listen: false);
+                                    final problemId = problemIdProvider
+                                        .problemId; // 프로바이더로 pid 받아옴. 현재 읽고 있는 글의 pid를 다시 풀기 버튼에 대비하여 결과 화면에 보내줌.
+                                    Navigator.of(context)
+                                        .pushNamed('/finish', arguments: {
+                                      'ai_summarization': aiSummarization,
+                                      'title': problemTitle,
+                                      'level': level,
+                                      'keyword_list': _textEditingControllers
+                                          .map((e) => e.text)
+                                          .toList(),
+                                      'key_sentences': keySentences,
+                                      'my_summarization':
+                                          _summaryTextEditingController.text,
+                                      'save_fl': "N",
+                                      'problem_id': problemId,
+                                    }); // 바로 다음 페이지니까 서버 거치지 않고 바로 인자로 넘기기
+                                  }
+                                },
+                                child: Text(
+                                  "완료",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600),
+                                )),
+                          ],
+                        )
+                      ],
+                    ),
+                  ), // 3번 문제
+                ],
               ),
-              Positioned(
-                  //가로줄
-                  top: 10,
-                  left: 0,
-                  right: 0,
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 5,
-                        decoration: BoxDecoration(
-                            color: myColor.shade800,
-                            borderRadius: BorderRadius.circular(20)),
-                      ),
-                    ],
-                  )),
-            ],
-          );
-        },
-      ),
+            ),
+            Positioned(
+                //가로줄
+                top: 10,
+                left: 0,
+                right: 0,
+                child: Column(
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 5,
+                      decoration: BoxDecoration(
+                          color: myColor.shade800,
+                          borderRadius: BorderRadius.circular(20)),
+                    ),
+                  ],
+                )),
+          ],
+        );
+      },
     );
   }
 }

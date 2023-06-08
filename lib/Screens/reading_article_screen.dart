@@ -292,9 +292,13 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                         listen: false)
                                     .deinitGazeTracker();
                               },
-                              child: Text("트래킹 종료")),
+                              child: Text(
+                                "트래킹 종료",
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                              )),
                           SizedBox(
-                            height: 40,
+                            height: 50,
                           ),
                         ],
                       ),

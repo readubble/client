@@ -25,7 +25,7 @@ class CalibrationWidget extends StatelessWidget {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const <Widget>[
-                Text('원을 보세요!',
+                Text('고개의 각도를 고정한 채 원을 보세요!',
                     style: TextStyle(
                         fontSize: 16,
                         color: Colors.white,
@@ -35,14 +35,9 @@ class CalibrationWidget extends StatelessWidget {
                 ),
               ],
             )),
-            // Positioned: 자식 위젯을 위치시키기 위한 위젯입니다.
-            // consumer.caliX와 consumer.caliY 값을 사용하여 위치를 설정합니다.
-            // 이 값들은 GazeTrackerProvider에서 제공되는 눈동자의 위치 정보입니다.
             Positioned(
               left: consumer.caliX - 24,
               top: consumer.caliY - 24,
-              // CircularPercentIndicator: 원형의 퍼센트 인디케이터를 생성하는 위젯입니다.
-              // radius로 반지름 크기를 설정하고, lineWidth로 퍼센트 인디케이터의 두께를 설정합니다.
               // animation을 비활성화하고, percent에 consumer.progress 값을 설정하여 퍼센트를 지정합니다.
               // center에는 현재 퍼센트 값을 표시하는 텍스트를 설정합니다.
               child: CircularPercentIndicator(
