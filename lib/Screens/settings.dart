@@ -53,7 +53,7 @@ class Settings extends StatelessWidget {
                         duration: Duration(seconds: 3),
                       ),
                     );
-                    Navigator.pushNamed(context, '/'); // 로그아웃하면 메인 화면으로 이동
+                    Navigator.pushNamed(context, '/main'); // 로그아웃하면 메인 화면으로 이동
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(

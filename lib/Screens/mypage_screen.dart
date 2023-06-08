@@ -19,6 +19,7 @@ class MyPageScreen extends StatefulWidget {
 class _MyPageScreenState extends State<MyPageScreen> {
   int correctCount = 0;
   List<dynamic> countByDifficulty = [];
+
   Future<void> _getImageFromGallery() async {
     final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
@@ -35,12 +36,16 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
   Future<void> readArticleCount() async {
     countByDifficulty = await ApiService.getSolvedProblemCount();
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   } // 읽은 글 개수
 
   Future<void> getCorrectWordCount() async {
     correctCount = await ApiService.getWordQuizResult();
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   } // 어휘 퀴즈 개수
 
   @override

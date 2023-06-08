@@ -28,8 +28,8 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
         // searchResults.addAll(result); // result가 단일 객체인 경우
         searchResults = result;
         print("searchResults: ${searchResults}"); // result 출력
-        likes = searchResults.map((e) => (e.saveFl=="Y")?true:false).toList();
-        //likes = List.filled(searchResults.length, false);
+        likes =
+            searchResults.map((e) => (e.saveFl == "Y") ? true : false).toList();
         for (int i = 0; i < searchResults.length; i++) {
           print('${searchResults[i].wordNm}  ${searchResults[i].wordMean}');
         }
@@ -83,13 +83,12 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
                   onPressed: () async {
                     setState(() {
                       likes[i] = !likes[i];
-
                     });
                     print(likes[i]);
                     await ApiService.wordBookmark(
-                        searchResults[i].targetCode,
-                        searchResults[i].wordNm,
-                        searchResults[i].wordMean,
+                      searchResults[i].targetCode,
+                      searchResults[i].wordNm,
+                      searchResults[i].wordMean,
                     );
                   },
                   icon: likes[i]
@@ -114,7 +113,7 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
                 Expanded(
                   child: Text(
                     searchResults[i].wordMean, // 결과에서 뜻 가져오기
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, height: 1.5),
                   ),
                 ),
               ],
@@ -122,7 +121,7 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
           ],
         ),
       );
-      
+
       buttonList.add(wordInfo);
     }
     return buttonList;
