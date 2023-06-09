@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bwageul/Services/api_services.dart';
+import '../Providers/problem_id_provider.dart';
 import '../Providers/user_info_provider.dart';
 import '../main.dart';
 
@@ -149,6 +150,10 @@ class _FinishReadingState extends State<FinishReading> {
                       children: [
                         ElevatedButton(
                             onPressed: () {
+                              Provider.of<ProblemIdProvider>(context,
+                                      listen: false)
+                                  .setProblemId(
+                                      problemId); // 결과 화면에서 다시 풀기 버튼을 누를 때도 problemId가 필요하므로 set.
                               Navigator.popUntil(
                                 context,
                                 ModalRoute.withName('/main'),
@@ -156,7 +161,7 @@ class _FinishReadingState extends State<FinishReading> {
                               Navigator.pushNamed(
                                 context,
                                 '/article',
-                                arguments: problemId, // 전달할 int 인자
+                                // arguments: problemId, // 전달할 int 인자
                               );
                             },
                             child: Row(
