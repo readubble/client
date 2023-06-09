@@ -56,7 +56,6 @@ class _LikesScreenState extends State<LikesScreen>
   }
 
   Future<void> loadData(int no) async {
-    // 북마크된 글 정보 불러오기
     final data = await ApiService.getProblemBookmarkList(no);
     if (mounted) {
       setState(() {
@@ -64,10 +63,9 @@ class _LikesScreenState extends State<LikesScreen>
         articleCount = resultDataList.length;
       });
     }
-  }
+  } // 북마크된 글 정보 불러오기
 
   Future<void> loadWord() async {
-    // 북마크된 단어 정보 불러오기
     final data = await ApiService.getWordBookmarkList();
     if (mounted) {
       setState(() {
@@ -76,7 +74,7 @@ class _LikesScreenState extends State<LikesScreen>
         likes = data.map((e) => true).toList();
       });
     }
-  }
+  } // 북마크된 단어 정보 불러오기
 
   List<Widget> getLikedWords() {
     List<Widget> words = [];
@@ -163,7 +161,7 @@ class _LikesScreenState extends State<LikesScreen>
     }
 
     return words;
-  }
+  } // 북마크된 단어 리스트 가져오기
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +223,6 @@ class _LikesScreenState extends State<LikesScreen>
                               ],
                             ),
                           ), // 인문 버튼
-                          // psychology_rounded
                           GestureDetector(
                             onTap: () {
                               setState(() {
@@ -265,7 +262,7 @@ class _LikesScreenState extends State<LikesScreen>
                                 )
                               ],
                             ),
-                          ), //사회 버튼
+                          ), // 사회 버튼
                           GestureDetector(
                             onTap: () {
                               setState(() {
@@ -303,7 +300,7 @@ class _LikesScreenState extends State<LikesScreen>
                                 )
                               ],
                             ),
-                          ), //과학 버튼
+                          ), // 과학 버튼
                         ],
                       ),
                       const SizedBox(
@@ -336,13 +333,14 @@ class _LikesScreenState extends State<LikesScreen>
                       ),
                       Expanded(
                         child: GridView.count(
-                          shrinkWrap: true,
-                          primary: false,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          crossAxisCount: 2,
-                          children: getLikedArticles(context, resultDataList),
-                        ),
+                            shrinkWrap: true,
+                            primary: false,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            crossAxisCount: 2,
+                            childAspectRatio: 3 / 4,
+                            children:
+                                getLikedArticles(context, resultDataList)),
                       ),
                     ],
                   ),
@@ -383,28 +381,26 @@ List<Widget> getLikedArticles(
   List<Widget> articles = [];
 
   for (int i = 0; i < resultDataList.length; i++) {
-    articles.add(Container(
-      child: GestureDetector(
-        onTap: () async {
-          ReadingResultModel model =
-              await ApiService.articleReadingResult(resultDataList[i].id);
-          Navigator.of(context).pushNamed('/finish', arguments: {
-            'ai_summarization': model.aiSummarization,
-            'title': resultDataList[i].atcTitle,
-            'level': resultDataList[i].difficulty,
-            'keyword_list': model.keywords,
-            'key_sentences': model.sentence,
-            'my_summarization': model.summarization,
-            'save_fl': model.saveFl,
-            'problem_id': model.problemId,
-          }); // 문제 풀이 결과 정보를 넘겨줘야 finishReading 스크린에 그릴 수 있음.
-        },
-        child: unlockedArticleTile(
-            resultDataList[i].atcPhotoIn,
-            resultDataList[i].genre,
-            resultDataList[i].difficulty,
-            resultDataList[i].atcTitle),
-      ),
+    articles.add(GestureDetector(
+      onTap: () async {
+        ReadingResultModel model =
+            await ApiService.articleReadingResult(resultDataList[i].id);
+        Navigator.of(context).pushNamed('/finish', arguments: {
+          'ai_summarization': model.aiSummarization,
+          'title': resultDataList[i].atcTitle,
+          'level': resultDataList[i].difficulty,
+          'keyword_list': model.keywords,
+          'key_sentences': model.sentence,
+          'my_summarization': model.summarization,
+          'save_fl': model.saveFl,
+          'problem_id': model.problemId,
+        }); // 문제 풀이 결과 정보를 넘겨줘야 finishReading 스크린에 그릴 수 있음.
+      },
+      child: unlockedArticleTile(
+          resultDataList[i].atcPhotoIn,
+          resultDataList[i].genre,
+          resultDataList[i].difficulty,
+          resultDataList[i].atcTitle),
     ));
   }
   return articles;

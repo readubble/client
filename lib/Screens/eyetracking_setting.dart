@@ -52,7 +52,7 @@ class _EyetrackingState extends State<Eyetracking> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            '시선 추적 기능',
+                            '시선 추적 설정',
                             style: TextStyle(
                                 decoration: TextDecoration.none, fontSize: 24),
                           ),

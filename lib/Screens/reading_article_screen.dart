@@ -68,7 +68,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
     }
     Provider.of<GazeTrackerProvider>(context, listen: false)
         .setScrollOffset(_scrollController.offset);
-    print('offset = ${_scrollController.offset}');
+    // print('offset = ${_scrollController.offset}');
   }
 
   Future<void> _loadArticleContents() async {
@@ -113,7 +113,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
     double maxScrollExtent = 0.0;
     if (_scrollController.hasClients) {
       maxScrollExtent = _scrollController.position.maxScrollExtent;
-      print('maxScrollExtent : $maxScrollExtent');
+      // print('maxScrollExtent : $maxScrollExtent');
     }
 
     return Scaffold(
@@ -185,97 +185,101 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                             height: 2,
                             color: Colors.black,
                           ), // 가로줄
-                          Row(
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pushNamed('/dictionary');
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.search,
-                                      size: 25,
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pushNamed('/dictionary');
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.search,
+                                        size: 25,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        "국어사전",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    fixedSize: Size(110, 40),
+                                    backgroundColor: myColor.shade700,
+                                    foregroundColor: Colors.black,
+                                    primary: Colors.black.withOpacity(0.5),
+                                    elevation: 4,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      "국어사전",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
+                                  ),
+                                ), // 국어사전 버튼
+                                SizedBox(
+                                  width: 10,
                                 ),
-                                style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(110, 40),
-                                  backgroundColor: myColor.shade700,
-                                  foregroundColor: Colors.black,
-                                  primary: Colors.black.withOpacity(0.5),
-                                  elevation: 4,
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  shape: RoundedRectangleBorder(
+                                Container(
+                                  height: 40,
+                                  width: 160,
+                                  decoration: BoxDecoration(
+                                    color: myColor.shade700,
                                     borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        offset: Offset(0, 3),
+                                        blurRadius: 2,
+                                        color: myColor.shade800,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            if (baseFontSize > 15)
+                                              baseFontSize -= 1;
+                                          });
+                                        },
+                                        icon: Icon(
+                                          Icons.text_decrease_rounded,
+                                          size: 25,
+                                        ),
+                                      ),
+                                      Text(
+                                        "글자 크기",
+                                        style: TextStyle(
+                                          fontFamily: 'lottedream',
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            if (baseFontSize < 30)
+                                              baseFontSize += 1;
+                                          });
+                                        },
+                                        icon: Icon(
+                                          Icons.text_increase_rounded,
+                                          size: 25,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ), // 국어사전 버튼
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Container(
-                                height: 40,
-                                width: 160,
-                                decoration: BoxDecoration(
-                                  color: myColor.shade700,
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      offset: Offset(0, 3),
-                                      blurRadius: 2,
-                                      color: myColor.shade800,
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          if (baseFontSize > 15)
-                                            baseFontSize -= 1;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        Icons.text_decrease_rounded,
-                                        size: 25,
-                                      ),
-                                    ),
-                                    Text(
-                                      "글자 크기",
-                                      style: TextStyle(
-                                        fontFamily: 'lottedream',
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          if (baseFontSize < 30)
-                                            baseFontSize += 1;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        Icons.text_increase_rounded,
-                                        size: 25,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           SizedBox(
                             height: 20,

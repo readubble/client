@@ -586,6 +586,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                       style: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.w600,
+                                        height: 1.5,
                                       ),
                                       textAlign: TextAlign.center,
                                     ),

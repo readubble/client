@@ -59,41 +59,43 @@ Widget unlockedArticleTile(
             borderRadius: BorderRadius.circular(15)),
       ),
     ),
-    SizedBox(
+    Container(
       width: 180,
       height: 240,
+      alignment: Alignment.bottomRight,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(subCategory, style: const TextStyle(color: Colors.white)),
-            RichText(
-                text: TextSpan(children: [
-              TextSpan(
-                  text: '난이도 ', style: const TextStyle(color: Colors.white)),
-              TextSpan(
-                  text: level,
-                  style: TextStyle(
-                      color: myColor.shade100, fontWeight: FontWeight.w600))
-            ])),
-            const SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              width: 160,
-              child: Text(
-                title,
-                textAlign: TextAlign.end,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    height: 1.4),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(subCategory, style: const TextStyle(color: Colors.white)),
+              RichText(
+                  text: TextSpan(children: [
+                TextSpan(
+                    text: '난이도 ', style: const TextStyle(color: Colors.white)),
+                TextSpan(
+                    text: level,
+                    style: TextStyle(
+                        color: myColor.shade100, fontWeight: FontWeight.w600))
+              ])),
+              const SizedBox(
+                height: 10,
               ),
-            ),
-          ],
+              SizedBox(
+                width: 160,
+                child: Text(
+                  title,
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      height: 1.4),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     ),

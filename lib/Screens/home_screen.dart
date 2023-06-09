@@ -33,19 +33,21 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _loadUserInfo();
-    _loadArticleList();
-    _loadWordQuiz();
+    Future.microtask(() {
+      _loadUserInfo(); // initState 메서드에서는 context를 찾을 수 없는 오류 -> 현재 이벤트 루프의 작업이 완료된 후에 해당 메서드들이 실행되도록
+      _loadArticleList();
+      _loadWordQuiz();
+    });
   }
 
   Future<void> _loadUserInfo() async {
     String? userId = await getUserId(); // 사용자 ID
     print('load user info -> userId : $userId');
     if (userId != null) {
-      // 로그인된 경우
       var user = await ApiService.getUserInfoById(userId);
-      final userInfoProvider =
-          Provider.of<UserInfoProvider>(context, listen: false);
+      final userInfoProvider = Provider.of<UserInfoProvider>(context,
+          listen:
+              false); // context를 사용해서 프로바이더를 찾는데, context가 없음 -> initState에서 microtask 사용
       userInfoProvider.setUser(user);
 
       if (mounted) {
@@ -98,10 +100,9 @@ class _HomeScreenState extends State<HomeScreen> {
           buildEachQuiz(quizDataList[i], i)); // Enable 상태를 위한 인덱스 값도 매개변수로 넘겨줌.
     }
     return quizList;
-  } // 3개 퀴즈(Widget)을 불러오기
+  } // 어휘 퀴즈 3개(Widget)을 불러오기
 
   Widget buildEachQuiz(WordQuizModel model, int quizIdx) {
-    // 퀴즈 만드는 함수: 퀴즈제목, 보기1, 보기2
     return Stack(children: [
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -115,6 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
+                  height: 1.5,
                   shadows: [
                     Shadow(
                         color: Colors.black.withOpacity(0.3),
@@ -213,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               )
     ]);
-  }
+  } // 어휘 퀴즈 만드는 함수: 퀴즈제목, 보기1, 보기2
 
   void submitQuizResult(WordQuizModel model, int choice, int quizIdx) async {
     // 버튼 둘 중 하나가 클릭될 때마다
@@ -235,9 +237,8 @@ class _HomeScreenState extends State<HomeScreen> {
         isCorrect[quizIdx] = false;
       });
     }
-    await ApiService.sendWordQuiz(
-        model.quizId, choice, quizResult); // 서버에 어휘 퀴즈 결과 전송
-  }
+    await ApiService.sendWordQuiz(model.quizId, choice, quizResult);
+  } // 서버에 어휘 퀴즈 결과 전송
 
   @override
   Widget build(BuildContext context) {

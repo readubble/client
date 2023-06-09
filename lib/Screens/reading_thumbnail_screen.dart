@@ -66,7 +66,8 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
                           style: TextStyle(
                               color: myColor.shade100,
                               fontSize: 20,
-                              fontWeight: FontWeight.w600))
+                              fontWeight: FontWeight.w600,
+                              height: 1.5))
                     ])),
                     SizedBox(
                       height: 10,
@@ -76,7 +77,8 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
-                          fontSize: 30),
+                          fontSize: 30,
+                          height: 1.5),
                     ),
                     SizedBox(
                       height: 10,
