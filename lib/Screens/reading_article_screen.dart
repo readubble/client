@@ -3,6 +3,7 @@ import 'package:bwageul/Providers/problem_info_provider.dart';
 import 'package:bwageul/Providers/quiz_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../Models/app_stage.dart';
 import '../Providers/gaze_tracker_provider.dart';
 import '../Providers/problem_id_provider.dart';
 import '../Services/api_services.dart';
@@ -295,13 +296,22 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                             children: [
                               ElevatedButton(
                                 onPressed: () {
-                                  consumer.stopTracking();
-                                  Provider.of<GazeTrackerProvider>(context,
-                                          listen: false)
-                                      .deinitGazeTracker();
-                                  setState(() {
-                                    hasTrackingData = true;
-                                  });
+                                  if (consumer.state !=
+                                      GazeTrackerState.start) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text("시선 추적 중인 상태가 아닙니다."),
+                                      duration: Duration(seconds: 2),
+                                    ));
+                                  } else {
+                                    consumer.stopTracking();
+                                    Provider.of<GazeTrackerProvider>(context,
+                                            listen: false)
+                                        .deinitGazeTracker();
+                                    setState(() {
+                                      hasTrackingData = true;
+                                    });
+                                  }
                                 },
                                 child: Text(
                                   "추적 종료",
