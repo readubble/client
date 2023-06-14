@@ -8,6 +8,7 @@ import 'package:bwageul/Models/word_bookmark_model.dart';
 import 'package:bwageul/Models/word_info_model.dart';
 import 'package:bwageul/Models/word_quiz_model.dart';
 import 'package:bwageul/Services/storage.dart';
+import 'package:bwageul/licenseKey.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,8 +16,8 @@ import 'package:mime/mime.dart';
 import 'package:bwageul/Models/article_and_quiz.dart';
 
 class ApiService {
-  static const String baseUrl = // API 요청에 필요한 기본 URL 및 헤더 정보
-      "http://ec2-3-37-90-240.ap-northeast-2.compute.amazonaws.com";
+  static const String baseUrl = myBaseUrl; // API 요청에 필요한 기본 URL 및 헤더 정보
+
   static Map<String, String> headers = {
     "Content-type": "application/json; charset=utf-8",
     'Accept': 'application/json'
