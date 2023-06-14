@@ -27,9 +27,10 @@ class _EyetrackingState extends State<Eyetracking> {
     });
 
     Future.delayed(Duration(seconds: 4), () {
-      setState(() {
-        trackingStart = true;
-      });
+      if (mounted)
+        setState(() {
+          trackingStart = true;
+        });
     });
   }
 
