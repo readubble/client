@@ -66,7 +66,7 @@ class _FinishReadingState extends State<FinishReading> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.arrow_back_rounded,
                       size: 35,
                     ),
@@ -98,7 +98,7 @@ class _FinishReadingState extends State<FinishReading> {
                             )),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Padding(
@@ -107,18 +107,18 @@ class _FinishReadingState extends State<FinishReading> {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w600,
                           height: 1.5),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
+                        const Text(
                           "난이도 ",
                           style: TextStyle(
                             fontSize: 16,
@@ -131,12 +131,12 @@ class _FinishReadingState extends State<FinishReading> {
                               color: myColor.shade300,
                               fontWeight: FontWeight.w600),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
@@ -164,8 +164,21 @@ class _FinishReadingState extends State<FinishReading> {
                                 // arguments: problemId, // 전달할 int 인자
                               );
                             },
+                            style: ElevatedButton.styleFrom(
+                              fixedSize: const Size(110, 40),
+                              backgroundColor: myColor.shade700,
+                              foregroundColor: Colors.black,
+                              primary: Colors.black.withOpacity(0.5),
+                              elevation: 4,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    20), // BorderRadius 적용
+                              ),
+                            ),
                             child: Row(
-                              children: [
+                              children: const [
                                 Icon(
                                   Icons.menu_book_outlined,
                                   size: 25,
@@ -180,28 +193,29 @@ class _FinishReadingState extends State<FinishReading> {
                                       fontWeight: FontWeight.w600),
                                 ),
                               ],
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              fixedSize: Size(110, 40),
-                              backgroundColor: myColor.shade700,
-                              foregroundColor: Colors.black,
-                              primary: Colors.black.withOpacity(0.5),
-                              elevation: 4,
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    20), // BorderRadius 적용
-                              ),
                             )), // 원문보기 버튼
-                        SizedBox(
+                        const SizedBox(
                           width: 15,
                         ),
                         ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pushNamed('/dictionary');
                             },
+                            style: ElevatedButton.styleFrom(
+                              fixedSize: const Size(110, 40),
+                              backgroundColor: myColor.shade700,
+                              foregroundColor: Colors.black,
+                              primary: Colors.black.withOpacity(0.5),
+                              elevation: 4,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    20), // BorderRadius 적용
+                              ),
+                            ),
                             child: Row(
-                              children: [
+                              children: const [
                                 Icon(
                                   Icons.search,
                                   size: 25,
@@ -216,48 +230,18 @@ class _FinishReadingState extends State<FinishReading> {
                                       fontWeight: FontWeight.w600),
                                 ),
                               ],
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              fixedSize: Size(110, 40),
-                              backgroundColor: myColor.shade700,
-                              foregroundColor: Colors.black,
-                              primary: Colors.black.withOpacity(0.5),
-                              elevation: 4,
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    20), // BorderRadius 적용
-                              ),
                             )), // 국어사전 버튼
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    // Row(
-                    //   children: [
-                    //     Icon(Icons.timer_outlined),
-                    //     SizedBox(
-                    //       width: 10,
-                    //     ),
-                    //     Text(
-                    //       "소요 시간: 몇 분 몇 초",
-                    //       style: TextStyle(
-                    //           fontSize: 18,
-                    //           height: 1.7,
-                    //           fontWeight: FontWeight.w600),
-                    //     ),
-                    //   ],
-                    // ),
-                    // SizedBox(
-                    //   height: 20,
-                    // ),
                     Text(
                       "[ $nickname님이 정리한 결과 ]",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.w600),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Column(
@@ -270,19 +254,19 @@ class _FinishReadingState extends State<FinishReading> {
                               color: myColor.shade800,
                               size: 40,
                             ),
-                            Text(
+                            const Text(
                               "키워드",
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.w600),
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Container(
                             height: 130,
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 25, vertical: 10),
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
@@ -300,13 +284,14 @@ class _FinishReadingState extends State<FinishReading> {
                               itemBuilder: (context, index) {
                                 return Text(
                                   "${index + 1}. ${keywordList[index]}",
-                                  style: TextStyle(fontSize: 16),
+                                  style: const TextStyle(
+                                      fontSize: 16, height: 1.5),
                                 );
                               },
                               itemCount:
                                   keywordList != null ? keywordList.length : 0,
                             )), //키워드
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
                         Row(
@@ -316,19 +301,21 @@ class _FinishReadingState extends State<FinishReading> {
                               color: myColor.shade800,
                               size: 40,
                             ),
-                            Text(
+                            const Text(
                               "주제문",
                               style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w600),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.5),
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Container(
                           height: 200,
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 25, vertical: 10),
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
@@ -346,14 +333,16 @@ class _FinishReadingState extends State<FinishReading> {
                             itemBuilder: (context, index) {
                               return Text(
                                 "${index + 1}. ${sentenceList[index]}",
-                                style: TextStyle(fontSize: 16, height: 1.5),
+                                style:
+                                    const TextStyle(fontSize: 16, height: 1.5),
                               );
                             },
-                            itemCount:
-                                sentenceList != null ? sentenceList.length : 0,
+                            itemCount: sentenceList.length != 0
+                                ? sentenceList.length
+                                : 0,
                           ),
                         ), //주제문
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
                         Row(
@@ -363,7 +352,7 @@ class _FinishReadingState extends State<FinishReading> {
                               color: myColor.shade800,
                               size: 40,
                             ),
-                            Text(
+                            const Text(
                               "요약문",
                               style: TextStyle(
                                   fontSize: 18,
@@ -372,13 +361,13 @@ class _FinishReadingState extends State<FinishReading> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Container(
                           height: 200,
                           alignment: Alignment.topLeft,
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 25, vertical: 10),
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
@@ -390,13 +379,14 @@ class _FinishReadingState extends State<FinishReading> {
                               children: [
                                 Text(
                                   summarization,
-                                  style: TextStyle(fontSize: 16, height: 1.5),
+                                  style: const TextStyle(
+                                      fontSize: 16, height: 1.5),
                                 ),
                               ],
                             ),
                           ),
                         ), //요약문
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
                         Row(
@@ -406,20 +396,20 @@ class _FinishReadingState extends State<FinishReading> {
                               color: myColor.shade800,
                               size: 40,
                             ),
-                            Text(
+                            const Text(
                               "요약 결과 비교",
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.w600),
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Container(
                           height: 250,
                           alignment: Alignment.topLeft,
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 25, vertical: 10),
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
@@ -431,7 +421,8 @@ class _FinishReadingState extends State<FinishReading> {
                               children: [
                                 Text(
                                   aiSummarization,
-                                  style: TextStyle(fontSize: 16, height: 1.5),
+                                  style: const TextStyle(
+                                      fontSize: 16, height: 1.5),
                                 ),
                               ],
                             ),
@@ -439,7 +430,7 @@ class _FinishReadingState extends State<FinishReading> {
                         ), //AI 요약문 비교
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
@@ -450,7 +441,7 @@ class _FinishReadingState extends State<FinishReading> {
                               Navigator.popUntil(
                                   context, ModalRoute.withName('/main'));
                             },
-                            child: Text(
+                            child: const Text(
                               "완료",
                               style: TextStyle(
                                   fontSize: 18,

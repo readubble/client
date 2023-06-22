@@ -1,4 +1,4 @@
-import 'package:bwageul/licenseKey.dart';
+import 'package:bwageul/secret.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -8,7 +8,7 @@ import 'package:bwageul/Models/gazetracker_method_string.dart';
 
 class GazeTrackerProvider with ChangeNotifier {
   dynamic state; // state 변수: 현재 Gaze Tracker 상태를 나타내는 변수입니다.
-  static const licenseKey = myLicenseKey;
+  static const licenseKey = Secret.myLicenseKey;
   final _channel = const MethodChannel(
       'samples.flutter.dev/tracker'); // _channel 변수: Gaze Tracker SDK와의 통신을 위한 MethodChannel입니다.
   String? failedReason; //failedReason 변수: 초기화 또는 실행 실패 시 실패 이유를 저장하는 변수입니다.
@@ -154,8 +154,7 @@ class GazeTrackerProvider with ChangeNotifier {
     pointX = x;
     pointY = y;
     pointY += _scrollOffset;
-    debugPrint(
-        "gaze x : $pointX, y: $pointY, timestamp: ${DateFormat('HH:mm:ss.SSS').format(DateTime.now())}");
+    debugPrint("gaze x : $pointX, y: $pointY");
     if (_startReading) {
       gazeCount[(pointY ~/ 30).toInt()][(pointX ~/ 30).toInt()] += 1;
     }

@@ -31,12 +31,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Future.microtask(() async {
-      await _loadUserInfo(); // initState 메서드에서는 context를 찾을 수 없는 오류 -> 현재 이벤트 루프의 작업이 완료된 후에 해당 메서드들이 실행되도록
-      await _loadArticleList();
-      await _loadWordQuiz();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _loadUserInfo(); // initState 메서드에서는 context를 찾을 수 없는 오류 -> 현재 이벤트 루프의 작업이 완료된 후에 해당 메서드들이 실행되도록
+      _loadArticleList();
+      _loadWordQuiz();
     });
   }
 
@@ -45,11 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
     print('load user info -> userId : $userId');
     if (userId != null) {
       var user = await ApiService.getUserInfoById(userId);
-      final userInfoProvider = Provider.of<UserInfoProvider>(context,
-          listen:
-              false); // context를 사용해서 프로바이더를 찾는데, context가 없음 -> initState에서 microtask 사용
+      final userInfoProvider =
+          Provider.of<UserInfoProvider>(context, listen: false);
       userInfoProvider.setUser(user);
-
       if (mounted) {
         setState(() {
           nickname = user.nickname;
@@ -266,15 +263,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            Container(
-              // 가로줄
-              margin: const EdgeInsets.symmetric(vertical: 15),
-              width: double.infinity,
-              height: 2,
+            Divider(
+              height: 20,
+              thickness: 1.5,
               color: myColor.shade700,
             ),
             Container(
-              // 어휘 퀴즈!!!!!!!
+              // 어휘 퀴즈
               height: 140,
               alignment: Alignment.center,
               width: double.infinity,

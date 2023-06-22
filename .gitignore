@@ -46,4 +46,4 @@ app.*.map.json
 /android/app/releases
 /.dart_tool/
 
-/lib/licenseKey.dart
+/lib/secret.dart

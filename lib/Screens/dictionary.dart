@@ -12,22 +12,20 @@ class KoreanDictionary extends StatefulWidget {
 }
 
 class _KoreanDictionaryState extends State<KoreanDictionary> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   List<bool> likes = []; // 단어장 추가 T/F
   List<WordInfoModel> searchResults = []; // 검색 결과 리스트
 
   Future<void> searchDictionary() async {
+    FocusScope.of(context).unfocus();
     // searchDictionary 함수 내에서 dictionaryResult 함수를 호출하고 검색어를 전달하도록 구현되어 있습니다.
     try {
       // dictionaryResult 함수를 호출하여 검색 결과를 받아옴
       final result = await ApiService.dictionaryResult(_searchController.text);
 
       setState(() {
-        // 검색 결과를 searchResults에 할당
-        // searchResults = result; // 예시에서는 result가 리스트인 경우라고 가정
-        // searchResults.addAll(result); // result가 단일 객체인 경우
         searchResults = result;
-        print("searchResults: ${searchResults}"); // result 출력
+        print("searchResults: $searchResults"); // result 출력
         likes =
             searchResults.map((e) => (e.saveFl == "Y") ? true : false).toList();
         for (int i = 0; i < searchResults.length; i++) {
@@ -199,7 +197,6 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
                                         icon: Icon(Icons.clear),
                                         onPressed: () {
                                           setState(() {
-                                            // 이 아이콘 버튼을 클릭하면 _searchController를 비워서 검색어를 지울 수 있도록 구현
                                             _searchController.clear();
                                           });
                                         },

@@ -8,7 +8,7 @@ import 'package:bwageul/Models/word_bookmark_model.dart';
 import 'package:bwageul/Models/word_info_model.dart';
 import 'package:bwageul/Models/word_quiz_model.dart';
 import 'package:bwageul/Services/storage.dart';
-import 'package:bwageul/licenseKey.dart';
+import 'package:bwageul/secret.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,16 +16,12 @@ import 'package:mime/mime.dart';
 import 'package:bwageul/Models/article_and_quiz.dart';
 
 class ApiService {
-  static const String baseUrl = myBaseUrl; // API 요청에 필요한 기본 URL 및 헤더 정보
-
+  static const String baseUrl = Secret.myBaseUrl;
   static Map<String, String> headers = {
     "Content-type": "application/json; charset=utf-8",
     'Accept': 'application/json'
   };
 
-  // 회원가입 요청을 처리합니다. 지정된 닉네임, 아이디, 비밀번호 및 역할 정보를 바탕으로
-  // 서버에 POST 요청을 전송하여 회원가입을 시도합니다.
-  // 닉네임, id, pw를 전달받음
   static Future<void> signUp(
       String nickname, String id, String password) async {
     final url = Uri.parse('$baseUrl/users');
@@ -38,9 +34,6 @@ class ApiService {
     };
 
     var response = await http.post(
-      // http.post 메서드를 사용하여 서버에 회원가입 요청을 전송
-      // url, headers, body 매개변수를 설정하여 POST 요청을 보냅니다
-      // 응답을 기다릴 때 await 키워드를 사용하여 비동기적으로 처리하고 있습니다.
       url,
       headers: headers,
       body: jsonEncode(userInfo),
@@ -52,7 +45,6 @@ class ApiService {
     // 회원가입 실패
     else {
       if (response.body.isNotEmpty) {
-        // 응답의 본문이 비어 있지 않은 경우 해당 본문을 해석하고 에러 코드와 메시지를 출력
         var body = jsonDecode(utf8.decode(response.bodyBytes));
         print(
             'Error Code: ${body['code']} / Error Message: ${body['message']}');
@@ -61,9 +53,6 @@ class ApiService {
     }
   } //회원가입 함수
 
-  // 로그인 요청을 처리합니다. 지정된 아이디, 비밀번호 및 자동 로그인 여부에 따라 서버에 POST 요청을 전송하여 로그인을 시도합니다.
-  // 응답 상태 코드에 따라 성공, 토큰 만료, 실패 등의 작업을 수행합니다.
-  // 로그인 요청을 처리합니다. 함수에는 아이디, 비밀번호 및 자동 로그인 여부(isAutoLogin)를 전달해야 함
   static Future<bool> login(
       String id, String password, bool isAutoLogin) async {
     final url = Uri.parse('$baseUrl/users/authorize');
@@ -104,8 +93,6 @@ class ApiService {
     }
   } //로그인 함수
 
-  // 로그아웃 요청을 처리합니다. 현재 로그인된 사용자에 대한 정보와 액세스 토큰을 서버에 POST 요청을 전송하여 로그아웃을 시도한다.
-  // 응답 상태 코드에 따라 성공, 토큰 만료, 실패 등의 작업을 수행합니다.
   static Future<bool> logout() async {
     final url = Uri.parse('$baseUrl/users/logout');
     var userInfo;
@@ -145,8 +132,6 @@ class ApiService {
     }
   } //로그아웃 함수
 
-  // 자동 로그인 요청을 처리합니다. 저장된 액세스 토큰을 사용하여 서버에 GET 요청을 전송하여 자동 로그인을 시도합니다.
-  // 응답 상태 코드에 따라 성공 또는 실패를 판단하고, 성공 시 사용자 ID를 저장합니다.
   static Future<void> autoLogin() async {
     final url = Uri.parse('$baseUrl/users/authorize/auto');
     final accessToken =
@@ -161,8 +146,6 @@ class ApiService {
       },
     );
     if (response.statusCode == 200) {
-      // 자동 로그인 성공! 자동 로그인을 선택하면 실제로 로그인을 한 게 아니라 로그인 과정을 생략한 것.
-      // 따라서 user_id가 필요한 작업이 있을 때 사용하려고 user_id를 저장해둠.
       print('자동 로그인 성공');
       var body = jsonDecode(utf8.decode(response.bodyBytes));
       saveUserId(body['data']['user_id']);
@@ -171,7 +154,6 @@ class ApiService {
     }
   } // 자동 로그인 함수
 
-  // 토큰 갱신 요청을 처리합니다. 저장된 액세스 토큰을 사용하여 서버에 POST 요청을 전송하여 토큰을 갱신합니다.
   static Future<void> updateToken() async {
     final url = Uri.parse('$baseUrl/users/authorize/token');
     final accessToken = await getAccessToken(); // 토큰 만료 => 이미 토큰이 있다
@@ -201,9 +183,6 @@ class ApiService {
     }
   } // 토큰 갱신 함수
 
-  // 토큰 갱신 함수
-  // 사용자 정보 조회 요청을 처리합니다. 지정된 사용자 ID를 사용하여 서버에 GET 요청을 전송하여 사용자 정보를 조회합니다.
-  // 응답 상태 코드에 따라 성공, 토큰 만료, 실패 등의 작업을 수행합니다.
   static Future<UserInfoModel> getUserInfoById(String id) async {
     UserInfoModel model;
     final accessToken = await getAccessToken();
@@ -227,8 +206,6 @@ class ApiService {
     }
   } // 회원 정보 가져오기
 
-  // 프로필 이미지 변경 요청을 처리합니다. 사용자 ID와 액세스 토큰을 사용하여 서버에 POST 요청을 전송하여 프로필 이미지를 업로드한다.
-  // 응답 상태 코드에 따라 성공 또는 실패를 판단하고, 성공 시 업로드된 이미지의 URL을 반환
   static Future<String> changeProfileImage(XFile image) async {
     final id = await getUserId();
     final accessToken = await getAccessToken();

@@ -10,7 +10,6 @@ Widget buildArticleList(List<ArticleInfoModel> articleList) {
       itemCount: articleList.length,
       itemBuilder: (BuildContext context, int index) {
         ArticleInfoModel article = articleList[index];
-
         return Row(children: [
           GestureDetector(
             onTap: () {
@@ -23,12 +22,8 @@ Widget buildArticleList(List<ArticleInfoModel> articleList) {
                 'problemId': article.id,
               });
             },
-            child: unlockedArticleTile(
-              article.photo,
-              article.genre,
-              article.difficulty,
-              article.title,
-            ),
+            child: unlockedArticleTile(context, article.photo, article.genre,
+                article.difficulty, article.title, 1),
           ),
           const SizedBox(
             width: 15,
@@ -39,13 +34,16 @@ Widget buildArticleList(List<ArticleInfoModel> articleList) {
   );
 }
 
-Widget unlockedArticleTile(
-    String imageURL, String subCategory, String level, String title) {
-  // 각 글(타일)을 리턴
+Widget unlockedArticleTile(BuildContext context, String imageURL,
+    String subCategory, String level, String title, int size) {
+  // 각 글(타일)을 리턴. 작은 사이즈 = 1, 큰 사이즈 = 2
+  final type = size;
+  final double thisWidth = MediaQuery.of(context).size.width;
   return Stack(children: [
     Container(
-      width: 180,
-      height: 240,
+      width: type == 1 ? 180 : thisWidth * 0.8, // 화면 가로 길이의 4/5
+      height:
+          type == 1 ? 240 : thisWidth * 1.07, // 타일이 가로 세로 비율 3:4를 갖도록 세로 길이 계산
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         image: DecorationImage(
@@ -60,8 +58,9 @@ Widget unlockedArticleTile(
       ),
     ),
     Container(
-      width: 180,
-      height: 240,
+      width: type == 1 ? 180 : thisWidth * 0.8, // 화면 가로 길이의 4/5
+      height:
+          type == 1 ? 240 : thisWidth * 1.07, // 타일이 가로 세로 비율 3:4를 갖도록 세로 길이 계산
       alignment: Alignment.bottomRight,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
@@ -69,30 +68,31 @@ Widget unlockedArticleTile(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(subCategory, style: const TextStyle(color: Colors.white)),
+              Text(subCategory,
+                  style: const TextStyle(color: Colors.white, height: 1.5)),
               RichText(
                   text: TextSpan(children: [
-                TextSpan(
-                    text: '난이도 ', style: const TextStyle(color: Colors.white)),
+                const TextSpan(
+                    text: '난이도 ',
+                    style: TextStyle(color: Colors.white, height: 1.5)),
                 TextSpan(
                     text: level,
                     style: TextStyle(
-                        color: myColor.shade100, fontWeight: FontWeight.w600))
+                        color: myColor.shade100,
+                        fontWeight: FontWeight.w600,
+                        height: 1.5))
               ])),
               const SizedBox(
                 height: 10,
               ),
-              SizedBox(
-                width: 160,
-                child: Text(
-                  title,
-                  textAlign: TextAlign.end,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      height: 1.4),
-                ),
+              Text(
+                title,
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: type == 1 ? 16 : 20,
+                    height: 1.5),
               ),
             ],
           ),

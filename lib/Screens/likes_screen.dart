@@ -2,7 +2,6 @@ import 'package:bwageul/Models/article_bookmark_model.dart';
 import 'package:bwageul/Models/reading_result_model.dart';
 import 'package:bwageul/Models/word_bookmark_model.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../Services/api_services.dart';
 import '../Widgets/unlocked_article_tile.dart';
 import '../main.dart';
@@ -76,12 +75,47 @@ class _LikesScreenState extends State<LikesScreen>
     }
   } // 북마크된 단어 정보 불러오기
 
+  List<Widget> getLikedArticles() {
+    List<Widget> articles = [];
+    for (int i = 0; i < resultDataList.length; i++) {
+      articles.add(GestureDetector(
+        onTap: () async {
+          ReadingResultModel model =
+              await ApiService.articleReadingResult(resultDataList[i].id);
+          Navigator.of(context).pushNamed('/finish', arguments: {
+            'ai_summarization': model.aiSummarization,
+            'title': resultDataList[i].atcTitle,
+            'level': resultDataList[i].difficulty,
+            'keyword_list': model.keywords,
+            'key_sentences': model.sentence,
+            'my_summarization': model.summarization,
+            'save_fl': model.saveFl,
+            'problem_id': model.problemId,
+          }); // 북마크 글에어 문제 풀이 결과 정보를 넘겨줘야 finishReading 스크린에 그릴 수 있음.
+        },
+        child: Align(
+          alignment: Alignment.center,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: unlockedArticleTile(
+                context,
+                resultDataList[i].atcPhotoIn,
+                resultDataList[i].genre,
+                resultDataList[i].difficulty,
+                resultDataList[i].atcTitle,
+                2),
+          ),
+        ),
+      ));
+    }
+    return articles;
+  } // 저장한 글의 리스트를 타일 형태로 반환하는 메소드. 좋아요 표시 된 UnlockedArticleTile을 articles[]에 추가할 것.
+
   List<Widget> getLikedWords() {
     List<Widget> words = [];
-
     for (int i = 0; i < wordDataList.length; i++) {
       Container wordInfo = Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
         margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
           color: myColor.shade700,
@@ -96,22 +130,17 @@ class _LikesScreenState extends State<LikesScreen>
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "${wordDataList[i].wordNm}",
-                        style: const TextStyle(
-                          fontSize: 21,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+                Text(
+                  wordDataList[i].wordNm,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 IconButton(
@@ -119,7 +148,6 @@ class _LikesScreenState extends State<LikesScreen>
                     setState(() {
                       likes[i] = !likes[i];
                     });
-                    // print(likes[i]);
                     await ApiService.wordBookmark(
                       wordDataList[i].targetCode,
                       wordDataList[i].wordNm,
@@ -192,37 +220,21 @@ class _LikesScreenState extends State<LikesScreen>
                                 catNo = 1;
                               });
                             },
-                            child: Column(
-                              children: [
-                                Container(
-                                    alignment: Alignment.center,
-                                    height: 100,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: myColor.shade400,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: myColor.shade800,
-                                            blurRadius: 3,
-                                            offset: const Offset(2, 2))
-                                      ],
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const FaIcon(
-                                      FontAwesomeIcons.bookOpen,
-                                      size: 50,
-                                      color: Colors.white,
-                                    )),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                const Text(
-                                  '인문',
-                                  style: TextStyle(fontSize: 25),
-                                )
-                              ],
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
+                              decoration: BoxDecoration(
+                                color: myColor.shade700,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              width: MediaQuery.of(context).size.width / 3.7,
+                              child: Text(
+                                '인문',
+                                style: TextStyle(fontSize: 20),
+                              ),
                             ),
-                          ), // 인문 버튼
+                          ),
                           GestureDetector(
                             onTap: () {
                               setState(() {
@@ -230,39 +242,21 @@ class _LikesScreenState extends State<LikesScreen>
                                 catNo = 2;
                               });
                             },
-                            child: Column(
-                              children: [
-                                Container(
-                                    alignment: Alignment.center,
-                                    height: 100,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: myColor.shade200,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: myColor.shade800,
-                                            blurRadius: 3,
-                                            offset: const Offset(2, 2))
-                                      ],
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child:
-                                        const Icon(Icons.diversity_3_outlined,
-                                            //groups_outlined
-                                            size: 70,
-                                            color: Colors.white)),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                const Text(
-                                  '사회',
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                  ),
-                                )
-                              ],
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
+                              decoration: BoxDecoration(
+                                color: myColor.shade700,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              width: MediaQuery.of(context).size.width / 3.7,
+                              child: Text(
+                                '사회',
+                                style: TextStyle(fontSize: 20),
+                              ),
                             ),
-                          ), // 사회 버튼
+                          ),
                           GestureDetector(
                             onTap: () {
                               setState(() {
@@ -270,77 +264,40 @@ class _LikesScreenState extends State<LikesScreen>
                                 catNo = 3;
                               });
                             },
-                            child: Column(
-                              children: [
-                                Container(
-                                    alignment: Alignment.center,
-                                    height: 100,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: myColor.shade600,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: myColor.shade800,
-                                            blurRadius: 3,
-                                            offset: const Offset(2, 2))
-                                      ],
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const FaIcon(
-                                      FontAwesomeIcons.flask,
-                                      size: 50,
-                                      color: Colors.white,
-                                    )),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                const Text(
-                                  '과학',
-                                  style: TextStyle(fontSize: 25),
-                                )
-                              ],
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
+                              decoration: BoxDecoration(
+                                color: myColor.shade700,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              width: MediaQuery.of(context).size.width / 3.7,
+                              child: Text(
+                                '과학',
+                                style: TextStyle(fontSize: 20),
+                              ),
                             ),
-                          ), // 과학 버튼
+                          ),
                         ],
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          RichText(
-                              text: TextSpan(children: [
-                            TextSpan(
-                              text: ' $category ',
-                              style: const TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.lightBlue),
-                            ),
-                            TextSpan(
-                              text: '저장한 글 (${resultDataList.length} 개)',
-                              style: const TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black),
-                            ),
-                          ])),
-                        ],
-                      ), //'저장한 글' 텍스트
+                      Divider(
+                        height: 10,
+                        thickness: 1.5,
+                        color: myColor.shade700,
+                      ),
                       const SizedBox(
                         height: 10,
                       ),
                       Expanded(
-                        child: GridView.count(
-                            shrinkWrap: true,
-                            primary: false,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            crossAxisCount: 2,
-                            childAspectRatio: 3 / 4,
-                            children:
-                                getLikedArticles(context, resultDataList)),
+                        child: ListView(
+                          shrinkWrap: true,
+                          primary: false,
+                          children: getLikedArticles(),
+                        ),
                       ),
                     ],
                   ),
@@ -375,33 +332,3 @@ class _LikesScreenState extends State<LikesScreen>
     );
   }
 }
-
-List<Widget> getLikedArticles(
-    BuildContext context, List<ArticleBookmarkModel> resultDataList) {
-  List<Widget> articles = [];
-
-  for (int i = 0; i < resultDataList.length; i++) {
-    articles.add(GestureDetector(
-      onTap: () async {
-        ReadingResultModel model =
-            await ApiService.articleReadingResult(resultDataList[i].id);
-        Navigator.of(context).pushNamed('/finish', arguments: {
-          'ai_summarization': model.aiSummarization,
-          'title': resultDataList[i].atcTitle,
-          'level': resultDataList[i].difficulty,
-          'keyword_list': model.keywords,
-          'key_sentences': model.sentence,
-          'my_summarization': model.summarization,
-          'save_fl': model.saveFl,
-          'problem_id': model.problemId,
-        }); // 문제 풀이 결과 정보를 넘겨줘야 finishReading 스크린에 그릴 수 있음.
-      },
-      child: unlockedArticleTile(
-          resultDataList[i].atcPhotoIn,
-          resultDataList[i].genre,
-          resultDataList[i].difficulty,
-          resultDataList[i].atcTitle),
-    ));
-  }
-  return articles;
-} // 저장한 글의 리스트를 타일 형태로 반환하는 메소드. 좋아요 표시 된 UnlockedArticleTile을 articles[]에 추가할 것.
