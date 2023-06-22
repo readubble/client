@@ -32,9 +32,8 @@ class _LikesScreenState extends State<LikesScreen>
           )),
     )
   ];
-  int articleCount = 0;
+  int articleCount = 0; // 현재 카테고리의 북마크된 글 개수
   int wordCount = 0;
-  String category = '[인문]'; // 기본값: 인문
   List<ArticleBookmarkModel> resultDataList = [];
   List<WordBookmarkModel> wordDataList = [];
   int catNo = 1;
@@ -96,7 +95,7 @@ class _LikesScreenState extends State<LikesScreen>
         child: Align(
           alignment: Alignment.center,
           child: Padding(
-            padding: EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 10),
             child: unlockedArticleTile(
                 context,
                 resultDataList[i].atcPhotoIn,
@@ -115,7 +114,7 @@ class _LikesScreenState extends State<LikesScreen>
     List<Widget> words = [];
     for (int i = 0; i < wordDataList.length; i++) {
       Container wordInfo = Container(
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
         margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
           color: myColor.shade700,
@@ -124,7 +123,7 @@ class _LikesScreenState extends State<LikesScreen>
             BoxShadow(
               color: myColor.shade800,
               blurRadius: 3,
-              offset: Offset(3, 3),
+              offset: const Offset(3, 3),
             ),
           ],
         ),
@@ -176,7 +175,7 @@ class _LikesScreenState extends State<LikesScreen>
                 Expanded(
                   child: Text(
                     wordDataList[i].wordMean, // 결과에서 뜻 가져오기
-                    style: TextStyle(fontSize: 17, height: 1.5),
+                    style: const TextStyle(fontSize: 17, height: 1.5),
                   ),
                 ),
               ],
@@ -216,20 +215,19 @@ class _LikesScreenState extends State<LikesScreen>
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                category = '[인문]';
                                 catNo = 1;
                               });
                             },
                             child: Container(
                               alignment: Alignment.center,
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 20),
                               decoration: BoxDecoration(
                                 color: myColor.shade700,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               width: MediaQuery.of(context).size.width / 3.7,
-                              child: Text(
+                              child: const Text(
                                 '인문',
                                 style: TextStyle(fontSize: 20),
                               ),
@@ -238,20 +236,19 @@ class _LikesScreenState extends State<LikesScreen>
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                category = '[사회]';
                                 catNo = 2;
                               });
                             },
                             child: Container(
                               alignment: Alignment.center,
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 20),
                               decoration: BoxDecoration(
                                 color: myColor.shade700,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               width: MediaQuery.of(context).size.width / 3.7,
-                              child: Text(
+                              child: const Text(
                                 '사회',
                                 style: TextStyle(fontSize: 20),
                               ),
@@ -260,29 +257,28 @@ class _LikesScreenState extends State<LikesScreen>
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                category = '[과학]';
                                 catNo = 3;
                               });
                             },
                             child: Container(
                               alignment: Alignment.center,
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 20),
                               decoration: BoxDecoration(
                                 color: myColor.shade700,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               width: MediaQuery.of(context).size.width / 3.7,
-                              child: Text(
+                              child: const Text(
                                 '과학',
                                 style: TextStyle(fontSize: 20),
                               ),
                             ),
                           ),
                         ],
-                      ),
+                      ), // 인문, 사회, 과학 버튼 리스트
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       Divider(
                         height: 10,
@@ -308,7 +304,7 @@ class _LikesScreenState extends State<LikesScreen>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           ' 나의 단어장',
                           style: TextStyle(
                               fontSize: 25,

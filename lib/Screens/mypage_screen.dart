@@ -197,22 +197,25 @@ class _MyPageScreenState extends State<MyPageScreen> {
                       child: RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
+                          style: const TextStyle(fontFamily: 'lottedream'),
                           children: [
                             TextSpan(
                               text:
-                                  '${countByDifficulty.length > 0 ? countByDifficulty[2]['level'] : " "}\n',
+                                  '${countByDifficulty.length > 0 ? countByDifficulty[2]['level'] : " "}',
                               style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
                             ),
                             TextSpan(
                               text:
-                                  '${countByDifficulty.length > 0 ? countByDifficulty[2]['num'] : " "}',
+                                  '\n${countByDifficulty.length > 0 ? countByDifficulty[2]['num'] : " "}',
                               style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.black),
+                                  color: Colors.black,
+                                  height: 1.5),
                             ),
                           ],
                         ),
@@ -229,22 +232,25 @@ class _MyPageScreenState extends State<MyPageScreen> {
                       child: RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
+                          style: const TextStyle(fontFamily: 'lottedream'),
                           children: [
                             TextSpan(
                               text:
-                                  '${countByDifficulty.length > 0 ? countByDifficulty[1]['level'] : " "}\n',
+                                  '${countByDifficulty.length > 0 ? countByDifficulty[1]['level'] : " "}',
                               style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
                             ),
                             TextSpan(
                               text:
-                                  '${countByDifficulty.length > 0 ? countByDifficulty[1]['num'] : ''}',
+                                  '\n${countByDifficulty.length > 0 ? countByDifficulty[1]['num'] : ''}',
                               style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.black),
+                                  color: Colors.black,
+                                  height: 1.5),
                             ),
                           ],
                         ),
@@ -261,22 +267,25 @@ class _MyPageScreenState extends State<MyPageScreen> {
                       child: RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
+                          style: const TextStyle(fontFamily: 'lottedream'),
                           children: [
                             TextSpan(
                               text:
-                                  '${countByDifficulty.length > 0 ? countByDifficulty[0]['level'] : " "}\n',
+                                  '${countByDifficulty.length > 0 ? countByDifficulty[0]['level'] : " "}',
                               style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
                             ),
                             TextSpan(
                               text:
-                                  '${countByDifficulty.length > 0 ? countByDifficulty[0]['num'] : ''}',
+                                  '\n${countByDifficulty.length > 0 ? countByDifficulty[0]['num'] : ''}',
                               style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.black),
+                                  color: Colors.black,
+                                  height: 1.5),
                             ),
                           ],
                         ),

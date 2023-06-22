@@ -71,17 +71,19 @@ Widget unlockedArticleTile(BuildContext context, String imageURL,
               Text(subCategory,
                   style: const TextStyle(color: Colors.white, height: 1.5)),
               RichText(
-                  text: TextSpan(children: [
-                const TextSpan(
-                    text: '난이도 ',
-                    style: TextStyle(color: Colors.white, height: 1.5)),
-                TextSpan(
-                    text: level,
-                    style: TextStyle(
-                        color: myColor.shade100,
-                        fontWeight: FontWeight.w600,
-                        height: 1.5))
-              ])),
+                  text: TextSpan(
+                      style: const TextStyle(fontFamily: 'lottedream'),
+                      children: [
+                    const TextSpan(
+                        text: '난이도 ',
+                        style: TextStyle(color: Colors.white, height: 1.5)),
+                    TextSpan(
+                        text: level,
+                        style: TextStyle(
+                            color: myColor.shade100,
+                            fontWeight: FontWeight.w600,
+                            height: 1.5))
+                  ])),
               const SizedBox(
                 height: 10,
               ),
