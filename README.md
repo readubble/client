@@ -1,2 +1,11 @@
-# 봐글봐글
-## Readubble
+![_캡스톤디자인_매뉴얼_page-0001](https://github.com/readubble/client/assets/99166914/7bfb077d-1a18-42ac-b8b3-bc5e1896cef7)
+![_캡스톤디자인_매뉴얼_page-0002](https://github.com/readubble/client/assets/99166914/38daa60d-9a45-4219-a3dd-acac7abfa457)
+![_캡스톤디자인_매뉴얼_page-0003](https://github.com/readubble/client/assets/99166914/bb15e2df-6f3b-4692-96e4-40406abd4742)
+![_캡스톤디자인_매뉴얼_page-0004](https://github.com/readubble/client/assets/99166914/eedcab85-06f6-4275-a017-a2a1ff2aeb75)
+![_캡스톤디자인_매뉴얼_page-0005](https://github.com/readubble/client/assets/99166914/346a2295-1aa3-476e-adba-9669fa5b085f)
+![_캡스톤디자인_매뉴얼_page-0006](https://github.com/readubble/client/assets/99166914/c85a859c-b212-4be6-9f3d-eeb6e423f1b2)
+![_캡스톤디자인_매뉴얼_page-0007](https://github.com/readubble/client/assets/99166914/599edc8c-0849-47de-af32-5a7bb74dd8ec)
+![_캡스톤디자인_매뉴얼_page-0008](https://github.com/readubble/client/assets/99166914/ed878a50-7f91-4833-bcc9-194321014b61)
+![_캡스톤디자인_매뉴얼_page-0009](https://github.com/readubble/client/assets/99166914/5e13a9a1-a7a4-4a60-a6b6-84095a921eb0)
+![_캡스톤디자인_매뉴얼_page-0010](https://github.com/readubble/client/assets/99166914/e797f484-0483-4185-b71e-ffc00838cd71)
+![_캡스톤디자인_매뉴얼_page-0011](https://github.com/readubble/client/assets/99166914/3c200d3c-25dc-4a86-8844-b08ea0209344)
