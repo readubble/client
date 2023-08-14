@@ -1,4 +1,3 @@
-import 'dart:ffi';
 // 단어 사전 데이터를 서버에서 불러와 객체로 저장
 class WordInfoModel {
   String wordNm, wordMean, saveFl;

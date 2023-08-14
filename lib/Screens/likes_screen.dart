@@ -54,7 +54,7 @@ class _LikesScreenState extends State<LikesScreen>
   }
 
   Future<void> loadData(int no) async {
-    final data = await ApiService.getProblemBookmarkList(no);
+    final data = await ApiService.getProblemBookmarks(no);
     if (mounted) {
       setState(() {
         resultDataList = data;
@@ -64,7 +64,7 @@ class _LikesScreenState extends State<LikesScreen>
   } // 북마크된 글 정보 불러오기
 
   Future<void> loadWord() async {
-    final data = await ApiService.getWordBookmarkList();
+    final data = await ApiService.getWordBookmarks();
     if (mounted) {
       setState(() {
         wordDataList = data;
@@ -80,7 +80,7 @@ class _LikesScreenState extends State<LikesScreen>
       articles.add(GestureDetector(
         onTap: () async {
           ReadingResultModel model =
-              await ApiService.articleReadingResult(resultDataList[i].id);
+              await ApiService.getProblemResult(resultDataList[i].id);
           Navigator.of(context).pushNamed('/finish', arguments: {
             'ai_summarization': model.aiSummarization,
             'title': resultDataList[i].atcTitle,
@@ -147,7 +147,7 @@ class _LikesScreenState extends State<LikesScreen>
                     setState(() {
                       likes[i] = !likes[i];
                     });
-                    await ApiService.wordBookmark(
+                    await ApiService.updateWordBookmark(
                       wordDataList[i].targetCode,
                       wordDataList[i].wordNm,
                       wordDataList[i].wordMean,

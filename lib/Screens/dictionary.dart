@@ -21,7 +21,8 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
     // searchDictionary 함수 내에서 dictionaryResult 함수를 호출하고 검색어를 전달하도록 구현되어 있습니다.
     try {
       // dictionaryResult 함수를 호출하여 검색 결과를 받아옴
-      final result = await ApiService.dictionaryResult(_searchController.text);
+      final result =
+          await ApiService.getDictionarySearch(_searchController.text);
 
       setState(() {
         searchResults = result;
@@ -83,7 +84,7 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
                       likes[i] = !likes[i];
                     });
                     print(likes[i]);
-                    await ApiService.wordBookmark(
+                    await ApiService.updateWordBookmark(
                       searchResults[i].targetCode,
                       searchResults[i].wordNm,
                       searchResults[i].wordMean,

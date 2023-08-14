@@ -31,7 +31,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
   }
 
   Future<void> readArticleCount() async {
-    countByDifficulty = await ApiService.getSolvedProblemCount();
+    countByDifficulty = await ApiService.getResolvedProblemCount();
     if (mounted) {
       setState(() {});
     }

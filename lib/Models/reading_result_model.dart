@@ -17,9 +17,6 @@ class ReadingResultModel {
       required this.problemId});
 
   factory ReadingResultModel.fromJson(Map<String, dynamic> json) {
-    // final sentenceList = List<String>.from(
-    //     json['sentence'].map((sentence) => sentence.toString()));
-
     return ReadingResultModel(
       time: json['time'],
       keywords: json['keyword'],

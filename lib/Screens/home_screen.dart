@@ -56,9 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadArticleList() async {
     if (await isLoggedIn()) {
       List<ArticleInfoModel> list1 =
-          await ApiService.fetchArticleList(1); // 1: 인문, 2: 사회, 3: 과학
-      List<ArticleInfoModel> list2 = await ApiService.fetchArticleList(2);
-      List<ArticleInfoModel> list3 = await ApiService.fetchArticleList(3);
+          await ApiService.getArticles(1); // 1: 인문, 2: 사회, 3: 과학
+      List<ArticleInfoModel> list2 = await ApiService.getArticles(2);
+      List<ArticleInfoModel> list3 = await ApiService.getArticles(3);
       if (mounted) {
         setState(() {
           humArticleList = list1;
@@ -231,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
         isCorrect[quizIdx] = false;
       });
     }
-    await ApiService.sendWordQuiz(model.quizId, choice, quizResult);
+    await ApiService.postWordQuiz(model.quizId, choice, quizResult);
   } // 서버에 어휘 퀴즈 결과 전송
 
   @override
