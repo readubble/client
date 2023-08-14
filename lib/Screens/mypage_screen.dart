@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -32,7 +31,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
   }
 
   Future<void> readArticleCount() async {
-    countByDifficulty = await ApiService.getSolvedProblemCount();
+    countByDifficulty = await ApiService.getResolvedProblemCount();
     if (mounted) {
       setState(() {});
     }

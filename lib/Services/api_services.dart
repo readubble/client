@@ -275,7 +275,7 @@ class ApiService {
     }
   } // 어휘 퀴즈 정보 불러오기
 
-  static Future<void> sendWordQuiz(
+  static Future<void> postWordQuiz(
       int quizId, int quizChoice, String quizResult) async {
     final accessToken = await getAccessToken();
     final userId = await getUserId();
@@ -327,7 +327,7 @@ class ApiService {
     }
   } // 어휘 퀴즈 결과(맞춘 개수) 받아오기 -> 마이페이지에서 보여줄 예정
 
-  static Future<List<ArticleInfoModel>> fetchArticleList(int category) async {
+  static Future<List<ArticleInfoModel>> getArticles(int category) async {
     List<ArticleInfoModel> articleList = [];
     final userId = await getUserId();
     final accessToken = await getAccessToken();
@@ -349,7 +349,7 @@ class ApiService {
       throw Exception('body[\'data\'] 가져오는데 에러 발생..');
     } else if (response.statusCode == 401) {
       await updateToken();
-      return await fetchArticleList(category);
+      return await getArticles(category);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       print("articleList() 글 -> ${body['data']}");
@@ -357,7 +357,7 @@ class ApiService {
     }
   } // 글 목록 가져오기. 1: 인문, 2: 사회, 3: 과학
 
-  static Future<ArticleAndQuiz> fetchArticleContents(int problemId) async {
+  static Future<ArticleAndQuiz> getArticleWithExercises(int problemId) async {
     final accessToken = await getAccessToken();
     final url = Uri.parse("$baseUrl/problem/$problemId");
     var response = await http.get(url, headers: {
@@ -370,14 +370,14 @@ class ApiService {
       return ArticleAndQuiz.fromJson(body['data']);
     } else if (response.statusCode == 401) {
       await updateToken();
-      return fetchArticleContents(problemId);
+      return getArticleWithExercises(problemId);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       throw Exception('글+문제 내용 가져오기 실패');
     }
   } // 문제 내용 (글 본문 + 추가 문제)
 
-  static Future<ReadingResultModel> articleReadingResult(int problemId) async {
+  static Future<ReadingResultModel> getProblemResult(int problemId) async {
     final userId = await getUserId();
     final accessToken = await getAccessToken();
     final url = Uri.parse("$baseUrl/problem/$problemId/users/$userId");
@@ -397,7 +397,7 @@ class ApiService {
     }
   } // 문제 풀이 결과 가져오기. pid 리턴함
 
-  static Future<List<WordInfoModel>> dictionaryResult(String word) async {
+  static Future<List<WordInfoModel>> getDictionarySearch(String word) async {
     List<WordInfoModel> wordList = [];
     final userId = await getUserId();
     final accessToken = await getAccessToken();
@@ -427,7 +427,7 @@ class ApiService {
     }
   } // 사전에 "word"에 대한 검색 결과 리턴
 
-  static Future<Map<String, dynamic>> sendProblemSolved(
+  static Future<Map<String, dynamic>> postProblemResolved(
       List<String> keywordList,
       String topicSentences,
       String summarization,
@@ -467,7 +467,7 @@ class ApiService {
     }
   } // 문제 풀이: 글 읽고, 문제 푼 결과 서버에 보내기. problem_id & ai_summarization 리턴
 
-  static Future<List<dynamic>> getSolvedProblemCount() async {
+  static Future<List<dynamic>> getResolvedProblemCount() async {
     final accessToken = await getAccessToken();
     final userId = await getUserId();
     final url = Uri.parse('$baseUrl/users/$userId/statistics');
@@ -482,12 +482,11 @@ class ApiService {
       return body['data']; // [{'level':상, 'num':2}, ...]
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      //print('getSolvedProblemCount 호출: ${body}');
       throw Exception('난이도 별 읽은 글 개수 가져오기 실패');
     }
   } // 난이도 별 읽은 글 개수
 
-  static Future<void> problemBookmark(int problemId) async {
+  static Future<void> updateProblemBookmark(int problemId) async {
     final accessToken = await getAccessToken();
     final userId = await getUserId();
     final url = Uri.parse('$baseUrl/problem/$problemId/bookmark');
@@ -508,7 +507,7 @@ class ApiService {
     }
   } // 글의 북마크 여부 보내기
 
-  static Future<List<ArticleBookmarkModel>> getProblemBookmarkList(
+  static Future<List<ArticleBookmarkModel>> getProblemBookmarks(
       int category) async {
     // 1:인문, 2:사회, 3:과학
     final accessToken = await getAccessToken();
@@ -530,7 +529,7 @@ class ApiService {
       return bookmarkList;
     } else if (response.statusCode == 401) {
       await updateToken();
-      return await getProblemBookmarkList(category);
+      return await getProblemBookmarks(category);
     } else {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
       // print('북마크된 글 리스트 호출 : $body');
@@ -538,7 +537,7 @@ class ApiService {
     }
   } // 북마크된 글의 리스트 가져오기
 
-  static Future<void> wordBookmark(
+  static Future<void> updateWordBookmark(
       int wordId, String wordNm, String wordMean) async {
     final accessToken = await getAccessToken();
     final userId = await getUserId();
@@ -561,7 +560,7 @@ class ApiService {
     }
   } // 단어 북마크 여부 보내기
 
-  static Future<List<WordBookmarkModel>> getWordBookmarkList() async {
+  static Future<List<WordBookmarkModel>> getWordBookmarks() async {
     final accessToken = await getAccessToken();
     final userId = await getUserId();
     final url = Uri.parse('$baseUrl/word/bookmark/users/$userId');
@@ -580,7 +579,7 @@ class ApiService {
       return wordBookmarkList;
     } else if (response.statusCode == 401) {
       await updateToken();
-      return await getWordBookmarkList();
+      return await getWordBookmarks();
     } else {
       throw Exception("글 북마크 리스트 api 호출 실패");
     }

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../Models/article_and_quiz.dart';
 
 class ProblemInfoProvider with ChangeNotifier {
-  ProblemInfo? _problemInfo;
+  Article? _problemInfo;
 
-  ProblemInfo? get problemInfo => _problemInfo;
+  Article? get problemInfo => _problemInfo;
 
-  void setProblemInfo(ProblemInfo problemInfo) {
+  void setProblemInfo(Article problemInfo) {
     _problemInfo = problemInfo;
     notifyListeners();
   }

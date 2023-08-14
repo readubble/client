@@ -83,7 +83,7 @@ class _FinishReadingState extends State<FinishReading> {
                               ? arguments['save_fl'] = 'N'
                               : arguments['save_fl'] = 'Y';
                         });
-                        await ApiService.problemBookmark(problemId);
+                        await ApiService.updateProblemBookmark(problemId);
                       },
                       icon: isLiked
                           ? Icon(

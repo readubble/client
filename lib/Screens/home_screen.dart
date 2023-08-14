@@ -19,8 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final PageController _quizController = PageController(initialPage: 0);
-  String nickname = '000';
-  int days = 0;
+  bool hasUserData = false;
   List<ArticleInfoModel> humArticleList = [];
   List<ArticleInfoModel> socArticleList = [];
   List<ArticleInfoModel> sciArticleList = [];
@@ -32,26 +31,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      _loadUserInfo(); // initState 메서드에서는 context를 찾을 수 없는 오류 -> 현재 이벤트 루프의 작업이 완료된 후에 해당 메서드들이 실행되도록
-      _loadArticleList();
-      _loadWordQuiz();
-    });
+    _loadUserInfo();
+    _loadArticleList();
+    _loadWordQuiz();
   }
 
   Future<void> _loadUserInfo() async {
-    String? userId = await getUserId(); // 사용자 ID
-    print('load user info -> userId : $userId');
-    if (userId != null) {
-      var user = await ApiService.getUserInfoById(userId);
-      final userInfoProvider =
-          Provider.of<UserInfoProvider>(context, listen: false);
-      userInfoProvider.setUser(user);
-      if (mounted) {
-        setState(() {
-          nickname = user.nickname;
-          days = userInfoProvider.getDaysFromSignUp();
-        });
+    // 로그인은 되어 있지만, 유저 정보가 로드되지 않은 상태(최초 1회)
+    if (!hasUserData) {
+      String? userId = await getUserId();
+      if (userId != null) {
+        var user = await ApiService.getUserInfoById(userId!);
+        final userInfoProvider =
+            Provider.of<UserInfoProvider>(context, listen: false);
+        userInfoProvider.setUser(user);
+        if (mounted)
+          setState(() {
+            hasUserData = true;
+          });
       }
     }
   }
@@ -59,9 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadArticleList() async {
     if (await isLoggedIn()) {
       List<ArticleInfoModel> list1 =
-          await ApiService.fetchArticleList(1); // 1: 인문, 2: 사회, 3: 과학
-      List<ArticleInfoModel> list2 = await ApiService.fetchArticleList(2);
-      List<ArticleInfoModel> list3 = await ApiService.fetchArticleList(3);
+          await ApiService.getArticles(1); // 1: 인문, 2: 사회, 3: 과학
+      List<ArticleInfoModel> list2 = await ApiService.getArticles(2);
+      List<ArticleInfoModel> list3 = await ApiService.getArticles(3);
       if (mounted) {
         setState(() {
           humArticleList = list1;
@@ -234,11 +231,13 @@ class _HomeScreenState extends State<HomeScreen> {
         isCorrect[quizIdx] = false;
       });
     }
-    await ApiService.sendWordQuiz(model.quizId, choice, quizResult);
+    await ApiService.postWordQuiz(model.quizId, choice, quizResult);
   } // 서버에 어휘 퀴즈 결과 전송
 
   @override
   Widget build(BuildContext context) {
+    final userInfoProvider =
+        Provider.of<UserInfoProvider>(context, listen: false);
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
@@ -255,12 +254,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900),
                 ),
                 const SizedBox(
-                  width: 15,
+                  width: 10,
                 ),
-                Text(
-                  '$nickname님은 봐글봐글과 함께\n$days일째 성장 중!',
-                  style: const TextStyle(fontSize: 15, height: 1.4),
-                ),
+                Expanded(
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: userInfoProvider.user == null
+                          ? CircularProgressIndicator()
+                          : Text(
+                              '${userInfoProvider.nickname}님은 봐글봐글과 함께\n${userInfoProvider.getDaysFromSignUp()}일째 성장 중!',
+                              style: const TextStyle(fontSize: 15, height: 1.4),
+                              textAlign: TextAlign.start,
+                            )),
+                )
               ],
             ),
             Divider(
@@ -331,6 +337,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             buildArticleList(sciArticleList),
+            SizedBox(
+              height: 10,
+            )
           ],
         ),
       ),

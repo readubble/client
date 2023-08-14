@@ -24,9 +24,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
   List<int> chosenAnswer = [0, 0, 0]; //총 3문제
   late TabController _tabController;
   List<bool> isSelected = []; // 각 문장이 선택되었는지 true/false
-  late ProblemInfo problemInfo;
+  late Article problemInfo;
   String problemTitle = "";
-  List<QuizInfo> quizInfoList = [];
+  List<Exercise> quizInfoList = [];
   String aiSummarization = "";
   String level = "";
   List<bool> isAnswerPressed = List.generate(9, (index) => false);
@@ -95,7 +95,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
     final problemIdProvider =
         Provider.of<ProblemIdProvider>(context, listen: false);
     final problemId = problemIdProvider.problemId;
-    final result = await ApiService.sendProblemSolved(
+    final result = await ApiService.postProblemResolved(
         keywords,
         sentences,
         summarization,

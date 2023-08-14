@@ -32,7 +32,7 @@ class _LikesScreenState extends State<LikesScreen>
           )),
     )
   ];
-  int articleCount = 0; // 현재 카테고리의 북마크된 글 개수
+  int articleCount = -1; // 현재 카테고리의 북마크된 글 개수
   int wordCount = 0;
   List<ArticleBookmarkModel> resultDataList = [];
   List<WordBookmarkModel> wordDataList = [];
@@ -54,7 +54,7 @@ class _LikesScreenState extends State<LikesScreen>
   }
 
   Future<void> loadData(int no) async {
-    final data = await ApiService.getProblemBookmarkList(no);
+    final data = await ApiService.getProblemBookmarks(no);
     if (mounted) {
       setState(() {
         resultDataList = data;
@@ -64,7 +64,7 @@ class _LikesScreenState extends State<LikesScreen>
   } // 북마크된 글 정보 불러오기
 
   Future<void> loadWord() async {
-    final data = await ApiService.getWordBookmarkList();
+    final data = await ApiService.getWordBookmarks();
     if (mounted) {
       setState(() {
         wordDataList = data;
@@ -80,7 +80,7 @@ class _LikesScreenState extends State<LikesScreen>
       articles.add(GestureDetector(
         onTap: () async {
           ReadingResultModel model =
-              await ApiService.articleReadingResult(resultDataList[i].id);
+              await ApiService.getProblemResult(resultDataList[i].id);
           Navigator.of(context).pushNamed('/finish', arguments: {
             'ai_summarization': model.aiSummarization,
             'title': resultDataList[i].atcTitle,
@@ -147,7 +147,7 @@ class _LikesScreenState extends State<LikesScreen>
                     setState(() {
                       likes[i] = !likes[i];
                     });
-                    await ApiService.wordBookmark(
+                    await ApiService.updateWordBookmark(
                       wordDataList[i].targetCode,
                       wordDataList[i].wordNm,
                       wordDataList[i].wordMean,
@@ -212,63 +212,71 @@ class _LikesScreenState extends State<LikesScreen>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                catNo = 1;
-                              });
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: myColor.shade700,
-                                borderRadius: BorderRadius.circular(10),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 3.7,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  catNo = 1;
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                backgroundColor: myColor.shade700,
                               ),
-                              width: MediaQuery.of(context).size.width / 3.7,
                               child: const Text(
                                 '인문',
                                 style: TextStyle(fontSize: 20),
                               ),
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                catNo = 2;
-                              });
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: myColor.shade700,
-                                borderRadius: BorderRadius.circular(10),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 3.7,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  catNo = 2;
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      10), // 원하는 BorderRadius 값 설정
+                                ),
+                                backgroundColor: myColor.shade700,
                               ),
-                              width: MediaQuery.of(context).size.width / 3.7,
                               child: const Text(
                                 '사회',
                                 style: TextStyle(fontSize: 20),
                               ),
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                catNo = 3;
-                              });
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: myColor.shade700,
-                                borderRadius: BorderRadius.circular(10),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 3.7,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  catNo = 3;
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      10), // 원하는 BorderRadius 값 설정
+                                ),
+                                backgroundColor: myColor.shade700,
                               ),
-                              width: MediaQuery.of(context).size.width / 3.7,
                               child: const Text(
                                 '과학',
                                 style: TextStyle(fontSize: 20),
@@ -288,13 +296,42 @@ class _LikesScreenState extends State<LikesScreen>
                       const SizedBox(
                         height: 10,
                       ),
-                      Expanded(
-                        child: ListView(
-                          shrinkWrap: true,
-                          primary: false,
-                          children: getLikedArticles(),
+                      if (articleCount == -1)
+                        const Expanded(
+                            child: Center(child: CircularProgressIndicator()))
+                      else if (articleCount == 0)
+                        Expanded(
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.sentiment_neutral_outlined,
+                                  size: 100,
+                                  color: Colors.grey.shade400,
+                                ),
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                Text(
+                                  '북마크한 글이 없어요!',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      else
+                        Expanded(
+                          child: ListView(
+                            shrinkWrap: true,
+                            primary: false,
+                            children: getLikedArticles(),
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ), //저장한 글

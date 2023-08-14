@@ -22,9 +22,9 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
   double baseFontSize = 18;
   String thisText = '';
   ArticleAndQuiz info = ArticleAndQuiz(
-      problem: ProblemInfo(title: '', content: [], level: '', author: ''),
+      problem: Article(title: '', content: [], level: '', author: ''),
       quizList: [
-        QuizInfo(
+        Exercise(
           problem: '문제',
           choices: [],
           answer: 1,
@@ -77,7 +77,8 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
           Provider.of<ProblemIdProvider>(context, listen: false);
       final problemId = problemIdProvider.problemId;
 
-      ArticleAndQuiz model = await ApiService.fetchArticleContents(problemId!);
+      ArticleAndQuiz model =
+          await ApiService.getArticleWithExercises(problemId!);
       final problemProvider =
           Provider.of<ProblemInfoProvider>(context, listen: false);
       problemProvider.setProblemInfo(model.problem);

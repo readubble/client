@@ -117,17 +117,17 @@ class _LoginFormState extends State<LoginForm> {
                       obscureText: !isPwVisible, // 입력시 ****** 처리
                       obscuringCharacter: "*",
                       decoration: InputDecoration(
-                        prefixIcon: Icon(
+                        prefixIcon: const Icon(
                           Icons.password,
                           color: Colors.black,
                         ),
                         suffixIcon: IconButton(
                           icon: isPwVisible
-                              ? Icon(
+                              ? const Icon(
                                   Icons.visibility_off_outlined,
                                   color: Colors.black,
                                 )
-                              : Icon(
+                              : const Icon(
                                   Icons.visibility_outlined,
                                   color: Colors.black,
                                 ),
@@ -137,7 +137,7 @@ class _LoginFormState extends State<LoginForm> {
                             });
                           },
                         ),
-                        focusedBorder: OutlineInputBorder(
+                        focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
                             width: 3,
                             color: Colors.black,
@@ -146,7 +146,7 @@ class _LoginFormState extends State<LoginForm> {
                             Radius.circular(20),
                           ),
                         ),
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
                             width: 3,
                             color: Colors.black,
@@ -156,7 +156,7 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                         ),
                         labelText: '비밀번호를 입력해주세요.',
-                        labelStyle: TextStyle(
+                        labelStyle: const TextStyle(
                           color: Colors.grey,
                         ),
                       ),
@@ -194,7 +194,6 @@ class _LoginFormState extends State<LoginForm> {
                             );
                             idController.clear();
                             pwController.clear();
-                            //Navigator.pop(context);
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               '/main', // 첫 페이지로 설정할 경로
