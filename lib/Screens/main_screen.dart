@@ -1,6 +1,9 @@
 import 'package:bwageul/main.dart';
 import 'package:flutter/material.dart';
 import 'package:iphone_has_notch/iphone_has_notch.dart';
+import 'package:provider/provider.dart';
+import '../Providers/user_info_provider.dart';
+import '../Services/api_services.dart';
 import '../Services/storage.dart';
 import 'home_screen.dart';
 import 'likes_screen.dart';
@@ -25,8 +28,8 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> loadStartScreen() async {
     // 로그인 여부 확인하여 시작 스크린 설정
-    bool loginState = await isLoggedIn();
-    if (!loginState)
+    String? userId = await getUserId();
+    if (userId == null)
       Navigator.pushNamed(context, '/login'); // 로그인 안 되어 있으면 로그인 페이지로 이동
   }
 

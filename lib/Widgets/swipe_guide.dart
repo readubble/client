@@ -16,9 +16,10 @@ class _SwipeGuideState extends State<SwipeGuide> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 4), () {
-      setState(() {
-        _isVisible = false;
-      });
+      if (mounted)
+        setState(() {
+          _isVisible = false;
+        });
     });
   }
 

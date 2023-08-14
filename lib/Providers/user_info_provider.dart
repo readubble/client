@@ -7,6 +7,8 @@ class UserInfoProvider with ChangeNotifier {
   int? daysFromSignUp;
   UserInfoModel? get user => _user;
 
+  String? get nickname => _user?.nickname;
+
   int getDaysFromSignUp() {
     // 0일째 성장 중
     if (_user != null) {
@@ -14,8 +16,7 @@ class UserInfoProvider with ChangeNotifier {
       final date = DateFormat('yy-MM-dd')
           .parse(_user!.date); // 입력된 날짜 문자열을 DateTime 객체로 변환
       final difference = now.difference(date).inDays;
-
-      return (difference + 1); // 오늘부터 1일을 기준으로 해야 하므로 1을 더해줌
+      return (difference); // 오늘부터 1일
     } else {
       return 0;
     }
