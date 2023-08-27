@@ -96,15 +96,9 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
         Provider.of<ProblemIdProvider>(context, listen: false);
     final problemId = problemIdProvider.problemId;
     final result = await ApiService.postProblemResolved(
-        keywords,
-        sentences,
-        summarization,
-        choiceList,
-        resultList,
-        problemId!); // 문제 다 풀고 '완료' 버튼 누르면 서버로 결과 전송 & ai 요약 결과 가져옴.
-    // Map<String, dynamic>으로, result['problem_id], result['ai_summarization']으로 받음
+        keywords, sentences, summarization, choiceList, resultList, problemId!);
     aiSummarization = result['ai_summarization'];
-  } // this bottom sheet에서 작성한 결과를 정리해서 서버에 보내는 작업.
+  }
 
   static List<Tab> myTabs = <Tab>[
     Tab(
@@ -139,12 +133,10 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
     ),
   ];
 
-  // 키워드 추가 부분
   int _rowsCount = 1;
-  final List<TextEditingController> _textEditingControllers =
-      []; // 키워드 작성 텍스트 컨트롤러
+  final List<TextEditingController> _textEditingControllers = [];
   final TextEditingController _summaryTextEditingController =
-      TextEditingController(); // 요약문 작성 텍스트 컨트롤러
+      TextEditingController();
 
   void _addRow() {
     setState(() {

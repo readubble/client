@@ -54,7 +54,7 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
             BoxShadow(
               color: myColor.shade800,
               blurRadius: 3,
-              offset: Offset(3, 3),
+              offset: const Offset(3, 3),
             ),
           ],
         ),

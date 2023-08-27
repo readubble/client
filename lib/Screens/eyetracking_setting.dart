@@ -26,11 +26,12 @@ class _EyetrackingState extends State<Eyetracking> {
           .initGazeTracker(); // 초기화. state를 initializing으로 바꿈
     });
 
-    Future.delayed(Duration(seconds: 4), () {
-      if (mounted)
+    Future.delayed(const Duration(seconds: 4), () {
+      if (mounted) {
         setState(() {
           trackingStart = true;
         });
+      }
     });
   }
 
@@ -52,27 +53,27 @@ class _EyetrackingState extends State<Eyetracking> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(
+                          const Text(
                             '시선 추적 설정',
                             style: TextStyle(
                                 decoration: TextDecoration.none, fontSize: 24),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Divider(
                             // Divider: 수평 구분선을 나타내는 위젯입니다. 회색 계통의 색상을 사용합니다.
                             color: Colors.grey[800],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
-                          Text(
+                          const Text(
                             '보정이 끝나면 화면을 바라보는 각도를 고정한 채 다음 페이지로 이동하세요!',
                             style: TextStyle(height: 1.5, fontSize: 18),
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           !trackingStart
@@ -84,12 +85,12 @@ class _EyetrackingState extends State<Eyetracking> {
                                     consumer.startCalibration(); // 트래킹 시작
                                     // Calibration 시작
                                   },
-                                  child: Text(
+                                  child: const Text(
                                     "클릭하여 보정 시작",
                                     style: TextStyle(fontSize: 20),
                                   ),
                                 ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           ElevatedButton(
@@ -97,7 +98,7 @@ class _EyetrackingState extends State<Eyetracking> {
                               Navigator.pushNamed(context, '/article');
                               consumer.setStartReading();
                             },
-                            child: Text(
+                            child: const Text(
                               '다음 페이지로 이동',
                               style: TextStyle(color: Colors.white),
                             ),

@@ -7,29 +7,27 @@ import 'package:bwageul/Models/app_stage.dart';
 import 'package:bwageul/Models/gazetracker_method_string.dart';
 
 class GazeTrackerProvider with ChangeNotifier {
-  dynamic state; // state 변수: 현재 Gaze Tracker 상태를 나타내는 변수입니다.
+  dynamic state;
   static const licenseKey = Secret.myLicenseKey;
-  final _channel = const MethodChannel(
-      'samples.flutter.dev/tracker'); // _channel 변수: Gaze Tracker SDK와의 통신을 위한 MethodChannel입니다.
-  String? failedReason; //failedReason 변수: 초기화 또는 실행 실패 시 실패 이유를 저장하는 변수입니다.
-  // pointX, pointY 변수: Gaze Tracker로부터 받은 시선 좌표를 저장하는 변수입니다.
+  final _channel = const MethodChannel('samples.flutter.dev/tracker');
+  String? failedReason;
+
   var pointX = 0.0;
   var pointY = 0.0;
 
   // calibration
-  double progress = 0.0; //progress 변수: 캘리브레이션 진행 상태를 나타내는 변수입니다.
-  // caliX, caliY 변수: 캘리브레이션 진행 중인 좌표를 저장하는 변수입니다.
+  double progress = 0.0;
+
   var caliX = 0.0;
   var caliY = 0.0;
-  bool hasCaliData = false; //hasCaliData 변수: 캘리브레이션 데이터가 있는지 여부를 나타내는 변수입니다.
-  double attention = 0.0; // attention 변수: 사용자의 집중도를 나타내는 변수입니다.
-  bool isUserOption = false; //isUserOption 변수: 사용자 옵션 활성화 여부를 나타내는 변수입니다.
+  bool hasCaliData = false;
+  double attention = 0.0;
+  bool isUserOption = false;
 
-  int calibrationType = 5; //calibrationType 변수: 캘리브레이션 타입을 나타내는 변수입니다.
-  bool isDrowsiness = false; //isDrowsiness 변수: 사용자의 졸음 여부를 나타내는 변수입니다.
-  bool isBlink = false; //isBlink 변수: 사용자의 눈깜빡임 여부를 나타내는 변수입니다.
-  bool savedCalibrationData =
-      false; //savedCalibrationData 변수: 캘리브레이션 데이터가 저장되었는지 여부를 나타내는 변수입니다.
+  int calibrationType = 5;
+  bool isDrowsiness = false;
+  bool isBlink = false;
+  bool savedCalibrationData = false;
 
   double _scrollOffset = 0.0;
   double get scrollOffset => _scrollOffset;
@@ -40,17 +38,15 @@ class GazeTrackerProvider with ChangeNotifier {
     }
   }
 
-  bool _startReading = false; // '다음으로 넘어가기' 버튼을 누른 이후에만 gazeCount가 세어지도록 하는 변수
+  bool _startReading = false;
   bool get startReading => _startReading;
   void setStartReading() {
     _startReading = true;
     notifyListeners();
   }
 
-  List<List<int>> gazeCount = List.generate(
-      200,
-      (index) =>
-          List<int>.filled(15, 0)); // 15 * 30 2차원 배열. 시선이 머물렀던 횟수를 세서 저장.
+  List<List<int>> gazeCount =
+      List.generate(200, (index) => List<int>.filled(15, 0));
   List<List<int>> topItems = [];
 
   GazeTrackerProvider() {
@@ -218,17 +214,17 @@ class GazeTrackerProvider with ChangeNotifier {
           (entry) => MapEntry(entry.value, rowIndex * row.length + entry.key));
     }).toList();
 
-    flattenedArray.sort((a, b) => b.key.compareTo(a.key)); // 내림차순으로 정렬
+    flattenedArray.sort((a, b) => b.key.compareTo(a.key));
 
     List<int> topIndices = flattenedArray
         .take(20)
         .map((entry) => entry.value)
-        .toList(); // 최빈값 상위 10개의 인덱스 선택.
+        .toList(); // 최빈값 상위 10개의 인덱스 선택
 
     topItems = topIndices.map((index) {
       int row = index ~/ gazeCount[0].length;
       int col = index % gazeCount[0].length;
-      return [row, col]; // 선택된 인덱스 반환
+      return [row, col];
     }).toList();
 
     for (int i = 0; i < 20; i++) {

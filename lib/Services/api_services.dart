@@ -26,7 +26,6 @@ class ApiService {
       String nickname, String id, String password) async {
     final url = Uri.parse('$baseUrl/users');
     var userInfo = {
-      // Map 자료구조
       'id': id,
       'nickname': nickname,
       'password': password,
@@ -39,11 +38,8 @@ class ApiService {
       body: jsonEncode(userInfo),
     );
     if (response.statusCode == 200) {
-      // 회원가입 성공
       print('회원가입 성공');
-    }
-    // 회원가입 실패
-    else {
+    } else {
       if (response.body.isNotEmpty) {
         var body = jsonDecode(utf8.decode(response.bodyBytes));
         print(
@@ -77,7 +73,6 @@ class ApiService {
         await ApiService.autoLogin(); // 자동 로그인이 체크되어 있으므로 자동 로그인 함수 호출
       return true;
     } else if (response.statusCode == 401) {
-      // 토큰 만료 에러
       await updateToken();
       return await login(id, password, isAutoLogin);
     } else {
@@ -111,17 +106,14 @@ class ApiService {
         },
         body: jsonEncode(userInfo));
     if (response.statusCode == 200) {
-      // 로그아웃 성공
       print('$userInfo 로그아웃 성공');
       await deleteTokenAndId();
       return true;
     } else if (response.statusCode == 401) {
-      // 토큰 만료 에러
       print('토큰 만료 에러 401');
       await updateToken();
       return false;
     } else {
-      //로그아웃 실패
       print('로그아웃 실패');
       if (response.body.isNotEmpty) {
         var body = jsonDecode(utf8.decode(response.bodyBytes));
@@ -167,7 +159,6 @@ class ApiService {
         },
         body: jsonEncode(refreshToken));
     if (response.statusCode == 200) {
-      // 토큰 갱신 성공
       print('토큰 갱신 성공');
       var body = jsonDecode(response.body);
       final newAccessToken = body['data']['access_token'];
@@ -197,7 +188,6 @@ class ApiService {
       model = UserInfoModel.fromJson(body['data']);
       return model;
     } else if (response.statusCode == 401) {
-      // 토큰 만료
       await updateToken();
       return getUserInfoById(id);
     } else {
@@ -227,18 +217,14 @@ class ApiService {
 
     final response = await request.send();
     if (response.statusCode == 200) {
-      // 성공적으로 업로드 완료
       print('프로필 사진이 서버에 업로드되었습니다.');
       final responseData = await response.stream.bytesToString();
       final parsedData = jsonDecode(responseData);
-      print(parsedData);
       return parsedData['data']['url'];
     } else {
-      // 업로드 실패
       print('프로필 사진 업로드에 실패했습니다.');
       final responseData = await response.stream.bytesToString();
       final parsedData = jsonDecode(responseData);
-      print(parsedData);
       throw Exception('프로필 사진 업로드 중 오류 발생');
     }
   } // 프로필 이미지 변경
@@ -262,11 +248,9 @@ class ApiService {
       }
       return modelList;
     } else if (response.statusCode == 401) {
-      // 토큰 만료
       await updateToken();
       return await getWordQuiz();
     } else {
-      // 이외의 에러
       if (response.body != null) {
         final body = jsonDecode(utf8.decode(response.bodyBytes));
         print(body);
@@ -531,8 +515,6 @@ class ApiService {
       await updateToken();
       return await getProblemBookmarks(category);
     } else {
-      final body = jsonDecode(utf8.decode(response.bodyBytes));
-      // print('북마크된 글 리스트 호출 : $body');
       throw Exception("글 북마크 리스트 api 호출 실패");
     }
   } // 북마크된 글의 리스트 가져오기
@@ -550,12 +532,7 @@ class ApiService {
           'Accept': 'application/json'
         },
         body: jsonEncode(input));
-    // body에 word_nm, word_mean
-    if (response.statusCode == 200) {
-      final body = jsonDecode(utf8.decode(response.bodyBytes));
-    } else {
-      final body = jsonDecode(utf8.decode(response.bodyBytes));
-      // print('단어 북마크 여부 보내기 wordBookmark() 호출: $body');
+    if (response.statusCode != 200) {
       throw Exception("북마크 api 호출 실패");
     }
   } // 단어 북마크 여부 보내기

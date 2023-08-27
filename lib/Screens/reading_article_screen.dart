@@ -132,14 +132,14 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back_rounded,
                           size: 35,
                         ),
                         onPressed: () => Navigator.pop(context),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Padding(
@@ -148,18 +148,18 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                         children: [
                           Text(
                             info.problem.title,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.w600,
                                 height: 1.4),
                           ), //글 제목
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
+                              const Text(
                                 "난이도 ",
                                 style: TextStyle(
                                   fontSize: 16,
@@ -172,12 +172,12 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                     color: myColor.shade300,
                                     fontWeight: FontWeight.w600),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
                             ],
                           ), //난이도
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Container(
@@ -196,7 +196,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                         .pushNamed('/dictionary');
                                   },
                                   child: Row(
-                                    children: [
+                                    children: const [
                                       Icon(
                                         Icons.search,
                                         size: 25,
@@ -213,19 +213,19 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                     ],
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    fixedSize: Size(110, 40),
+                                    fixedSize: const Size(110, 40),
                                     backgroundColor: myColor.shade700,
                                     foregroundColor: Colors.black,
                                     primary: Colors.black.withOpacity(0.5),
                                     elevation: 4,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                   ),
                                 ), // 국어사전 버튼
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Container(
@@ -236,7 +236,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                     borderRadius: BorderRadius.circular(20),
                                     boxShadow: [
                                       BoxShadow(
-                                        offset: Offset(0, 3),
+                                        offset: const Offset(0, 3),
                                         blurRadius: 2,
                                         color: myColor.shade800,
                                       ),
@@ -247,16 +247,17 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                       IconButton(
                                         onPressed: () {
                                           setState(() {
-                                            if (baseFontSize > 15)
+                                            if (baseFontSize > 15) {
                                               baseFontSize -= 1;
+                                            }
                                           });
                                         },
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.text_decrease_rounded,
                                           size: 25,
                                         ),
                                       ),
-                                      Text(
+                                      const Text(
                                         "글자 크기",
                                         style: TextStyle(
                                           fontFamily: 'lottedream',
@@ -267,11 +268,12 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                       IconButton(
                                         onPressed: () {
                                           setState(() {
-                                            if (baseFontSize < 30)
+                                            if (baseFontSize < 30) {
                                               baseFontSize += 1;
+                                            }
                                           });
                                         },
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.text_increase_rounded,
                                           size: 25,
                                         ),
@@ -282,7 +284,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                               ],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Text(
@@ -293,7 +295,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                               height: 1.7,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 30,
                           ),
                           Row(
@@ -304,7 +306,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                   if (consumer.state !=
                                       GazeTrackerState.start) {
                                     ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
+                                        .showSnackBar(const SnackBar(
                                       content: Text("시선 추적 중인 상태가 아닙니다."),
                                       duration: Duration(seconds: 2),
                                     ));
@@ -318,7 +320,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                     });
                                   }
                                 },
-                                child: Text(
+                                child: const Text(
                                   "추적 종료",
                                   style: TextStyle(
                                     fontSize: 18,
@@ -336,7 +338,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                     }
                                   });
                                 },
-                                child: Text(
+                                child: const Text(
                                   "추적 결과",
                                   style: TextStyle(
                                     fontSize: 18,
@@ -346,7 +348,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 50,
                           ),
                         ],
@@ -389,7 +391,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                   ),
                 ),
               ),
-            BottomSummarySheet(), // 하단 퀴즈, 글 요약하는 창
+            const BottomSummarySheet(), // 하단 퀴즈, 글 요약하는 창
           ],
         ),
       ),

@@ -10,13 +10,11 @@ class UserInfoProvider with ChangeNotifier {
   String? get nickname => _user?.nickname;
 
   int getDaysFromSignUp() {
-    // 0일째 성장 중
     if (_user != null) {
       final now = DateTime.now(); // 현재 시간
-      final date = DateFormat('yy-MM-dd')
-          .parse(_user!.date); // 입력된 날짜 문자열을 DateTime 객체로 변환
+      final date = DateFormat('yy-MM-dd').parse(_user!.date);
       final difference = now.difference(date).inDays;
-      return (difference); // 오늘부터 1일
+      return (difference);
     } else {
       return 0;
     }
