@@ -36,10 +36,11 @@ Future<void> deleteTokenAndId() async {
 }
 
 Future<bool> isLoggedIn() async {
-  if (await getAccessToken() != null && await getUserId() != null)
+  if (await getAccessToken() != null && await getUserId() != null) {
     return true;
-  else
+  } else {
     return false;
+  }
 }
 
 Future<void> saveProblemId(int id) async {

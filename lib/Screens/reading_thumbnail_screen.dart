@@ -25,7 +25,6 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
     return GestureDetector(
       onHorizontalDragUpdate: (details) {
         if (details.delta.direction > 0) {
-          // <- 방향 스와이프 시 다음 단계로 넘어감
           Navigator.of(context).pushNamed('/eyetracking');
         }
       },
@@ -57,10 +56,12 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(arguments['genre'],
-                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 20)),
                     RichText(
                         text: TextSpan(children: [
-                      TextSpan(text: "난이도 ", style: TextStyle(fontSize: 20)),
+                      const TextSpan(
+                          text: "난이도 ", style: TextStyle(fontSize: 20)),
                       TextSpan(
                           text: arguments['difficulty'],
                           style: TextStyle(
@@ -69,18 +70,18 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
                               fontWeight: FontWeight.w600,
                               height: 1.5))
                     ])),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       arguments['title'],
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
                           fontSize: 30,
                           height: 1.5),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(arguments['writer'],

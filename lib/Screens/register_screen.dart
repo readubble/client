@@ -136,17 +136,17 @@ class _RegisterFormState extends State<RegisterForm> {
                   obscureText: !isPwVisible, // 입력시 ****** 처리
                   obscuringCharacter: "*",
                   decoration: InputDecoration(
-                    prefixIcon: Icon(
+                    prefixIcon: const Icon(
                       Icons.password,
                       color: Colors.black,
                     ),
                     suffixIcon: IconButton(
                       icon: isPwVisible
-                          ? Icon(
+                          ? const Icon(
                               Icons.visibility_off_outlined,
                               color: Colors.black,
                             )
-                          : Icon(
+                          : const Icon(
                               Icons.visibility_outlined,
                               color: Colors.black,
                             ),
@@ -156,7 +156,7 @@ class _RegisterFormState extends State<RegisterForm> {
                         });
                       },
                     ),
-                    enabledBorder: OutlineInputBorder(
+                    enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(
                         width: 3,
                         color: Colors.black,
@@ -165,7 +165,7 @@ class _RegisterFormState extends State<RegisterForm> {
                         Radius.circular(20),
                       ),
                     ),
-                    focusedBorder: OutlineInputBorder(
+                    focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(
                         width: 3,
                         color: Colors.black,
@@ -175,7 +175,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       ),
                     ),
                     labelText: '비밀번호',
-                    labelStyle: TextStyle(
+                    labelStyle: const TextStyle(
                       color: Colors.grey,
                     ),
                   ),
@@ -190,17 +190,17 @@ class _RegisterFormState extends State<RegisterForm> {
                   obscureText: !isPwCheckVisible, // 입력시 ****** 처리
                   obscuringCharacter: "*",
                   decoration: InputDecoration(
-                    prefixIcon: Icon(
+                    prefixIcon: const Icon(
                       Icons.done_all,
                       color: Colors.black,
                     ),
                     suffixIcon: IconButton(
                       icon: isPwCheckVisible
-                          ? Icon(
+                          ? const Icon(
                               Icons.visibility_off_outlined,
                               color: Colors.black,
                             )
-                          : Icon(
+                          : const Icon(
                               Icons.visibility_outlined,
                               color: Colors.black,
                             ),
@@ -247,7 +247,6 @@ class _RegisterFormState extends State<RegisterForm> {
                     ),
                   ),
                   onPressed: () async {
-                    // 비밀번호와 비밀번호 확인 정보가 일치하는지 확인
                     if (pwController.text != pwCheckController.text) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

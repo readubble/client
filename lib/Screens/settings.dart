@@ -1,5 +1,4 @@
 import 'package:bwageul/Services/api_services.dart';
-import 'package:bwageul/Services/storage.dart';
 import 'package:flutter/material.dart';
 
 class Settings extends StatelessWidget {

@@ -37,13 +37,13 @@ class _LikesScreenState extends State<LikesScreen>
   List<ArticleBookmarkModel> resultDataList = [];
   List<WordBookmarkModel> wordDataList = [];
   int catNo = 1;
-  List<bool> likes = []; // 단어장 추가 T/F
+  List<bool> likes = [];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    loadData(catNo);
+    loadArticleData(catNo);
     loadWord();
   }
 
@@ -53,7 +53,7 @@ class _LikesScreenState extends State<LikesScreen>
     super.dispose();
   }
 
-  Future<void> loadData(int no) async {
+  Future<void> loadArticleData(int no) async {
     final data = await ApiService.getProblemBookmarks(no);
     if (mounted) {
       setState(() {
@@ -61,7 +61,7 @@ class _LikesScreenState extends State<LikesScreen>
         articleCount = resultDataList.length;
       });
     }
-  } // 북마크된 글 정보 불러오기
+  }
 
   Future<void> loadWord() async {
     final data = await ApiService.getWordBookmarks();
@@ -72,7 +72,7 @@ class _LikesScreenState extends State<LikesScreen>
         likes = data.map((e) => true).toList();
       });
     }
-  } // 북마크된 단어 정보 불러오기
+  }
 
   List<Widget> getLikedArticles() {
     List<Widget> articles = [];
@@ -192,7 +192,7 @@ class _LikesScreenState extends State<LikesScreen>
 
   @override
   Widget build(BuildContext context) {
-    loadData(catNo);
+    loadArticleData(catNo);
     loadWord();
 
     return DefaultTabController(
