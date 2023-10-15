@@ -41,9 +41,8 @@ Widget unlockedArticleTile(BuildContext context, String imageURL,
   final double thisWidth = MediaQuery.of(context).size.width;
   return Stack(children: [
     Container(
-      width: type == 1 ? 180 : thisWidth * 0.8, // 화면 가로 길이의 4/5
-      height:
-          type == 1 ? 240 : thisWidth * 1.07, // 타일이 가로 세로 비율 3:4를 갖도록 세로 길이 계산
+      width: type == 1 ? 180 : thisWidth * 0.8,
+      height: type == 1 ? 240 : thisWidth * 1.07,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         image: DecorationImage(
@@ -58,9 +57,8 @@ Widget unlockedArticleTile(BuildContext context, String imageURL,
       ),
     ),
     Container(
-      width: type == 1 ? 180 : thisWidth * 0.8, // 화면 가로 길이의 4/5
-      height:
-          type == 1 ? 240 : thisWidth * 1.07, // 타일이 가로 세로 비율 3:4를 갖도록 세로 길이 계산
+      width: type == 1 ? 180 : thisWidth * 0.8,
+      height: type == 1 ? 240 : thisWidth * 1.07,
       alignment: Alignment.bottomRight,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),

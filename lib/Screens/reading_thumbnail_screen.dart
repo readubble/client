@@ -19,8 +19,7 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
     final problemIdProvider =
         Provider.of<ProblemIdProvider>(context, listen: false);
-    problemIdProvider.setProblemId(arguments[
-        'problemId']); // buildArticleList에서 받아온 problemId 프로바이더에 최초 등록
+    problemIdProvider.setProblemId(arguments['problemId']);
 
     return GestureDetector(
       onHorizontalDragUpdate: (details) {
@@ -46,7 +45,6 @@ class _ReadingThumbnailScreenState extends State<ReadingThumbnailScreen> {
               ),
             ),
             SizedBox(
-              //하위 카테고리, 난이도, 글 제목
               width: double.infinity,
               child: Padding(
                 padding:

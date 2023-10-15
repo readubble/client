@@ -27,10 +27,9 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   Future<void> loadStartScreen() async {
-    // 로그인 여부 확인하여 시작 스크린 설정
     String? userId = await getUserId();
     if (userId == null) {
-      Navigator.pushNamed(context, '/login'); // 로그인 안 되어 있으면 로그인 페이지로 이동
+      Navigator.pushNamed(context, '/login');
     }
   }
 

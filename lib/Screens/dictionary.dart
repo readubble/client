@@ -18,9 +18,7 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
 
   Future<void> searchDictionary() async {
     FocusScope.of(context).unfocus();
-    // searchDictionary 함수 내에서 dictionaryResult 함수를 호출하고 검색어를 전달하도록 구현되어 있습니다.
     try {
-      // dictionaryResult 함수를 호출하여 검색 결과를 받아옴
       final result =
           await ApiService.getDictionarySearch(_searchController.text);
 
@@ -35,11 +33,9 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
       });
     } catch (e) {
       print('에러 발생: $e');
-      // 에러 처리 로직 추가
     }
   }
 
-  // dictionaryResult() 로 찾은 단어를 Container 로 감싸서 하나씩 출력하는 함수
   List<Widget> showWordList() {
     List<Widget> buttonList = [];
 
@@ -193,7 +189,6 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
                                           borderRadius:
                                               BorderRadius.circular(10)),
                                       hintText: '검색어를 입력하세요',
-                                      // 텍스트 필드에 입력하게 함
                                       suffixIcon: IconButton(
                                         icon: Icon(Icons.clear),
                                         onPressed: () {
@@ -210,11 +205,7 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
                                     Icons.search_rounded,
                                     size: 30,
                                   ),
-                                  onPressed: searchDictionary, //() {
-                                  //클릭 시 setState를 호출하여 상태를 업데이트합니다.
-                                  // 이 부분의 구현은 버튼을 클릭했을 때 원하는 동작을 수행할 수 있도록 설정하는 부분
-                                  //   setState(() {});
-                                  // },
+                                  onPressed: searchDictionary,
                                 ), //돋보기 버튼
                               ],
                             ),
@@ -226,7 +217,7 @@ class _KoreanDictionaryState extends State<KoreanDictionary> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                "${_searchController.text}", // 얘로 텍스트를 출력한다
+                                "${_searchController.text}",
                                 style: TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w600,

@@ -90,7 +90,7 @@ class _LikesScreenState extends State<LikesScreen>
             'my_summarization': model.summarization,
             'save_fl': model.saveFl,
             'problem_id': model.problemId,
-          }); // 북마크 글에어 문제 풀이 결과 정보를 넘겨줘야 finishReading 스크린에 그릴 수 있음.
+          });
         },
         child: Align(
           alignment: Alignment.center,
@@ -108,7 +108,7 @@ class _LikesScreenState extends State<LikesScreen>
       ));
     }
     return articles;
-  } // 저장한 글의 리스트를 타일 형태로 반환하는 메소드. 좋아요 표시 된 UnlockedArticleTile을 articles[]에 추가할 것.
+  }
 
   List<Widget> getLikedWords() {
     List<Widget> words = [];
@@ -188,7 +188,7 @@ class _LikesScreenState extends State<LikesScreen>
     }
 
     return words;
-  } // 북마크된 단어 리스트 가져오기
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -248,8 +248,7 @@ class _LikesScreenState extends State<LikesScreen>
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 20),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10), // 원하는 BorderRadius 값 설정
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                                 backgroundColor: myColor.shade700,
                               ),
@@ -272,8 +271,7 @@ class _LikesScreenState extends State<LikesScreen>
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 20),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10), // 원하는 BorderRadius 값 설정
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                                 backgroundColor: myColor.shade700,
                               ),
@@ -348,7 +346,6 @@ class _LikesScreenState extends State<LikesScreen>
                               fontWeight: FontWeight.w600,
                               color: Colors.black),
                         ),
-                        //'저장한 글' 텍스트
                         const SizedBox(
                           height: 20,
                         ),
@@ -356,7 +353,7 @@ class _LikesScreenState extends State<LikesScreen>
                       ],
                     ),
                   ),
-                ), //저장한 단어
+                ),
               ]),
             ),
           ],

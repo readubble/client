@@ -249,7 +249,7 @@ class GazeTrackerProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void chageIdleState() {
+  void changeIdleState() {
     failedReason = null;
     _setTrackerState(GazeTrackerState.idle);
   }

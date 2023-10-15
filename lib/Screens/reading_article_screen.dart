@@ -29,13 +29,13 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
           choices: [],
           answer: 1,
         )
-      ]); // 디폴트 객체
+      ]);
   late ScrollController _scrollController;
   late ScrollController _scrollController2;
 
-  bool seeResult = false; // 시선 추적 결과 보기
-  bool hasTrackingData = false; // 시선 추적 데이터가 있는가 == '시선 추적 종료' 버튼을 눌렀는가
-  int circleRadius = 35; // 결과를 그릴 원의 반지름
+  bool seeResult = false;
+  bool hasTrackingData = false;
+  int circleRadius = 35;
 
   @override
   void initState() {
@@ -68,7 +68,6 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
     }
     Provider.of<GazeTrackerProvider>(context, listen: false)
         .setScrollOffset(_scrollController.offset);
-    // print('offset = ${_scrollController.offset}');
   }
 
   Future<void> _loadArticleContents() async {
@@ -90,7 +89,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
         thisText = makeText(info.problem.content);
       });
     }
-  } // 글에 대한 정보를 가져옴.
+  }
 
   String makeText(List<List<String>> lst) {
     String txt = ' ';
@@ -106,7 +105,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
     }
 
     return txt;
-  } // 2차원 배열로 들어오는 글을 잘라서 보여주기
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +113,6 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
     double maxScrollExtent = 0.0;
     if (_scrollController.hasClients) {
       maxScrollExtent = _scrollController.position.maxScrollExtent;
-      // print('maxScrollExtent : $maxScrollExtent');
     }
 
     return Scaffold(
@@ -152,7 +150,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                 fontSize: 28,
                                 fontWeight: FontWeight.w600,
                                 height: 1.4),
-                          ), //글 제목
+                          ),
                           const SizedBox(
                             height: 20,
                           ),
@@ -185,7 +183,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                             width: double.infinity,
                             height: 2,
                             color: Colors.black,
-                          ), // 가로줄
+                          ),
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
@@ -224,7 +222,7 @@ class _ReadingArticleScreenState extends State<ReadingArticleScreen> {
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                   ),
-                                ), // 국어사전 버튼
+                                ),
                                 const SizedBox(
                                   width: 10,
                                 ),
