@@ -69,7 +69,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
         nickname = userInfoProvider.user!.nickname;
       });
     }
-  } // 최초 1회 실행. wow... 문제 객체, 퀴즈 객체 초기화
+  } // 최초 1회 실행. 문제 객체, 퀴즈 객체 초기화
 
   Future<void> fetchResult() async {
     List<String> keywords = ["", "", ""];
@@ -171,9 +171,8 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
               updateSelection(i);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: isSelected[i]
-                  ? myColor.shade50
-                  : myColor.shade700, // 선택되면 색상 바꾸기
+              backgroundColor:
+                  isSelected[i] ? myColor.shade50 : myColor.shade700,
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
@@ -218,7 +217,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
         );
 
         sentencesTile.add(button);
-      } // 눌렸으면 요약문 작성 탭에서 보이도록
+      }
     }
     return sentencesTile;
   } // 주제문 선택용 본문 텍스트 타일
@@ -256,7 +255,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                   }
                 });
               }),
-        ), // 첫번째 보기
+        ),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
@@ -287,7 +286,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                   }
                 });
               }),
-        ), // 두번째 보기
+        ),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
@@ -318,7 +317,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                   }
                 });
               }),
-        ), // 세번째 보기
+        ),
       ],
     );
   }
@@ -336,7 +335,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
             Container(
               padding: const EdgeInsets.fromLTRB(20, 25, 20, 0),
               decoration: BoxDecoration(
-                  color: Colors.white, // 배경 색상
+                  color: Colors.white,
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(30)),
                   boxShadow: [
@@ -345,8 +344,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                       offset: const Offset(0, -15),
                       blurRadius: 10,
                     )
-                  ] // 둥근 모서리
-                  ),
+                  ]),
               child: PageView(
                 controller: _pageController,
                 children: [
@@ -423,8 +421,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                           tabs: myTabs,
                           controller: _tabController,
                           onTap: (int index) {
-                            FocusManager.instance.primaryFocus
-                                ?.unfocus(); // 키보드 닫기 이벤트
+                            FocusManager.instance.primaryFocus?.unfocus();
                           },
                         ),
                       ),
@@ -539,8 +536,7 @@ class _BottomSummarySheetState extends State<BottomSummarySheet>
                                       ),
                                       ElevatedButton(
                                         onPressed: () {
-                                          FocusScope.of(context)
-                                              .unfocus(); // 포커스 해제
+                                          FocusScope.of(context).unfocus();
                                           final nextIndex =
                                               _tabController.index + 1;
                                           if (nextIndex <

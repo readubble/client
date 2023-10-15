@@ -33,9 +33,7 @@ class _FinishReadingState extends State<FinishReading> {
     final userInfoProvider =
         Provider.of<UserInfoProvider>(context, listen: false);
     nickname = userInfoProvider.user!.nickname;
-    final arguments = ModalRoute.of(context)
-        ?.settings
-        .arguments; // pushNamed 인자로 받아온 aiSummarization
+    final arguments = ModalRoute.of(context)?.settings.arguments;
     if (arguments is Map<String, dynamic>) {
       setState(() {
         title = arguments['title'];
@@ -152,16 +150,14 @@ class _FinishReadingState extends State<FinishReading> {
                             onPressed: () {
                               Provider.of<ProblemIdProvider>(context,
                                       listen: false)
-                                  .setProblemId(
-                                      problemId); // 결과 화면에서 다시 풀기 버튼을 누를 때도 problemId가 필요하므로 set.
+                                  .setProblemId(problemId);
                               Navigator.popUntil(
                                 context,
                                 ModalRoute.withName('/main'),
-                              ); // 앞에 쌓인 페이지 다 치우고 글 읽는 화면으로 이동
+                              );
                               Navigator.pushNamed(
                                 context,
                                 '/article',
-                                // arguments: problemId, // 전달할 int 인자
                               );
                             },
                             style: ElevatedButton.styleFrom(
@@ -210,8 +206,7 @@ class _FinishReadingState extends State<FinishReading> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    20), // BorderRadius 적용
+                                borderRadius: BorderRadius.circular(20),
                               ),
                             ),
                             child: Row(

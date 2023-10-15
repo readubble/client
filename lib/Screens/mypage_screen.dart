@@ -317,8 +317,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                     elevation: 20.0,
                     backgroundColor: myColor.shade700,
                     borderColor: Colors.transparent,
-                    progressValue:
-                        (correctCount / 3), // progress value from 0.0 to 1.0
+                    progressValue: (correctCount / 3),
                     progressColor: myColor.shade50,
                     size: 150,
                     children: [

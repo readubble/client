@@ -23,7 +23,7 @@ class _EyetrackingState extends State<Eyetracking> {
         .handleCamera()
         .then((_) {
       Provider.of<GazeTrackerProvider>(context, listen: false)
-          .initGazeTracker(); // 초기화. state를 initializing으로 바꿈
+          .initGazeTracker();
     });
 
     Future.delayed(const Duration(seconds: 4), () {
@@ -62,7 +62,6 @@ class _EyetrackingState extends State<Eyetracking> {
                             height: 10,
                           ),
                           Divider(
-                            // Divider: 수평 구분선을 나타내는 위젯입니다. 회색 계통의 색상을 사용합니다.
                             color: Colors.grey[800],
                           ),
                           const SizedBox(

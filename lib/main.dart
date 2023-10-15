@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Readubble',
       theme: ThemeData(primarySwatch: myColor, fontFamily: 'lottedream'),
-      debugShowCheckedModeBanner: false, //오른쪽 상단 DEBUG 배너 비활성화
+      debugShowCheckedModeBanner: false,
       routes: {
         '/main': (context) => const MainScreen(),
         '/login': (context) => const LoginScreen(),
@@ -51,7 +51,6 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => const Settings(),
         '/eyetracking': (context) => const Eyetracking(),
       },
-
       home: AnimatedSplashScreen(
         duration: 3000,
         splash: Image.asset(

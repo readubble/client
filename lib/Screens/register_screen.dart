@@ -25,7 +25,7 @@ class _RegisterFormState extends State<RegisterForm> {
   bool showSpinner = false;
   bool isPwVisible = false;
   bool isPwCheckVisible = false;
-  final _formkey = GlobalKey<FormState>(); // Form 위젯을 쓸 땐 global key 를 넣어야 함
+  final _formkey = GlobalKey<FormState>();
   TextEditingController nicknameController = TextEditingController();
   TextEditingController idController = TextEditingController();
   TextEditingController pwController = TextEditingController();

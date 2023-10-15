@@ -37,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadUserInfo() async {
-    // 로그인은 되어 있지만, 유저 정보가 로드되지 않은 상태(최초 1회)
     if (!hasUserData) {
       String? userId = await getUserId();
       if (userId != null) {
@@ -90,11 +89,10 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> buildWordQuiz() {
     List<Widget> quizList = [];
     for (int i = 0; i < quizDataList.length; i++) {
-      quizList.add(
-          buildEachQuiz(quizDataList[i], i)); // Enable 상태를 위한 인덱스 값도 매개변수로 넘겨줌.
+      quizList.add(buildEachQuiz(quizDataList[i], i));
     }
     return quizList;
-  } // 어휘 퀴즈 3개(Widget)을 불러오기
+  }
 
   Widget buildEachQuiz(WordQuizModel model, int quizIdx) {
     return Stack(children: [
@@ -143,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 onPressed: isQuizEnabled[quizIdx]
                     ? () => submitQuizResult(model, 1, quizIdx)
-                    : null, // isEnabled == false이면 onPressed disabled
+                    : null,
                 child: Text(
                   model.choices[0],
                   style: TextStyle(
@@ -170,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 onPressed: isQuizEnabled[quizIdx]
                     ? () => submitQuizResult(model, 2, quizIdx)
-                    : null, // isEnabled == false이면 onPressed disabled
+                    : null,
                 child: Text(
                   model.choices[1],
                   style: const TextStyle(
@@ -183,8 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      if (!isQuizEnabled[
-          quizIdx]) // disabled 된 상태 = 즉, 이미 푼 문제의 경우 아이콘으로 정답 여부를 보여줌.
+      if (!isQuizEnabled[quizIdx])
         isCorrect[quizIdx]
             ? Positioned(
                 left: 0,
@@ -212,15 +209,12 @@ class _HomeScreenState extends State<HomeScreen> {
   } // 어휘 퀴즈 만드는 함수: 퀴즈제목, 보기1, 보기2
 
   void submitQuizResult(WordQuizModel model, int choice, int quizIdx) async {
-    // 버튼 둘 중 하나가 클릭될 때마다
     setState(() {
-      isQuizEnabled[quizIdx] =
-          !isQuizEnabled[quizIdx]; // 하나라도 눌렸으면 풀 수 없는 문제로 설정.
-      isClicked[quizIdx] = choice; // 지금 1번, 2번 버튼이 선택됨
+      isQuizEnabled[quizIdx] = !isQuizEnabled[quizIdx];
+      isClicked[quizIdx] = choice;
     });
     String quizResult = '';
     if (choice == model.answer) {
-      // 정답처리
       quizResult = 'Y';
       setState(() {
         isCorrect[quizIdx] = true;
@@ -247,7 +241,6 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 5,
             ),
             Row(
-              // 앱명 + 000님은 000일째 성장 중!
               children: [
                 const Text(
                   '봐글봐글',

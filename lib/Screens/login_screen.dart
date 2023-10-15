@@ -24,9 +24,9 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   bool showSpinner = false;
-  final _formkey = GlobalKey<FormState>(); // Form 위젯을 쓸 땐 global key 를 넣어야 함
+  final _formkey = GlobalKey<FormState>();
   bool isPwVisible = false;
-  bool _autoLogin = true; // 자동로그인 여부 저장 변수
+  bool _autoLogin = true;
   TextEditingController idController = TextEditingController();
   TextEditingController pwController = TextEditingController();
 
@@ -37,15 +37,12 @@ class _LoginFormState extends State<LoginForm> {
         body: ModalProgressHUD(
           inAsyncCall: showSpinner,
           child: Container(
-            // 뺄까?
             decoration: const BoxDecoration(
-              // 뺄까?
               image: DecorationImage(
-                // 뺄까?
-                fit: BoxFit.cover, // 뺄까?
-                image: AssetImage('assets/images/bubble1.gif'), // 뺄까?
-              ), // 뺄까?
-            ), // 뺄까?
+                fit: BoxFit.cover,
+                image: AssetImage('assets/images/bubble1.gif'),
+              ),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Form(
@@ -107,7 +104,7 @@ class _LoginFormState extends State<LoginForm> {
                           color: Colors.grey,
                         ),
                       ),
-                    ), //아이디
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -213,7 +210,7 @@ class _LoginFormState extends State<LoginForm> {
                         '로그인',
                         style: TextStyle(fontSize: 16),
                       ),
-                    ), // 로그인 버튼
+                    ),
                     CheckboxListTile(
                       controlAffinity: ListTileControlAffinity.leading,
                       title: const Text('자동 로그인'),
@@ -224,7 +221,7 @@ class _LoginFormState extends State<LoginForm> {
                           _autoLogin = value!;
                         });
                       },
-                    ), // 자동 로그인 여부 체크박스
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -233,7 +230,6 @@ class _LoginFormState extends State<LoginForm> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          //수평선
                           height: 1.0,
                           width: (MediaQuery.of(context).size.width - 80) / 2,
                           color: Colors.black,
@@ -249,7 +245,6 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                         ),
                         Container(
-                          //수평선
                           height: 1.0,
                           width: (MediaQuery.of(context).size.width - 80) / 2,
                           color: Colors.black,
@@ -280,7 +275,7 @@ class _LoginFormState extends State<LoginForm> {
                           style: TextStyle(fontSize: 16, color: Colors.black),
                         ),
                       ),
-                    ) // 회원가입 버튼
+                    )
                   ],
                 ),
               ),

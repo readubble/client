@@ -309,7 +309,7 @@ class ApiService {
       print('$body');
       throw Exception('어휘 퀴즈 맞춘 개수 가져오기 실패');
     }
-  } // 어휘 퀴즈 결과(맞춘 개수) 받아오기 -> 마이페이지에서 보여줄 예정
+  } // 어휘 퀴즈 결과(맞춘 개수) 받아오기
 
   static Future<List<ArticleInfoModel>> getArticles(int category) async {
     List<ArticleInfoModel> articleList = [];
@@ -449,7 +449,7 @@ class ApiService {
       print(body);
       throw Exception("문제 풀이 결과 보내기 실패");
     }
-  } // 문제 풀이: 글 읽고, 문제 푼 결과 서버에 보내기. problem_id & ai_summarization 리턴
+  } // 문제 풀이: 글 읽고, 문제 푼 결과 서버에 보내기
 
   static Future<List<dynamic>> getResolvedProblemCount() async {
     final accessToken = await getAccessToken();
